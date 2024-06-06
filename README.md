@@ -1,0 +1,2 @@
+# DuckDB for Kotlin Multiplatform
+
