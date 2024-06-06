@@ -9,11 +9,11 @@ internal val log = klog.logger("DUCKDB")
 
 internal inline fun UInt.handleDuckDbError(msg: () -> String) {
 	if (this == DuckDBError) {
+		log.trace { "got an error" }
 		"${msg()} message: ${strerror(errno)?.toKString()}".also {
 			log.error { it }
 			throw Exception(it)
 		}
-
 	}
 }
 

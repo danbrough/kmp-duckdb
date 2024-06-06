@@ -1,0 +1,6 @@
+#This code is added to the start of duckdb.def from duckdb_headers.def
+package = org.danbrough.duckdb.cinterops
+headers = duckdb.h
+linkerOpts = -lduckdb
+# end of duckdb_headers.def
+

@@ -6,3 +6,5 @@ versions.properties
 **/build
 /bin
 /.kotlin
+/duckdb/src/cinterops/duckdb.def
+**vgcore*

@@ -9,7 +9,6 @@ import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
-import org.danbrough.duckdb.cinterops.DuckDBError
 import org.danbrough.duckdb.cinterops.duckdb_close
 import org.danbrough.duckdb.cinterops.duckdb_databaseVar
 import org.danbrough.duckdb.cinterops.duckdb_open
@@ -47,5 +46,5 @@ class DuckDB(override val handle: duckdb_databaseVar) : NativeObject<duckdb_data
 
 }
 
-fun MemScope.duckDB(path: String?) = DuckDB(alloc(), path)
-fun MemScope.duckDB(path: String?, config: DuckDBConfig) = DuckDB(alloc(), path, config)
+fun MemScope.duckdb(path: String?) = DuckDB(alloc(), path)
+fun MemScope.duckdb(path: String?, config: DuckDBConfig) = DuckDB(alloc(), path, config)
