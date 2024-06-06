@@ -14,30 +14,33 @@ import org.danbrough.duckdb.cinterops.duckdb_databaseVar
 import org.danbrough.duckdb.cinterops.duckdb_open
 import org.danbrough.duckdb.cinterops.duckdb_open_ext
 
-class DuckDB(override val handle: duckdb_databaseVar) : NativeObject<duckdb_databaseVar>() {
+class DuckDB(memScope: MemScope) :
+	NativeObject<duckdb_databaseVar>(memScope) {
 
-	constructor(handle: duckdb_databaseVar, path: String?) : this(handle) {
+	override val handle: duckdb_databaseVar = memScope.alloc()
+
+	constructor(memScope: MemScope, path: String?) : this(memScope) {
 		duckdb_open(path, handle.ptr).handleDuckDbError { "duckdb_open $path failed" }
 	}
 
 	constructor(
-		handle: duckdb_databaseVar,
+		memScope: MemScope,
 		path: String? = null,
 		config: DuckDBConfig
-	) : this(handle) {
-		memScoped {
-			config.use {
-				val err: CPointerVarOf<CPointer<ByteVar>> = alloc()
-				duckdb_open_ext(path, handle.ptr, config.handle.value, err.ptr).also {
-					it.handleDuckDbError {
-						"duckdb_open_ext failed: ${err.value?.toKString()}"
-					}
+	) : this(memScope) {
+
+		config.use {
+			val err: CPointerVarOf<CPointer<ByteVar>> = memScope.alloc()
+			duckdb_open_ext(path, handle.ptr, config.handle.value, err.ptr).also {
+				it.handleDuckDbError {
+					"duckdb_open_ext failed: ${err.value?.toKString()}"
 				}
 			}
+
 		}
 	}
 
-	fun connect(memScope: MemScope): DuckDBConnection = DuckDBConnection(memScope.alloc())
+	fun connect(): DuckDBConnection = DuckDBConnection(memScope)
 
 	override fun close() {
 		log.trace { "DuckDB::close()" }
@@ -46,5 +49,5 @@ class DuckDB(override val handle: duckdb_databaseVar) : NativeObject<duckdb_data
 
 }
 
-fun MemScope.duckdb(path: String?) = DuckDB(alloc(), path)
-fun MemScope.duckdb(path: String?, config: DuckDBConfig) = DuckDB(alloc(), path, config)
+fun MemScope.duckdb(path: String?) = DuckDB(this, path)
+fun MemScope.duckdb(path: String?, config: DuckDBConfig) = DuckDB(this, path, config)

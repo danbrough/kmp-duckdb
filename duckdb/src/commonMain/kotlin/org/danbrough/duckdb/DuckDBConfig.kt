@@ -20,7 +20,7 @@ import org.danbrough.duckdb.cinterops.duckdb_set_config
 import platform.posix.free
 import platform.posix.size_t
 
-class DuckDBConfig(override val handle: duckdb_configVar) : NativeObject<duckdb_configVar>() {
+class DuckDBConfig(memScope: MemScope,override val handle: duckdb_configVar) : NativeObject<duckdb_configVar>(memScope) {
 
 	enum class AccessMode {
 		AUTOMATIC, READ_ONLY, READ_WRITE;
@@ -32,7 +32,7 @@ class DuckDBConfig(override val handle: duckdb_configVar) : NativeObject<duckdb_
 		}
 	}
 
-	constructor(handle: duckdb_configVar, options: Map<String, String>) : this(handle) {
+	constructor(memScope: MemScope,handle: duckdb_configVar, options: Map<String, String>) : this(memScope,handle) {
 		options.forEach {
 			set(it.key, it.value)
 		}
@@ -62,7 +62,7 @@ class DuckDBConfig(override val handle: duckdb_configVar) : NativeObject<duckdb_
 }
 
 
-fun MemScope.duckdbConfig() = DuckDBConfig(alloc())
+fun MemScope.duckdbConfig() = DuckDBConfig(this,alloc())
 
 fun duckdbConfigFlags(): Map<String, String> = buildMap {
 	memScoped {

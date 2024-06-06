@@ -12,14 +12,17 @@ import org.danbrough.duckdb.cinterops.duckdb_query
 import org.danbrough.duckdb.cinterops.duckdb_result
 import org.danbrough.duckdb.cinterops.duckdb_result_typeVar
 
-class DuckDBConnection(override val handle: duckdb_connectionVar) :
-	NativeObject<duckdb_connectionVar>() {
+class DuckDBConnection(memScope: MemScope) :
+	NativeObject<duckdb_connectionVar>(memScope) {
+
+	override val handle: duckdb_connectionVar = memScope.alloc()
+
 	override fun close() {
 		log.trace { "DuckDBConnection::close()" }
 		duckdb_disconnect(handle.ptr)
 	}
 
-	fun query( sql: String,result: duckdb_result) {
+	fun query(sql: String, result: duckdb_result) {
 		duckdb_query(handle.value, sql, result.ptr).handleDuckDbError {
 			"query: $sql"
 		}
