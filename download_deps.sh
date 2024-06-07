@@ -14,7 +14,10 @@ function download_archive() {
     URL="https://github.com/duckdb/duckdb/releases/download/$VERSION/$ARCHIVE"
     ZIP="$BINDIR/$ARCHIVE"
     [ ! -d "$BINDIR" ] && mkdir -p "$BINDIR"
-    [ ! -f "$ZIP" ] && ( curl $URL -o "$ZIP" || exit 1 )
+    if [ ! -f "$ZIP" ]; then
+        echo downloading $URL to $ZIP
+        curl $URL -o "$ZIP" || exit 1
+    fi 
     cd "$BINDIR" && unzip $ZIP
 }
 
