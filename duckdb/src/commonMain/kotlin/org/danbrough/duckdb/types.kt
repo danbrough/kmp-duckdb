@@ -1,6 +1,5 @@
 package org.danbrough.duckdb
 
-import org.danbrough.duckdb.cinterops.DUCKDB_TYPE
 import org.danbrough.duckdb.cinterops.DUCKDB_TYPE_ARRAY
 import org.danbrough.duckdb.cinterops.DUCKDB_TYPE_BIGINT
 import org.danbrough.duckdb.cinterops.DUCKDB_TYPE_BIT

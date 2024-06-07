@@ -94,22 +94,8 @@ fun printResult(result: duckdb_result) {
 
 
 	val zero: idx_t = 0.convert()
-	val one: idx_t = 1.convert()
-
 	val rowCount: idx_t = duckdb_row_count(result.ptr)
 	val colCount: idx_t = duckdb_column_count(result.ptr)
-	val idData = duckdb_column_data(result.ptr, zero)!!.reinterpret<IntVar>()
-	val idMask = duckdb_nullmask_data(result.ptr, zero)!!
-	val nameData = duckdb_column_data(result.ptr, one)!!.reinterpret<CPointerVar<ByteVar>>()
-	val nameMask = duckdb_nullmask_data(result.ptr, one)!!
-
-
-	/*
-	duckdb_type duckdb_column_type(
-  duckdb_result *result,
-  idx_t col
-);
-	 */
 
 	log.trace { "rowCount: $rowCount colCount: $colCount" }
 	for (col in zero until colCount) {
