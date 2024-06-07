@@ -141,6 +141,7 @@ fun main(args: Array<String>) {
 	}
 	println()
 
+	test1()
 	test2()
 }
 

@@ -25,7 +25,7 @@ MACHINE="$(uname -s)"
 if [ "$MACHINE" == "Linux" ]; then
   download_archive    libduckdb-linux-amd64.zip  amd64
   download_archive    libduckdb-linux-aarch64.zip  aarch64
-  download_archive libduckdb-osx-universal.zip darwin
+  download_archive    libduckdb-osx-universal.zip darwin
 elif [ "$MACHINE" == "Mac" ]; then
   download_archive libduckdb-osx-universal.zip darwin
 fi
