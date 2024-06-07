@@ -32,6 +32,7 @@ val generateDefFileTaskName = "generateInteropsDefFile"
 kotlin {
 	linuxX64()
 	linuxArm64()
+	macosX64()
 
 	@OptIn(ExperimentalKotlinGradlePluginApi::class)
 	compilerOptions {
