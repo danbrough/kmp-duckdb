@@ -19,8 +19,8 @@ version = duckDBVersion
 
 val KonanTarget.duckdbBinDir: File
 	get() = when (this) {
-		KonanTarget.LINUX_X64 -> file("../bin/amd64/")
-		KonanTarget.LINUX_ARM64 -> file("../bin/aarch64/")
+		KonanTarget.LINUX_X64 -> file("../bin/amd64")
+		KonanTarget.LINUX_ARM64 -> file("../bin/aarch64")
 		KonanTarget.MACOS_X64, KonanTarget.MACOS_ARM64 -> file("../bin/darwin")
 		else -> TODO("Handle target: $this")
 	}
@@ -81,14 +81,10 @@ afterEvaluate {
 		actions.add {
 			headersFile.copyTo(interopsDefFile, overwrite = true)
 		}
+
 		actions.add {
 			kotlin.targets.withType<KotlinNativeTarget>().forEach { target ->
 				val binDir = target.konanTarget.duckdbBinDir
-				/*
-				linkerOpts.linux_x64 = -L/home/dan/workspace/duckdb/kmp/bin/amd64
-compilerOpts.linux_x64 =  -I/home/dan/workspace/duckdb/kmp/bin/amd64
-libraryPaths.linux_x64  = /home/dan/workspace/duckdb/kmp/bin/amd64
-				 */
 				interopsDefFile.appendText(
 					"""
 						linkerOpts.${target.konanTarget.name} = -L${binDir.absolutePath}
@@ -104,7 +100,6 @@ libraryPaths.linux_x64  = /home/dan/workspace/duckdb/kmp/bin/amd64
 		actions.add{
 			interopsDefFile.appendText("---\n${codeFile.readText()}\n")
 		}
-
 	}
 }
 
