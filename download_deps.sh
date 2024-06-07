@@ -17,7 +17,7 @@ function download_archive() {
     if [ ! -f "$ZIP" ]; then
         echo downloading $URL to $ZIP
         curl $URL -o "$ZIP" || exit 1
-    fi 
+    fi
     cd "$BINDIR" && unzip $ZIP
 }
 
