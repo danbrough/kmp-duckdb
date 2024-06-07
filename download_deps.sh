@@ -10,14 +10,11 @@ VERSION=v1.0.0
 
 function download_archive() {
     ARCHIVE="$1"
-    FOLDER="$2"
-    BINDIR="$(realpath "$FOLDER")"
-    [ -d "$BINDIR" ] && echo "$BINDIR already exists" && return
+    BINDIR="$2"
     URL="https://github.com/duckdb/duckdb/releases/download/$VERSION/$ARCHIVE"
-    [ ! -f $ARCHIVE ] && ( wget $URL || exit 1 )
-    ZIP="$(realpath "$ARCHIVE")"
-
+    ZIP="$BINDIR/$ARCHIVE"
     [ ! -d "$BINDIR" ] && mkdir -p "$BINDIR"
+    [ ! -f "$ZIP" ] && ( curl $URL -o "$ZIP" || exit 1 )
     cd "$BINDIR" && unzip $ZIP
 }
 
