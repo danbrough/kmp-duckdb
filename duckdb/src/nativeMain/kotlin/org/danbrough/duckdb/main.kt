@@ -76,22 +76,76 @@ fun test1() {
 
 			db.connect().use { conn ->
 				log.debug { "connected" }
+				val sql = "SHOW ALL TABLES"
 				val result: duckdb_result = alloc()
-				duckdb_query(
-					conn.handle.value,
-					"SELECT * FROM STUFF",
-					result.ptr
-				).handleDuckDbError { "query failed" }
-				val count = duckdb_row_count(result.ptr)
-				log.debug { "retrieved $count rows" }
+				duckdb_query(conn.handle.value, sql, result.ptr).handleDuckDbError {
+					"query: $sql"
+				}
+
+				conn.query(sql)
+
+				println("#### SHOW ALL TABLES")
+				printResult(result)
+				duckdb_destroy_result(result.ptr)
 			}
 		}
 	}
 }
 
+fun test2() {
+	memScoped {
+		val db: duckdb_databaseVar = alloc()
+		val conn: duckdb_connectionVar = alloc()
+		runCatching {
+			duckdb_open(dbPath, db.ptr).handleDuckDbError { "duckdb_open $dbPath failed" }
+			log.trace { "opened db" }
+			duckdb_connect(db.value, conn.ptr).handleDuckDbError { "duckdb_connect failed" }
+			log.trace { "connected" }
+			val result: duckdb_result = alloc()
+			duckdb_query(
+				conn.value,
+				"SHOW ALL TABLES",
+				result.ptr
+			).handleDuckDbError { "duckdb_query failed" }
+			println("#### SHOW ALL TABLES")
+			printResult(result)
+			duckdb_destroy_result(result.ptr)
+
+			duckdb_query(
+				conn.value,
+				"SELECT * FROM STUFF",
+				result.ptr
+			).handleDuckDbError { "duckdb_query failed" }
+			println("#### SELECT * FROM STUFF")
+			printResult(result)
+			duckdb_destroy_result(result.ptr)
+
+		}.exceptionOrNull().also {
+			if (it != null) log.error(it) { "error: ${it.message}" }
+			duckdb_disconnect(conn.ptr)
+			duckdb_close(db.ptr)
+		}
+	}
+
+}
+
+fun main(args: Array<String>) {
+	//klog.kloggingDisabled() //to disable klog  
+	log.info { "main()" }
+
+	val flags = duckdbConfigFlags()
+	println()
+	println("#Config flags")
+	flags.forEach {
+		println("- ${it.key}:\t${it.value}")
+	}
+	println()
+
+	test2()
+}
+
 
 fun printResult(result: duckdb_result) {
-
 
 	val zero: idx_t = 0.convert()
 	val rowCount: idx_t = duckdb_row_count(result.ptr)
@@ -115,58 +169,4 @@ fun printResult(result: duckdb_result) {
 	}
 	printf("\n")
 	fflush(stdout)
-}
-
-
-fun test2() {
-	memScoped {
-		val db: duckdb_databaseVar = alloc()
-		val con: duckdb_connectionVar = alloc()
-		runCatching {
-			duckdb_open(dbPath, db.ptr).handleDuckDbError { "duckdb_open $dbPath failed" }
-			log.trace { "opened db" }
-			duckdb_connect(db.value, con.ptr).handleDuckDbError { "duckdb_connect failed" }
-			log.trace { "connected" }
-			val result: duckdb_result = alloc()
-
-			duckdb_query(
-				con.value,
-				"SHOW ALL TABLES",
-				result.ptr
-			).handleDuckDbError { "duckdb_query failed" }
-			println("#### SHOW ALL TABLES")
-			printResult(result)
-			duckdb_destroy_result(result.ptr)
-
-			duckdb_query(
-				con.value,
-				"SELECT * FROM STUFF",
-				result.ptr
-			).handleDuckDbError { "duckdb_query failed" }
-			println("#### SELECT * FROM STUFF")
-			printResult(result)
-			duckdb_destroy_result(result.ptr)
-
-		}.exceptionOrNull().also {
-			if (it != null) log.error(it) { "error: ${it.message}" }
-			duckdb_disconnect(con.ptr)
-			duckdb_close(db.ptr)
-		}
-	}
-
-}
-
-fun main(args: Array<String>) {
-	//klog.kloggingDisabled() //to disable klog  
-	log.info { "main()" }
-
-	val flags = duckdbConfigFlags()
-	println()
-	println("#Config flags")
-	flags.forEach {
-		println("- ${it.key}:\t${it.value}")
-	}
-	println()
-
-	test2()
 }

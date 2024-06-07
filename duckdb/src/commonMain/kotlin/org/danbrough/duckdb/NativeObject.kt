@@ -6,7 +6,6 @@ import kotlinx.cinterop.MemScope
 
 @Suppress("MemberVisibilityCanBePrivate")
 @OptIn(ExperimentalForeignApi::class)
-abstract class NativeObject<T : CPointerVarOf<*>>(val memScope: MemScope) : AutoCloseable {
-
-	abstract val handle: T
+interface NativeObject<T> : AutoCloseable {
+	val handle: T
 }

@@ -1,21 +1,28 @@
 package org.danbrough.duckdb
 
-import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.CPointerVarOf
 import kotlinx.cinterop.MemScope
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.value
+import org.danbrough.duckdb.cinterops.duckdb_connect
 import org.danbrough.duckdb.cinterops.duckdb_connectionVar
 import org.danbrough.duckdb.cinterops.duckdb_disconnect
 import org.danbrough.duckdb.cinterops.duckdb_query
 import org.danbrough.duckdb.cinterops.duckdb_result
-import org.danbrough.duckdb.cinterops.duckdb_result_typeVar
 
-class DuckDBConnection(memScope: MemScope) :
-	NativeObject<duckdb_connectionVar>(memScope) {
+class Connection(
+	private val memScope: MemScope,
+	db: Database
+) : NativeObject<duckdb_connectionVar> {
 
 	override val handle: duckdb_connectionVar = memScope.alloc()
+
+	init {
+		duckdb_connect(db.handle.value, handle.ptr).handleDuckDbError {
+			"duckdb_connect failed"
+		}
+	}
+
 
 	override fun close() {
 		log.trace { "DuckDBConnection::close()" }
@@ -27,4 +34,6 @@ class DuckDBConnection(memScope: MemScope) :
 			"query: $sql"
 		}
 	}
+
+	fun query(sql: String) = Result(this, sql, memScope.alloc())
 }

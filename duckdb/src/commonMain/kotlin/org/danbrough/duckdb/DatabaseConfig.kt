@@ -7,7 +7,6 @@ import kotlinx.cinterop.MemScope
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.convert
 import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.pointed
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
@@ -17,10 +16,10 @@ import org.danbrough.duckdb.cinterops.duckdb_create_config
 import org.danbrough.duckdb.cinterops.duckdb_destroy_config
 import org.danbrough.duckdb.cinterops.duckdb_get_config_flag
 import org.danbrough.duckdb.cinterops.duckdb_set_config
-import platform.posix.free
 import platform.posix.size_t
 
-class DuckDBConfig(memScope: MemScope,override val handle: duckdb_configVar) : NativeObject<duckdb_configVar>(memScope) {
+class DatabaseConfig(memScope: MemScope, override val handle: duckdb_configVar) :
+	NativeObject<duckdb_configVar> {
 
 	enum class AccessMode {
 		AUTOMATIC, READ_ONLY, READ_WRITE;
@@ -32,7 +31,10 @@ class DuckDBConfig(memScope: MemScope,override val handle: duckdb_configVar) : N
 		}
 	}
 
-	constructor(memScope: MemScope,handle: duckdb_configVar, options: Map<String, String>) : this(memScope,handle) {
+	constructor(memScope: MemScope, handle: duckdb_configVar, options: Map<String, String>) : this(
+		memScope,
+		handle
+	) {
 		options.forEach {
 			set(it.key, it.value)
 		}
@@ -62,7 +64,7 @@ class DuckDBConfig(memScope: MemScope,override val handle: duckdb_configVar) : N
 }
 
 
-fun MemScope.duckdbConfig() = DuckDBConfig(this,alloc())
+fun MemScope.duckdbConfig() = DatabaseConfig(this, alloc())
 
 fun duckdbConfigFlags(): Map<String, String> = buildMap {
 	memScoped {
