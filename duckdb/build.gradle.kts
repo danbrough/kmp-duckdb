@@ -39,20 +39,26 @@ kotlin {
 		listOf("kotlinx.cinterop.ExperimentalForeignApi").also { optIn = it }
 	}
 
-	sourceSets {
-		val commonMain by getting {
-			dependencies {
-				implementation(libs.klog.core)
-			}
+
+	val commonMain by sourceSets.getting {
+		dependencies {
+			implementation(libs.klog.core)
+			implementation(libs.clikt)
 		}
 	}
 
-	targets.withType<KotlinNativeTarget> {
+	val posixMain by sourceSets.creating {
+		dependsOn(commonMain)
+	}
 
-		compilations["main"].cinterops {
-			create("duckdb") {
-				definitionFile = interopsDefFile
-				tasks.getByName(interopProcessingTaskName).dependsOn(generateDefFileTaskName)
+	targets.withType<KotlinNativeTarget> {
+		compilations["main"].apply {
+			defaultSourceSet.dependsOn(posixMain)
+			cinterops {
+				create("duckdb") {
+					definitionFile = interopsDefFile
+					tasks.getByName(interopProcessingTaskName).dependsOn(generateDefFileTaskName)
+				}
 			}
 		}
 
@@ -61,6 +67,7 @@ kotlin {
 				entryPoint = "org.danbrough.duckdb.main"
 				runTask?.apply {
 					environment(HostManager.host.envLibraryPathName, konanTarget.duckdbBinDir)
+					args("-d", file("test.db"))
 				}
 			}
 		}
@@ -76,7 +83,7 @@ afterEvaluate {
 	tasks.register(generateDefFileTaskName) {
 		val headersFile = file("src/cinterops/duckdb_headers.def")
 		val codeFile = file("src/cinterops/duckdb_code.h")
-		inputs.files(headersFile,codeFile)
+		inputs.files(headersFile, codeFile)
 		outputs.files(interopsDefFile)
 
 		actions.add {
@@ -98,7 +105,7 @@ afterEvaluate {
 			}
 		}
 
-		actions.add{
+		actions.add {
 			interopsDefFile.appendText("---\n${codeFile.readText()}\n")
 		}
 	}
