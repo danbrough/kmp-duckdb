@@ -66,26 +66,3 @@ class DatabaseConfig(memScope: MemScope, override val handle: duckdb_configVar) 
 
 fun MemScope.duckdbConfig() = DatabaseConfig(this, alloc())
 
-fun duckdbConfigFlags(): Map<String, String> = buildMap {
-	memScoped {
-		val count = duckdb_config_count()
-		log.trace { "duckdb_config_count => $count" }
-		val cName: CPointerVarOf<CPointer<ByteVar>> = alloc()
-		val cDescription: CPointerVarOf<CPointer<ByteVar>> = alloc()
-		var index: size_t = 0.convert()
-		while (index < count) {
-			duckdb_get_config_flag(
-				index++,
-				cName.ptr,
-				cDescription.ptr
-			).handleDuckDbError { "duckdb_get_config_flag failed" }
-
-			val name = cName.value!!.toKString()
-			val description = cDescription.value!!.toKString()
-
-
-			put(name, description)
-			//println("$name:\t$description")
-		}
-	}
-}

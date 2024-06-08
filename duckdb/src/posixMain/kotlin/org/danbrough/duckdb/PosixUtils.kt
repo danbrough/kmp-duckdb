@@ -1,18 +1,27 @@
 package org.danbrough.duckdb
 
+import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.CPointerVarOf
+import kotlinx.cinterop.alloc
 import kotlinx.cinterop.convert
+import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
+import kotlinx.cinterop.value
 import org.danbrough.duckdb.cinterops.duckdb_column_count
 import org.danbrough.duckdb.cinterops.duckdb_column_name
 import org.danbrough.duckdb.cinterops.duckdb_column_type
+import org.danbrough.duckdb.cinterops.duckdb_config_count
 import org.danbrough.duckdb.cinterops.duckdb_free
+import org.danbrough.duckdb.cinterops.duckdb_get_config_flag
 import org.danbrough.duckdb.cinterops.duckdb_result
 import org.danbrough.duckdb.cinterops.duckdb_row_count
 import org.danbrough.duckdb.cinterops.duckdb_value_varchar
 import org.danbrough.duckdb.cinterops.idx_t
 import platform.posix.fflush
 import platform.posix.printf
+import platform.posix.size_t
 import platform.posix.stdout
 
 object PosixUtils {
@@ -46,4 +55,27 @@ object PosixUtils {
 		fflush(stdout)
 	}
 
+	fun duckdbConfigFlags(): Map<String, String> = buildMap {
+		memScoped {
+			val count = duckdb_config_count()
+			log.trace { "duckdb_config_count => $count" }
+			val cName: CPointerVarOf<CPointer<ByteVar>> = alloc()
+			val cDescription: CPointerVarOf<CPointer<ByteVar>> = alloc()
+			var index: size_t = 0.convert()
+			while (index < count) {
+				duckdb_get_config_flag(
+					index++,
+					cName.ptr,
+					cDescription.ptr
+				).handleDuckDbError { "duckdb_get_config_flag failed" }
+
+				val name = cName.value!!.toKString()
+				val description = cDescription.value!!.toKString()
+
+
+				put(name, description)
+				//println("$name:\t$description")
+			}
+		}
+	}
 }

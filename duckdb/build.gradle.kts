@@ -6,6 +6,7 @@ import org.danbrough.xtras.xtrasDeclareXtrasRepository
 import org.danbrough.xtras.xtrasTesting
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 import org.jetbrains.kotlin.konan.target.HostManager
 import org.jetbrains.kotlin.konan.target.KonanTarget
@@ -15,7 +16,6 @@ plugins {
 	`maven-publish`
 	id("org.danbrough.xtras")
 }
-
 
 
 val KonanTarget.duckdbBinDir: File
@@ -30,6 +30,18 @@ val KonanTarget.duckdbBinDir: File
 
 val interopsDefFile = file("src/cinterops/duckdb.def")
 val generateDefFileTaskName = "generateInteropsDefFile"
+
+class Demo(val name: String, val entryPoint: String, vararg args: String) {
+	var description: String = "$name test application"
+	val cmdArgs: Array<out String> = args
+}
+
+val demos = listOf(
+	Demo(
+		"demo1", "org.danbrough.duckdb.demo1",
+		"-d", file("test.db").absolutePath
+	),
+)
 
 kotlin {
 	linuxX64()
@@ -65,14 +77,24 @@ kotlin {
 			}
 		}
 
+
 		binaries {
+			demos.forEach { demoInfo ->
+				executable(demoInfo.name) {
+					entryPoint = demoInfo.entryPoint
 
+					if (buildType == NativeBuildType.DEBUG) {
+						if (konanTarget == HostManager.host)
+							tasks.create("run${demoInfo.name.capitalized()}") {
+								description = demoInfo.description
+								group = "run"
+							}.dependsOn(runTaskName)
+					}
 
-			executable("demo1") {
-				entryPoint = "org.danbrough.duckdb.demo1"
-				runTask?.apply {
-					environment(HostManager.host.envLibraryPathName, konanTarget.duckdbBinDir)
-					args("-d", file("test.db"))
+					runTask?.apply {
+						environment(HostManager.host.envLibraryPathName, konanTarget.duckdbBinDir)
+						args(*demoInfo.cmdArgs)
+					}
 				}
 			}
 
@@ -95,7 +117,7 @@ afterEvaluate {
 		outputs.files(interopsDefFile)
 
 		doFirst {
-			kotlin.targets.withType<KotlinNativeTarget>(){
+			kotlin.targets.withType<KotlinNativeTarget>() {
 				val binDir = konanTarget.duckdbBinDir
 				if (!binDir.exists())
 					throw GradleException("$binDir not found. Have you run ./download_deps.sh?")

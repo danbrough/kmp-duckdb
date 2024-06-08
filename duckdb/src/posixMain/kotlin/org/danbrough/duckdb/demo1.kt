@@ -84,7 +84,7 @@ val cmdArgs = object : CommandLine() {
 	override fun run() {
 		log.info { "main()" }
 
-		val flags = duckdbConfigFlags()
+		val flags = PosixUtils.duckdbConfigFlags()
 		println()
 		println("#Config flags")
 		flags.forEach {
