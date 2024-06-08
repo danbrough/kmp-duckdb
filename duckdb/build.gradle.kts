@@ -2,6 +2,7 @@ import org.danbrough.xtras.capitalized
 import org.danbrough.xtras.decapitalized
 import org.danbrough.xtras.envLibraryPathName
 import org.danbrough.xtras.kotlinTargetName
+import org.danbrough.xtras.xtrasDeclareXtrasRepository
 import org.danbrough.xtras.xtrasTesting
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -11,16 +12,17 @@ import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
 	alias(libs.plugins.kotlin.multiplatform)
+	`maven-publish`
 	id("org.danbrough.xtras")
 }
 
-val duckDBVersion = project.property("duckdb.version").toString()
-version = duckDBVersion
+
 
 val KonanTarget.duckdbBinDir: File
 	get() = when (this) {
 		KonanTarget.LINUX_X64 -> file("../bin/amd64")
 		KonanTarget.LINUX_ARM64 -> file("../bin/aarch64")
+		KonanTarget.MINGW_X64 -> file("../bin/windows")
 		KonanTarget.MACOS_X64, KonanTarget.MACOS_ARM64 -> file("../bin/darwin")
 		else -> TODO("Handle target: $this")
 	}
@@ -33,6 +35,7 @@ kotlin {
 	linuxX64()
 	linuxArm64()
 	macosX64()
+	mingwX64()
 
 	@OptIn(ExperimentalKotlinGradlePluginApi::class)
 	compilerOptions {
@@ -63,13 +66,16 @@ kotlin {
 		}
 
 		binaries {
+
+
 			executable("demo1") {
-				entryPoint = "org.danbrough.duckdb.main"
+				entryPoint = "org.danbrough.duckdb.demo1"
 				runTask?.apply {
 					environment(HostManager.host.envLibraryPathName, konanTarget.duckdbBinDir)
 					args("-d", file("test.db"))
 				}
 			}
+
 		}
 	}
 }
@@ -79,12 +85,22 @@ kotlin {
 xtrasTesting {
 }
 
+xtrasDeclareXtrasRepository()
+
 afterEvaluate {
 	tasks.register(generateDefFileTaskName) {
 		val headersFile = file("src/cinterops/duckdb_headers.def")
 		val codeFile = file("src/cinterops/duckdb_code.h")
 		inputs.files(headersFile, codeFile)
 		outputs.files(interopsDefFile)
+
+		doFirst {
+			kotlin.targets.withType<KotlinNativeTarget>(){
+				val binDir = konanTarget.duckdbBinDir
+				if (!binDir.exists())
+					throw GradleException("$binDir not found. Have you run ./download_deps.sh?")
+			}
+		}
 
 		actions.add {
 			headersFile.copyTo(interopsDefFile, overwrite = true)

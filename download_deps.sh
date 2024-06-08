@@ -11,27 +11,29 @@ function download_archive() {
     ARCHIVE="$1"
     BINDIR="$2"
     URL="https://github.com/duckdb/duckdb/releases/download/$VERSION/$ARCHIVE"
-    ZIP="$BINDIR/$ARCHIVE"
-   echo URL $URL ARCHIVE: $ARCHIVE BINDIR:$BINDIR 
+
+    echo URL $URL ARCHIVE: $ARCHIVE BINDIR:$BINDIR
+
     [ ! -d "$BINDIR" ] && mkdir -p "$BINDIR"
+    cd $BINDIR
     if [ ! -f "$ZIP" ]; then
-        echo downloading $URL to $ZIP
-        wget $WGETOPTS  $URL -O  "$ZIP" || exit 1
+            echo downloading $URL
+            wget $WGETOPTS  $URL || exit 1
     fi
-    cd "$BINDIR" && unzip $ARCHIVE && rm $ARCHIVE
+    unzip $ARCHIVE && rm $ARCHIVE
+    cd ..
 }
 
 MACHINE="$(uname -s)"
-if [ "$MACHINE" == "Linux" ]; then
-  download_archive    libduckdb-linux-amd64.zip  amd64
-  download_archive    libduckdb-linux-aarch64.zip  aarch64
-  download_archive    libduckdb-osx-universal.zip darwin
-elif [ "$MACHINE" == "Darwin" ]; then
-	# dont know why I need this
-	WGETOPTS="--ca-certificate=/etc/ssl/certs/ca-certificates.crt"
-	  download_archive libduckdb-osx-universal.zip darwin
+if [ "$MACHINE" == "Darwin" ]; then
+  # dont know why I need this
+  WGETOPTS="--ca-certificate=/etc/ssl/certs/ca-certificates.crt"
 fi
 
+#download_archive    libduckdb-linux-amd64.zip  amd64
+#download_archive    libduckdb-linux-aarch64.zip  aarch64
+#download_archive    libduckdb-osx-universal.zip darwin
+download_archive    libduckdb-windows-amd64.zip windows
 
 
 

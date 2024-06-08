@@ -2,35 +2,21 @@
 
 package org.danbrough.duckdb
 
-import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
-import kotlinx.cinterop.convert
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
-import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
 import org.danbrough.duckdb.cinterops.duckdb_close
-import org.danbrough.duckdb.cinterops.duckdb_column_count
-import org.danbrough.duckdb.cinterops.duckdb_column_name
-import org.danbrough.duckdb.cinterops.duckdb_column_type
 import org.danbrough.duckdb.cinterops.duckdb_connect
 import org.danbrough.duckdb.cinterops.duckdb_connectionVar
 import org.danbrough.duckdb.cinterops.duckdb_databaseVar
 import org.danbrough.duckdb.cinterops.duckdb_destroy_result
 import org.danbrough.duckdb.cinterops.duckdb_disconnect
-import org.danbrough.duckdb.cinterops.duckdb_free
 import org.danbrough.duckdb.cinterops.duckdb_open
 import org.danbrough.duckdb.cinterops.duckdb_query
 import org.danbrough.duckdb.cinterops.duckdb_result
-import org.danbrough.duckdb.cinterops.duckdb_row_count
-import org.danbrough.duckdb.cinterops.duckdb_value_varchar
-import org.danbrough.duckdb.cinterops.idx_t
 import org.danbrough.duckdb.cli.CommandLine
-import platform.posix.fflush
-import platform.posix.printf
-import platform.posix.stdout
-
 
 
 fun test1() {
@@ -111,7 +97,7 @@ val cmdArgs = object : CommandLine() {
 	}
 }
 
-fun main(args: Array<String>) {
+fun demo1(args: Array<String>) {
 	//klog.kloggingDisabled() //to disable klog
 	cmdArgs.main(args)
 }

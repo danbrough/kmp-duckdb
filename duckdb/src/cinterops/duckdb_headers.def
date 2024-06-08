@@ -4,3 +4,4 @@ headers = duckdb.h
 linkerOpts = -lduckdb
 # end of duckdb_headers.def
 
+
