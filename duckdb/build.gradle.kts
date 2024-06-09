@@ -111,6 +111,7 @@ xtrasDeclareXtrasRepository()
 
 afterEvaluate {
 	tasks.register(generateDefFileTaskName) {
+		dependsOn(":generateTypesEnum")
 		val headersFile = file("src/cinterops/duckdb_headers.def")
 		val codeFile = file("src/cinterops/duckdb_code.h")
 		inputs.files(headersFile, codeFile)

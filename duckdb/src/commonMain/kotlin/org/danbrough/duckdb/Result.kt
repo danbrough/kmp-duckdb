@@ -33,30 +33,6 @@ class Result(conn: Connection, val sql: String, override val handle: duckdb_resu
 		duckdb_destroy_result(handle.ptr)
 	}
 
-	fun printResult() {
 
-		val zero: idx_t = 0.convert()
-		val rowCount: idx_t = duckdb_row_count(handle.ptr)
-		val colCount: idx_t = duckdb_column_count(handle.ptr)
-
-		log.trace { "rowCount: $rowCount colCount: $colCount" }
-		for (col in zero until colCount) {
-			val colType = duckdb_column_type(handle.ptr, col)
-			val colName = duckdb_column_name(handle.ptr, col)
-			printf("COLUMN $col: type:${duckdbTypeToString(colType)} name:${colName!!.toKString()}\n")
-		}
-
-		for (row in zero until rowCount) {
-			for (col in zero until colCount) {
-				if (col > zero) printf("\t")
-				val str = duckdb_value_varchar(handle.ptr, col, row)
-				printf("%s", str)
-				duckdb_free(str)
-			}
-			printf("\n")
-		}
-		printf("\n")
-		fflush(stdout)
-	}
 
 }

@@ -29,7 +29,6 @@ dependencyResolutionManagement {
 	}
 }
 
-
 rootProject.name = "duckdb-kmp"
 
 include(":duckdb")

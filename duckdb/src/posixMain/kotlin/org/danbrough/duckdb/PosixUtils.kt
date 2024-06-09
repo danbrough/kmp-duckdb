@@ -9,6 +9,7 @@ import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
+import org.danbrough.duckdb.cinterops.DUCKDB_TYPE_MAP
 import org.danbrough.duckdb.cinterops.duckdb_column_count
 import org.danbrough.duckdb.cinterops.duckdb_column_name
 import org.danbrough.duckdb.cinterops.duckdb_column_type
@@ -39,7 +40,10 @@ object PosixUtils {
 		for (col in zero until colCount) {
 			val colType = duckdb_column_type(result.ptr, col)
 			val colName = duckdb_column_name(result.ptr, col)
-			printf("COLUMN $col: type:${duckdbTypeToString(colType)} name:${colName!!.toKString()}\n")
+
+
+			val enumValue = DuckDbType.entries[colType.convert()]
+			printf("COLUMN $col: type:$enumValue name:${colName!!.toKString()}\n")
 		}
 
 		for (row in zero until rowCount) {

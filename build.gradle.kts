@@ -10,3 +10,5 @@ allprojects{
 	group = projectGroup
 	version = duckDBVersion
 }
+
+project.generateTypesEnumTask()
