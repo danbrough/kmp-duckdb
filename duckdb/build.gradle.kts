@@ -2,8 +2,10 @@ import org.danbrough.xtras.capitalized
 import org.danbrough.xtras.decapitalized
 import org.danbrough.xtras.envLibraryPathName
 import org.danbrough.xtras.kotlinTargetName
+import org.danbrough.xtras.logInfo
 import org.danbrough.xtras.xtrasDeclareXtrasRepository
 import org.danbrough.xtras.xtrasTesting
+import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
@@ -30,6 +32,9 @@ val KonanTarget.duckdbBinDir: File
 
 val interopsDefFile = file("src/cinterops/duckdb.def")
 val generateDefFileTaskName = "generateInteropsDefFile"
+
+project.generateTypesEnumTask()
+
 
 class Demo(val name: String, val entryPoint: String, vararg args: String) {
 	var description: String = "$name test application"
@@ -62,8 +67,18 @@ kotlin {
 		}
 	}
 
+	val commonTest by sourceSets.getting {
+		dependencies {
+			implementation(kotlin("test"))
+		}
+	}
+
 	val posixMain by sourceSets.creating {
 		dependsOn(commonMain)
+	}
+
+	val posixTest by sourceSets.creating {
+		dependsOn(commonTest)
 	}
 
 	targets.withType<KotlinNativeTarget> {
@@ -77,19 +92,22 @@ kotlin {
 			}
 		}
 
+		compilations["test"].apply {
+			defaultSourceSet.dependsOn(posixTest)
+		}
 
 		binaries {
 			demos.forEach { demoInfo ->
-				executable(demoInfo.name) {
+				executable(demoInfo.name, buildTypes = setOf(NativeBuildType.DEBUG)) {
 					entryPoint = demoInfo.entryPoint
+					compilation = compilations["test"]
 
-					if (buildType == NativeBuildType.DEBUG) {
-						if (konanTarget == HostManager.host)
-							tasks.create("run${demoInfo.name.capitalized()}") {
-								description = demoInfo.description
-								group = "run"
-							}.dependsOn(runTaskName)
-					}
+					if (konanTarget == HostManager.host)
+						tasks.create("run${demoInfo.name.capitalized()}") {
+							description = demoInfo.description
+							group = "run"
+						}.dependsOn(runTaskName)
+
 
 					runTask?.apply {
 						environment(HostManager.host.envLibraryPathName, konanTarget.duckdbBinDir)
@@ -109,9 +127,8 @@ xtrasTesting {
 
 xtrasDeclareXtrasRepository()
 
-afterEvaluate {
 	tasks.register(generateDefFileTaskName) {
-		dependsOn(":$TASK_GENERATE_TYPES_ENUM")
+		dependsOn(TASK_GENERATE_TYPES_ENUM)
 		val headersFile = file("src/cinterops/duckdb_headers.def")
 		val codeFile = file("src/cinterops/duckdb_code.h")
 		inputs.files(headersFile, codeFile)
@@ -148,6 +165,10 @@ afterEvaluate {
 			interopsDefFile.appendText("---\n${codeFile.readText()}\n")
 		}
 	}
+
+
+tasks.withType<Jar>{
+	dependsOn(TASK_GENERATE_TYPES_ENUM)
 }
 
-
+xtrasDeclareXtrasRepository()

@@ -21,23 +21,22 @@ import org.danbrough.duckdb.cli.CommandLine
 
 fun test1() {
 	memScoped {
-
 		duckdb(cmdArgs.databasePath).use { db ->
 			log.debug { "opened db" }
 
 			db.connect().use { conn ->
 				log.debug { "connected" }
-				val sql = "SHOW ALL TABLES"
-				val result: duckdb_result = alloc()
-				duckdb_query(conn.handle.value, sql, result.ptr).handleDuckDbError {
-					"query: $sql"
+
+				conn.query("SHOW ALL TABLES").use { result->
+					println("#### SHOW ALL TABLES")
+					log.debug { "table count: ${result.rowCount}" }
+					PosixUtils.printResult(result.handle)
 				}
 
-				conn.query(sql)
-
-				println("#### SHOW ALL TABLES")
-				PosixUtils.printResult(result)
-				duckdb_destroy_result(result.ptr)
+				conn.query("SELECT * FROM duckdb_extensions()").use { result->
+					println("#### SELECT * FROM duckdb_extensions()")
+					PosixUtils.printResult(result.handle)
+				}
 			}
 		}
 	}
@@ -93,7 +92,7 @@ val cmdArgs = object : CommandLine() {
 		println()
 
 		test1()
-		test2()
+		//test2()
 	}
 }
 

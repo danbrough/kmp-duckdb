@@ -36,12 +36,10 @@ object PosixUtils {
 		val rowCount: idx_t = duckdb_row_count(result.ptr)
 		val colCount: idx_t = duckdb_column_count(result.ptr)
 
-		log.trace { "rowCount: $rowCount colCount: $colCount" }
+		log.trace { "printResult(): rowCount: $rowCount colCount: $colCount" }
 		for (col in zero until colCount) {
 			val colType = duckdb_column_type(result.ptr, col)
 			val colName = duckdb_column_name(result.ptr, col)
-
-
 			val enumValue = DuckDbType.entries[colType.convert()]
 			printf("COLUMN $col: type:$enumValue name:${colName!!.toKString()}\n")
 		}
@@ -75,7 +73,6 @@ object PosixUtils {
 
 				val name = cName.value!!.toKString()
 				val description = cDescription.value!!.toKString()
-
 
 				put(name, description)
 				//println("$name:\t$description")

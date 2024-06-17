@@ -4,11 +4,11 @@ plugins {
 }
 
 val projectGroup = project.property("project.group").toString()
+val projectVersion = project.property("project.version").toString()
 val duckDBVersion = project.property("duckdb.version").toString()
 
 allprojects{
 	group = projectGroup
-	version = duckDBVersion
+	version = projectVersion
 }
 
-project.generateTypesEnumTask()

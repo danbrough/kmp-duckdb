@@ -8,3 +8,4 @@ versions.properties
 /.kotlin
 /duckdb/src/cinterops/duckdb.def
 **vgcore*
+**.log
