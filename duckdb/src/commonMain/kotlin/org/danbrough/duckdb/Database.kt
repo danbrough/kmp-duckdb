@@ -37,7 +37,9 @@ class Database(private val memScope: MemScope) : NativeObject<duckdb_databaseVar
 		}
 	}
 
-	fun connect(): Connection = Connection(memScope,this)
+	fun connect(): Connection = Connection(memScope, this)
+
+	fun <R : Any> connect(block: Connection.() -> R) = connect().use(block)
 
 	override fun close() {
 		log.trace { "DuckDB::close()" }
@@ -47,4 +49,6 @@ class Database(private val memScope: MemScope) : NativeObject<duckdb_databaseVar
 }
 
 fun MemScope.duckdb(path: String?) = Database(this, path)
+fun <R> MemScope.duckdb(path: String?, block: Database.() -> R) = duckdb(path).use(block)
+
 //fun MemScope.duckdb(path: String?, config: DuckDBConfig) = DuckDB(this, path, config)

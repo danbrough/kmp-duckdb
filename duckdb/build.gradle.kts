@@ -49,6 +49,7 @@ val demos = listOf(
 )
 
 kotlin {
+	//jvm()
 	linuxX64()
 	linuxArm64()
 	macosX64()

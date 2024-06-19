@@ -19,21 +19,21 @@ import org.danbrough.duckdb.cinterops.duckdb_result
 import org.danbrough.duckdb.cli.CommandLine
 
 
-fun test1() {
+fun test1(cmdArgs: DemoArgs) {
 	memScoped {
-		duckdb(cmdArgs.databasePath).use { db ->
+		duckdb(cmdArgs.databasePath) {
 			log.debug { "opened db" }
 
-			db.connect().use { conn ->
+			connect {
 				log.debug { "connected" }
 
-				conn.query("SHOW ALL TABLES").use { result->
+				query("SHOW ALL TABLES").use { result ->
 					println("#### SHOW ALL TABLES")
 					log.debug { "table count: ${result.rowCount}" }
 					PosixUtils.printResult(result.handle)
 				}
 
-				conn.query("SELECT * FROM duckdb_extensions()").use { result->
+				query("SELECT * FROM duckdb_extensions()").use { result ->
 					println("#### SELECT * FROM duckdb_extensions()")
 					PosixUtils.printResult(result.handle)
 				}
@@ -42,12 +42,15 @@ fun test1() {
 	}
 }
 
-fun test2() {
+fun test2(cmdArgs: DemoArgs) {
 	memScoped {
 		val db: duckdb_databaseVar = alloc()
 		val conn: duckdb_connectionVar = alloc()
 		runCatching {
-			duckdb_open(cmdArgs.databasePath, db.ptr).handleDuckDbError { "duckdb_open $cmdArgs.databasePath failed" }
+			duckdb_open(
+				cmdArgs.databasePath,
+				db.ptr
+			).handleDuckDbError { "duckdb_open $cmdArgs.databasePath failed" }
 			log.trace { "opened db" }
 			duckdb_connect(db.value, conn.ptr).handleDuckDbError { "duckdb_connect failed" }
 			log.trace { "connected" }
@@ -76,12 +79,65 @@ fun test2() {
 			duckdb_close(db.ptr)
 		}
 	}
-
 }
 
-val cmdArgs = object : CommandLine() {
-	override fun run() {
-		log.info { "main()" }
+fun insertTest(cmdArgs: DemoArgs) {
+	log.info { "insertTest()" }
+	memScoped {
+		duckdb(cmdArgs.databasePath) {
+			log.debug { "opened db" }
+
+			connect {
+				log.debug { "connected" }
+
+				query("CREATE OR REPLACE TABLE things(id INT PRIMARY KEY, NAME VARCHAR)") {
+					log.trace { "rowsChanged: $rowsChanged" }
+				}
+
+				append("things") {
+					repeat(100) {
+						row {
+							appendInt32(it).appendVarchar("Item: $it")
+						}
+						if (it % 10 == 0 && it != 0) {
+							log.trace { "flushing at $it" }
+							flush()
+						}
+					}
+				}
+
+				prepareStatement("SELECT * FROM things WHERE id > $1") {
+					bindInt32(1U, 90)
+
+					executeWithResult {
+						log.warn { "received: $rowCount rows" }
+						PosixUtils.printResult(handle)
+					}
+				}
+
+				//select {id:event.id,time:event.time,type:event.type,count:event.count}::JSON from event;
+				query("SELECT {id:things.id,name:things.name}::JSON FROM things") {
+					PosixUtils.printResult(handle)
+				}
+			}
+		}
+	}
+}
+
+open class DemoArgs() : CommandLine() {
+	lateinit var runJob: DemoArgs.() -> Unit
+
+	fun run(args: Array<String>, block: DemoArgs.() -> Unit) {
+		runJob = block
+		main(args)
+	}
+
+	override fun run() = runJob()
+}
+
+fun demo1(args: Array<String>) {
+	//klog.kloggingDisabled() //to disable klog
+	DemoArgs().run(args) {
 
 		val flags = PosixUtils.duckdbConfigFlags()
 		println()
@@ -91,13 +147,8 @@ val cmdArgs = object : CommandLine() {
 		}
 		println()
 
-		test1()
-		//test2()
+		//test1(this)
+		insertTest(this)
 	}
-}
-
-fun demo1(args: Array<String>) {
-	//klog.kloggingDisabled() //to disable klog
-	cmdArgs.main(args)
 }
 

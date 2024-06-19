@@ -10,8 +10,9 @@ import org.danbrough.duckdb.cinterops.duckdb_disconnect
 import org.danbrough.duckdb.cinterops.duckdb_query
 import org.danbrough.duckdb.cinterops.duckdb_result
 
+@Suppress("MemberVisibilityCanBePrivate")
 class Connection(
-	private val memScope: MemScope,
+	 val memScope: MemScope,
 	db: Database
 ) : NativeObject<duckdb_connectionVar> {
 
@@ -23,17 +24,20 @@ class Connection(
 		}
 	}
 
-
 	override fun close() {
 		log.trace { "DuckDBConnection::close()" }
 		duckdb_disconnect(handle.ptr)
 	}
 
-	fun query(sql: String, result: duckdb_result) {
-		duckdb_query(handle.value, sql, result.ptr).handleDuckDbError {
-			"query: $sql"
-		}
-	}
+	fun query(sql: String) = Result(this,memScope.alloc(),sql)
 
-	fun query(sql: String) = Result(this, sql, memScope.alloc())
+	fun <R> query(sql: String, block: Result.() -> R) = query(sql).use(block)
+
+	fun prepareStatement(sql: String) = PreparedStatement(this, sql, memScope.alloc())
+	fun prepareStatement(sql: String, block: PreparedStatement.() -> Unit) =
+		prepareStatement(sql).use(block)
+
+	fun append(table: String) = Appender(this, table, memScope.alloc())
+
+	fun append(table: String, block: Appender.() -> Unit) = append(table).use(block)
 }
