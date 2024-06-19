@@ -4,7 +4,6 @@ import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
-import org.danbrough.duckdb.Appender2.Row
 import org.danbrough.duckdb.cinterops.DuckDBError
 import org.danbrough.duckdb.cinterops.duckdb_append_bool
 import org.danbrough.duckdb.cinterops.duckdb_append_date
