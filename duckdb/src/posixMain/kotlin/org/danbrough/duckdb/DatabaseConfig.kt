@@ -10,7 +10,7 @@ import org.danbrough.duckdb.cinterops.duckdb_destroy_config
 import org.danbrough.duckdb.cinterops.duckdb_set_config
 
 class DatabaseConfig(memScope: MemScope, override val handle: duckdb_configVar) :
-	NativeObject<duckdb_configVar> {
+	NativePeer<duckdb_configVar> {
 
 	enum class AccessMode {
 		AUTOMATIC, READ_ONLY, READ_WRITE;

@@ -1,11 +1,9 @@
 package org.danbrough.duckdb
 
-import kotlinx.cinterop.alloc
-import org.danbrough.duckdb.cinterops.duckdb_connectionVar
 
-expect interface NativeConnection : AutoCloseable
+expect interface ConnectionPeer : AutoCloseable
 
-expect class Connection : NativeConnection {
+expect class Connection : ConnectionPeer {
   val database: Database
 
   fun query(sql: String): Result
@@ -13,6 +11,8 @@ expect class Connection : NativeConnection {
   fun append(table: String): Appender
 
   fun prepareStatement(sql: String): PreparedStatement
+
+  override fun close()
 
 }
 

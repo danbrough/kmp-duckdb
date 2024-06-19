@@ -1,6 +1,5 @@
 package org.danbrough.duckdb
 
-import kotlinx.cinterop.alloc
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
@@ -19,7 +18,7 @@ import org.danbrough.duckdb.cinterops.duckdb_prepare_error
 import org.danbrough.duckdb.cinterops.duckdb_prepared_statementVar
 import org.danbrough.duckdb.cinterops.idx_t
 
-actual interface NativePreparedStatement : AutoCloseable, NativeObject<duckdb_prepared_statementVar>
+actual interface NativePreparedStatement : AutoCloseable, NativePeer<duckdb_prepared_statementVar>
 
 actual class PreparedStatement(actual val connection: Connection,override val handle: duckdb_prepared_statementVar) :
   NativePreparedStatement {
@@ -31,7 +30,7 @@ actual class PreparedStatement(actual val connection: Connection,override val ha
   }
 
 
-  override fun close() {
+  actual override fun close() {
     duckdb_destroy_prepare(handle.ptr)
   }
 

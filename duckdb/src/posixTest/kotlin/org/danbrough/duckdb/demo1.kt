@@ -125,9 +125,6 @@ fun insertTest(cmdArgs: DemoArgs) {
 }
 
 
-
-
-
 open class DemoArgs() : CommandLine() {
   lateinit var runJob: DemoArgs.() -> Unit
 

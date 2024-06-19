@@ -7,9 +7,9 @@ import org.danbrough.duckdb.cinterops.duckdb_connect
 import org.danbrough.duckdb.cinterops.duckdb_connectionVar
 import org.danbrough.duckdb.cinterops.duckdb_disconnect
 
-actual interface NativeConnection : NativeObject<duckdb_connectionVar>, AutoCloseable
+actual interface ConnectionPeer : NativePeer<duckdb_connectionVar>, AutoCloseable
 
-actual class Connection(actual val database: Database) : NativeConnection {
+actual class Connection(actual val database: Database) : ConnectionPeer {
 
   override val handle: duckdb_connectionVar = database.scope.alloc<duckdb_connectionVar>().also {
     duckdb_connect(database.handle.value, it.ptr).handleDuckDbError {
@@ -17,7 +17,7 @@ actual class Connection(actual val database: Database) : NativeConnection {
     }
   }
 
-  override fun close() {
+  actual override fun close() {
     log.trace { "DuckDBConnection::close()" }
     duckdb_disconnect(handle.ptr)
   }

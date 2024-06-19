@@ -24,7 +24,7 @@ import org.danbrough.duckdb.cinterops.duckdb_appender_error
 import org.danbrough.duckdb.cinterops.duckdb_appender_flush
 import org.danbrough.duckdb.cinterops.duckdb_date
 
-actual interface NativeAppender : NativeObject<duckdb_appenderVar>, AutoCloseable
+actual interface NativeAppender : NativePeer<duckdb_appenderVar>, AutoCloseable
 
 actual class Appender(
   actual val connection: Connection,

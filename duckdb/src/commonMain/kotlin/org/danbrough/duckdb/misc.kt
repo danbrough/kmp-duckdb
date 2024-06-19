@@ -1,6 +1,5 @@
 package org.danbrough.duckdb
 
-import kotlinx.cinterop.MemScope
 
 val log = klog.logger("DUCKDB")
 

@@ -10,7 +10,7 @@ import org.danbrough.duckdb.cinterops.duckdb_result
 import org.danbrough.duckdb.cinterops.duckdb_row_count
 import org.danbrough.duckdb.cinterops.duckdb_rows_changed
 
-actual interface ResultHandle : NativeObject<duckdb_result>, AutoCloseable
+actual interface ResultHandle : NativePeer<duckdb_result>, AutoCloseable
 
 actual class Result(val connection: Connection) : ResultHandle {
   override val handle: duckdb_result = connection.database.scope.alloc<duckdb_result>().also {
@@ -42,6 +42,6 @@ actual class Result(val connection: Connection) : ResultHandle {
   }
 
 
-  override fun close() = duckdb_destroy_result(handle.ptr)
+  actual override fun close() = duckdb_destroy_result(handle.ptr)
 }
 
