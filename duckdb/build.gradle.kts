@@ -51,13 +51,14 @@ val demos = listOf(
 kotlin {
 	//jvm()
 	linuxX64()
-	linuxArm64()
-	macosX64()
-	mingwX64()
+	//linuxArm64()
+	//macosX64()
+	//mingwX64()
 
 	@OptIn(ExperimentalKotlinGradlePluginApi::class)
 	compilerOptions {
 		listOf("kotlinx.cinterop.ExperimentalForeignApi").also { optIn = it }
+		freeCompilerArgs = freeCompilerArgs.get() +  "-Xexpect-actual-classes"
 	}
 
 

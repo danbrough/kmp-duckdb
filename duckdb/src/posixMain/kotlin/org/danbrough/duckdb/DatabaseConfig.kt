@@ -1,22 +1,13 @@
 package org.danbrough.duckdb
 
-import kotlinx.cinterop.ByteVar
-import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.CPointerVarOf
 import kotlinx.cinterop.MemScope
 import kotlinx.cinterop.alloc
-import kotlinx.cinterop.convert
-import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
-import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
 import org.danbrough.duckdb.cinterops.duckdb_configVar
-import org.danbrough.duckdb.cinterops.duckdb_config_count
 import org.danbrough.duckdb.cinterops.duckdb_create_config
 import org.danbrough.duckdb.cinterops.duckdb_destroy_config
-import org.danbrough.duckdb.cinterops.duckdb_get_config_flag
 import org.danbrough.duckdb.cinterops.duckdb_set_config
-import platform.posix.size_t
 
 class DatabaseConfig(memScope: MemScope, override val handle: duckdb_configVar) :
 	NativeObject<duckdb_configVar> {

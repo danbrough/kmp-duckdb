@@ -1,20 +1,11 @@
 package org.danbrough.duckdb
 
-import kotlinx.cinterop.toKString
-import org.danbrough.duckdb.cinterops.DuckDBError
-import org.danbrough.duckdb.cinterops.duckdb_result_error
-import platform.posix.errno
-import platform.posix.strerror
+import kotlinx.cinterop.MemScope
 
 val log = klog.logger("DUCKDB")
 
-inline fun UInt.handleDuckDbError(msg: () -> String) {
-	if (this == DuckDBError) {
-		log.trace { "got an error" }
-		"${msg()} message: ${strerror(errno)?.toKString()}".also {
-			log.error { it }
-			throw Exception(it)
-		}
-	}
-}
+expect class RootScope
 
+expect fun RootScope.duckdb(path:String?): Database
+
+fun <R> RootScope.duckdb(path: String?, block: Database.() -> R) = duckdb(path).use(block)
