@@ -53,6 +53,7 @@ slf4j-api = "2.0.13"
 slf4j-simple = "2.0.12"
 logback-classic = "1.5.6"
 kotlinx-coroutines = "1.8.1"
+##              ⬆ = "1.9.0-RC"
 ktor = "2.3.11"
 
 kotlinx-datetime = "0.6.0"
