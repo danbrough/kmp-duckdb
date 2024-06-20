@@ -3,11 +3,8 @@
 package org.danbrough.duckdb
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.NativePointed
 import kotlinx.cinterop.alloc
-import kotlinx.cinterop.free
 import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.nativeHeap
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.value
 import kotlinx.coroutines.runBlocking
@@ -26,7 +23,6 @@ import org.danbrough.duckdb.cinterops.duckdb_open
 import org.danbrough.duckdb.cinterops.duckdb_query
 import org.danbrough.duckdb.cinterops.duckdb_result
 import org.danbrough.duckdb.cli.CommandLine
-import platform.linux.SYS_tee
 
 
 fun test1(cmdArgs: DemoArgs) {
