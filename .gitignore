@@ -9,3 +9,4 @@ versions.properties
 /duckdb/src/cinterops/duckdb.def
 **vgcore*
 **.log
+**.db

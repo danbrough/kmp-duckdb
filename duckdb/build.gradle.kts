@@ -45,6 +45,9 @@ class Demo(val name: String, val entryPoint: String, vararg args: String) {
 
 val demos = listOf(
 	Demo(
+		"demo", "org.danbrough.duckdb.demo"
+	),
+	Demo(
 		"demo1", "org.danbrough.duckdb.demo1",
 		"-d", file("test.db").absolutePath
 	),

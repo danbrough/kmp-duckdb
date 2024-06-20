@@ -1,5 +1,5 @@
-site_name: Demo1 Site
-site_url: https://danbrough.org/demo1
+site_name: DuckDB for Kotlin Multiplatform
+site_url: https://danbrough.github.io/kmp-duckdb/
 copyright: dan@danbrough.org 2024
 theme:
   name: material
