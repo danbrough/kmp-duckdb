@@ -18,6 +18,4 @@ inline fun UInt.handleDuckDbError(msg: () -> String) {
   }
 }
 
-actual typealias RootScope = MemScope
 
-actual fun RootScope.duckdb(path: String?): Database = Database(this, path)

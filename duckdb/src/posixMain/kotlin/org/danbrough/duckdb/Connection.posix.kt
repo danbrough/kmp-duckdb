@@ -1,6 +1,8 @@
 package org.danbrough.duckdb
 
 import kotlinx.cinterop.alloc
+import kotlinx.cinterop.free
+import kotlinx.cinterop.nativeHeap
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.value
 import org.danbrough.duckdb.cinterops.duckdb_connect
@@ -11,8 +13,10 @@ actual interface ConnectionPeer : NativePeer<duckdb_connectionVar>, AutoCloseabl
 
 actual class Connection(actual val database: Database) : ConnectionPeer {
 
-  override val handle: duckdb_connectionVar = database.scope.alloc<duckdb_connectionVar>().also {
-    duckdb_connect(database.handle.value, it.ptr).handleDuckDbError {
+  override val handle: duckdb_connectionVar = nativeHeap.alloc<duckdb_connectionVar>()
+
+  init {
+    duckdb_connect(database.handle.value, handle.ptr).handleDuckDbError {
       "duckdb_connect failed"
     }
   }
@@ -20,12 +24,14 @@ actual class Connection(actual val database: Database) : ConnectionPeer {
   actual override fun close() {
     log.trace { "DuckDBConnection::close()" }
     duckdb_disconnect(handle.ptr)
+    nativeHeap.free(handle)
   }
 
   actual fun query(sql: String): Result = Result(this, sql)
 
-  actual fun append(table: String): Appender = Appender(this, table, database.scope.alloc())
-  actual fun prepareStatement(sql: String) = PreparedStatement(this, sql, database.scope.alloc())
+  actual fun append(table: String): Appender = Appender(this, table)
+
+  actual fun prepareStatement(sql: String) = PreparedStatement(this, sql)
 
 
   /*

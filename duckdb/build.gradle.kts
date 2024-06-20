@@ -74,6 +74,8 @@ kotlin {
   val commonTest by sourceSets.getting {
     dependencies {
       implementation(kotlin("test"))
+      implementation(libs.kotlinx.coroutines)
+      implementation(libs.kotlinx.datetime)
     }
   }
 
@@ -175,15 +177,11 @@ tasks.withType<Jar> {
   dependsOn(TASK_GENERATE_TYPES_ENUM)
 }
 
-tasks.withType<KotlinCompile>{
+tasks.withType<KotlinCompile> {
   dependsOn(TASK_GENERATE_TYPES_ENUM)
 }
-tasks.withType<KotlinCompileCommon>{
+tasks.withType<KotlinCompileCommon> {
   dependsOn(TASK_GENERATE_TYPES_ENUM)
 }
-/*afterEvaluate {
-  tasks.getByName("compileCommonMainKotlinMetadata").also {
-    println("TASK: ${it.name} type: ${it::class.java}")
-  }
-}*/
+
 xtrasDeclareXtrasRepository()

@@ -1,5 +1,8 @@
 package org.danbrough.duckdb
 
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.free
+import kotlinx.cinterop.nativeHeap
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
@@ -20,10 +23,12 @@ import org.danbrough.duckdb.cinterops.idx_t
 
 actual interface NativePreparedStatement : AutoCloseable, NativePeer<duckdb_prepared_statementVar>
 
-actual class PreparedStatement(actual val connection: Connection,override val handle: duckdb_prepared_statementVar) :
+actual class PreparedStatement(actual val connection: Connection) :
   NativePreparedStatement {
 
-  constructor(connection: Connection, sql: String, handle: duckdb_prepared_statementVar) : this(connection,handle) {
+  override val handle: duckdb_prepared_statementVar = nativeHeap.alloc()
+
+  constructor(connection: Connection, sql: String) : this(connection) {
 
     if (duckdb_prepare(connection.handle.value, sql, handle.ptr) == DuckDBError)
       error("PreparedStatement::prepare failed. SQL:$sql. message: ${duckdb_prepare_error(handle.value)?.toKString()}")
@@ -32,6 +37,7 @@ actual class PreparedStatement(actual val connection: Connection,override val ha
 
   actual override fun close() {
     duckdb_destroy_prepare(handle.ptr)
+    nativeHeap.free(handle)
   }
 
 

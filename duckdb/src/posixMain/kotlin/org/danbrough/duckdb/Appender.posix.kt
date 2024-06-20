@@ -1,6 +1,9 @@
 package org.danbrough.duckdb
 
 import kotlinx.cinterop.CValue
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.free
+import kotlinx.cinterop.nativeHeap
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
@@ -29,8 +32,8 @@ actual interface NativeAppender : NativePeer<duckdb_appenderVar>, AutoCloseable
 actual class Appender(
   actual val connection: Connection,
   actual val table: String,
-  override val handle: duckdb_appenderVar
 ) : NativeAppender {
+  override val handle: duckdb_appenderVar = nativeHeap.alloc()
 
   init {
     duckdb_appender_create(connection.handle.value, null, table, handle.ptr).handleDuckDbError {
@@ -44,41 +47,41 @@ actual class Appender(
     } else Unit
 
   actual inner class Row {
-    inline fun appendInt32(i: Int) = apply {
+    actual inline fun appendInt32(i: Int):Row = apply {
       duckdb_append_int32(handle.value, i).handleAppendError { "duckdb_append_int32" }
     }
 
-    inline fun appendInt64(i: Long) = apply {
+    actual inline fun appendInt64(i: Long) = apply {
       duckdb_append_int64(handle.value, i).handleAppendError {
         "duckdb_append_int64 failed"
       }
     }
 
-    inline fun appendInt16(i: Short) = apply {
+    actual inline fun appendInt16(i: Short) = apply {
       duckdb_append_int16(handle.value, i).handleAppendError {
         "duckdb_append_int16 failed"
       }
     }
 
-    inline fun appendInt8(i: Byte) = apply {
+    actual inline fun appendInt8(i: Byte) = apply {
       duckdb_append_int8(handle.value, i).handleAppendError {
         "duckdb_append_int8() failed"
       }
     }
 
-    fun appendNull() = apply {
+    actual inline fun appendNull() = apply {
       duckdb_append_null(handle.value).handleAppendError {
         "duckdb_append_null failed"
       }
     }
 
-    fun appendFloat(i: Float) = apply {
+    actual inline fun appendFloat(i: Float) = apply {
       duckdb_append_float(handle.value, i).handleAppendError {
         "duckdb_append_float failed"
       }
     }
 
-    fun appendDouble(i: Double) = apply {
+    actual inline fun appendDouble(i: Double) = apply {
       duckdb_append_double(handle.value, i).handleAppendError {
         "duckdb_append_double failed"
       }
@@ -90,13 +93,13 @@ actual class Appender(
       }
     }
 
-    fun appendBoolean(i: Boolean) = apply {
+    actual inline  fun appendBoolean(i: Boolean) = apply {
       duckdb_append_bool(handle.value, i).handleAppendError {
         "duckdb_append_bool failed"
       }
     }
 
-    fun appendVarchar(i: String) = apply {
+    actual inline fun appendVarchar(i: String) = apply {
       duckdb_append_varchar(handle.value, i).handleAppendError {
         "duckdb_append_varchar failed"
       }
@@ -108,6 +111,7 @@ actual class Appender(
       error("Appender::close(): failed ${duckdb_appender_error(handle.value)?.toKString()}")
 
     duckdb_appender_destroy(handle.ptr)
+    nativeHeap.free(handle)
   }
 
   actual fun flush() {

@@ -1,8 +1,11 @@
 package org.danbrough.duckdb
+
 expect interface DatabasePeer : AutoCloseable
 
-expect class Database : DatabasePeer {
-  val scope: RootScope
+expect class Database(path: String? = null, config: DatabaseConfig? = null) : DatabasePeer {
+
+  var path: String?
+  var config: DatabaseConfig?
 
   fun connect(): Connection
 
