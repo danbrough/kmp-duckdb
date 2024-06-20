@@ -23,6 +23,7 @@ import org.danbrough.duckdb.cinterops.duckdb_open
 import org.danbrough.duckdb.cinterops.duckdb_query
 import org.danbrough.duckdb.cinterops.duckdb_result
 import org.danbrough.duckdb.cli.CommandLine
+import org.danbrough.xtras.support.getEnv
 
 
 fun test1(cmdArgs: DemoArgs) {
@@ -145,7 +146,7 @@ fun dbTest(args: DemoArgs) {
 	log.info { "dbTest" }
 	runBlocking {
 		duckdb(
-			"/home/dan/.habitrack/database",
+			"${getEnv("HOME")}/.habitrack/database",
 			DatabaseConfig(DatabaseConfig.AccessMode.READ_ONLY)
 		) {
 			val midnight = Clock.System.todayIn(TimeZone.currentSystemDefault())
