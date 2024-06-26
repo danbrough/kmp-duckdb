@@ -10,3 +10,4 @@ versions.properties
 **vgcore*
 **.log
 **.db
+/tmp

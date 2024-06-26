@@ -25,6 +25,7 @@ actual class DatabaseConfig actual constructor(
     duckdb_create_config(handle.ptr).handleDuckDbError {
       "duckdb_create_config failed"
     }
+
     options.forEach {
       set(it.key, it.value)
     }

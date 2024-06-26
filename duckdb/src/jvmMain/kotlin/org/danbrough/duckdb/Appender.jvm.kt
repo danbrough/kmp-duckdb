@@ -2,7 +2,7 @@ package org.danbrough.duckdb
 
 actual interface NativeAppender : AutoCloseable
 
-actual class Appender {
+actual class Appender : NativeAppender {
   actual val connection: Connection
     get() = TODO("Not yet implemented")
   actual val table: String
@@ -12,45 +12,24 @@ actual class Appender {
   }
 
   actual inner class Row {
-    actual fun appendInt32(i: Int): Row {
-      TODO("Not yet implemented")
-    }
 
-    actual fun appendInt8(i: Byte): Row {
-      TODO("Not yet implemented")
-    }
-
-    actual fun appendInt16(i: Short): Row {
-      TODO("Not yet implemented")
-    }
-
-    actual fun appendInt64(i: Long): Row {
-      TODO("Not yet implemented")
-    }
 
     actual fun appendNull(): Row {
       TODO("Not yet implemented")
     }
 
-    actual fun appendFloat(i: Float): Row {
+    actual inline fun <T : Any> append(value: T): Row {
       TODO("Not yet implemented")
     }
 
-    actual fun appendDouble(i: Double): Row {
-      TODO("Not yet implemented")
-    }
-
-    actual fun appendVarchar(i: String): Row {
-      TODO("Not yet implemented")
-    }
-
-    actual fun appendBoolean(i: Boolean): Row {
-      TODO("Not yet implemented")
-    }
 
   }
 
   actual fun row(block: Row.() -> Unit) {
+  }
+
+  actual override fun close() {
+    TODO("Not yet implemented")
   }
 
 

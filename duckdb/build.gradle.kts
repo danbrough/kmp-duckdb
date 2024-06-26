@@ -19,6 +19,7 @@ plugins {
 	alias(libs.plugins.kotlin.multiplatform)
 	`maven-publish`
 	id("org.danbrough.xtras")
+	alias(libs.plugins.org.jetbrains.dokka )
 }
 
 
@@ -92,6 +93,7 @@ kotlin {
 	}
 
 	targets.withType<KotlinNativeTarget> {
+
 		compilations["main"].apply {
 			defaultSourceSet.dependsOn(posixMain)
 			cinterops {

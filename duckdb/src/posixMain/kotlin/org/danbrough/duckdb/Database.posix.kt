@@ -23,11 +23,13 @@ import org.danbrough.duckdb.cinterops.duckdb_open_ext
 actual interface DatabasePeer : NativePeer<duckdb_databaseVar>, AutoCloseable
 
 @Suppress("unused", "CanBePrimaryConstructorProperty")
-actual class Database actual constructor(path: String?, config: DatabaseConfig?) :
+actual class Database actual constructor(
+  actual val path: String?,
+  actual val config: DatabaseConfig?
+) :
   DatabasePeer {
 
-  actual var path: String? = path
-  actual var config: DatabaseConfig? = config
+
   override val handle: duckdb_databaseVar = nativeHeap.alloc()
 
   init {
@@ -46,23 +48,12 @@ actual class Database actual constructor(path: String?, config: DatabaseConfig?)
     if (errMessage != null) error(errMessage)
   }
 
-  /*
-
-    constructor(path: String?) : super() {
-      duckdb_open(path, handle.ptr).handleDuckDbError { "duckdb_open $path failed" }
-      log.trace { "opened db at $path" }
-    }
-  */
 
   actual fun connect(): Connection = Connection(this)
-
-  //actual fun <R : Any> connect(block: Connection.() -> R): R = connect().use(block)
 
   actual override fun close() {
     log.trace { "Database::close()" }
     duckdb_close(handle.ptr)
     nativeHeap.free(handle)
   }
-
-
 }

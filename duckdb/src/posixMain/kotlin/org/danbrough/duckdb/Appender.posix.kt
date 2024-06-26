@@ -17,8 +17,14 @@ import org.danbrough.duckdb.cinterops.duckdb_append_int32
 import org.danbrough.duckdb.cinterops.duckdb_append_int64
 import org.danbrough.duckdb.cinterops.duckdb_append_int8
 import org.danbrough.duckdb.cinterops.duckdb_append_null
+import org.danbrough.duckdb.cinterops.duckdb_append_uint16
+import org.danbrough.duckdb.cinterops.duckdb_append_uint32
+import org.danbrough.duckdb.cinterops.duckdb_append_uint64
+import org.danbrough.duckdb.cinterops.duckdb_append_uint8
 import org.danbrough.duckdb.cinterops.duckdb_append_varchar
+import org.danbrough.duckdb.cinterops.duckdb_appender
 import org.danbrough.duckdb.cinterops.duckdb_appenderVar
+import org.danbrough.duckdb.cinterops.duckdb_appender_begin_row
 import org.danbrough.duckdb.cinterops.duckdb_appender_close
 import org.danbrough.duckdb.cinterops.duckdb_appender_create
 import org.danbrough.duckdb.cinterops.duckdb_appender_destroy
@@ -26,6 +32,8 @@ import org.danbrough.duckdb.cinterops.duckdb_appender_end_row
 import org.danbrough.duckdb.cinterops.duckdb_appender_error
 import org.danbrough.duckdb.cinterops.duckdb_appender_flush
 import org.danbrough.duckdb.cinterops.duckdb_date
+import org.danbrough.duckdb.cinterops.duckdb_state
+import kotlin.reflect.KClass
 
 actual interface NativeAppender : NativePeer<duckdb_appenderVar>, AutoCloseable
 
@@ -47,66 +55,45 @@ actual class Appender(
     } else Unit
 
   actual inner class Row {
-    actual inline fun appendInt32(i: Int):Row = apply {
-      duckdb_append_int32(handle.value, i).handleAppendError { "duckdb_append_int32" }
-    }
 
-    actual inline fun appendInt64(i: Long) = apply {
-      duckdb_append_int64(handle.value, i).handleAppendError {
-        "duckdb_append_int64 failed"
-      }
-    }
 
-    actual inline fun appendInt16(i: Short) = apply {
-      duckdb_append_int16(handle.value, i).handleAppendError {
-        "duckdb_append_int16 failed"
-      }
-    }
-
-    actual inline fun appendInt8(i: Byte) = apply {
-      duckdb_append_int8(handle.value, i).handleAppendError {
-        "duckdb_append_int8() failed"
-      }
-    }
-
-    actual inline fun appendNull() = apply {
+    actual inline fun appendNull(): Row {
       duckdb_append_null(handle.value).handleAppendError {
         "duckdb_append_null failed"
       }
+      return this
     }
 
-    actual inline fun appendFloat(i: Float) = apply {
-      duckdb_append_float(handle.value, i).handleAppendError {
-        "duckdb_append_float failed"
-      }
-    }
-
-    actual inline fun appendDouble(i: Double) = apply {
-      duckdb_append_double(handle.value, i).handleAppendError {
-        "duckdb_append_double failed"
-      }
-    }
-
-    fun appendDate(i: CValue<duckdb_date>) = apply {
+    fun appendDate(i: CValue<duckdb_date>): Row {
       duckdb_append_date(handle.value, i).handleAppendError {
         "duckdb_append_double failed"
       }
+      return this
     }
 
-    actual inline  fun appendBoolean(i: Boolean) = apply {
-      duckdb_append_bool(handle.value, i).handleAppendError {
-        "duckdb_append_bool failed"
-      }
-    }
+    actual inline fun <T : Any> append(value: T): Row {
 
-    actual inline fun appendVarchar(i: String) = apply {
-      duckdb_append_varchar(handle.value, i).handleAppendError {
-        "duckdb_append_varchar failed"
-      }
+      when (value) {
+        is String -> duckdb_append_varchar(handle.value, value)
+        is Byte -> duckdb_append_int8(handle.value, value)
+        is Short -> duckdb_append_int16(handle.value, value)
+        is Int -> duckdb_append_int32(handle.value, value)
+        is Long -> duckdb_append_int64(handle.value, value)
+        is UByte -> duckdb_append_uint8(handle.value, value)
+        is UShort -> duckdb_append_uint16(handle.value, value)
+        is UInt -> duckdb_append_uint32(handle.value, value)
+        is ULong -> duckdb_append_uint64(handle.value, value)
+        is Float -> duckdb_append_float(handle.value, value)
+        is Double -> duckdb_append_double(handle.value, value)
+
+        else -> error("invalid value: $value")
+      }.handleAppendError { "duckdb_append $value failed" }
+      return this
     }
   }
 
-  override fun close() {
+
+  actual override fun close() {
     if (duckdb_appender_close(handle.value) == DuckDBError)
       error("Appender::close(): failed ${duckdb_appender_error(handle.value)?.toKString()}")
 

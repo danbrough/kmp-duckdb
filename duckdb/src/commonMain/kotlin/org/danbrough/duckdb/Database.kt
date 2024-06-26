@@ -4,8 +4,8 @@ expect interface DatabasePeer : AutoCloseable
 
 expect class Database(path: String? = null, config: DatabaseConfig? = null) : DatabasePeer {
 
-  var path: String?
-  var config: DatabaseConfig?
+  val path: String?
+  val config: DatabaseConfig?
 
   fun connect(): Connection
 
