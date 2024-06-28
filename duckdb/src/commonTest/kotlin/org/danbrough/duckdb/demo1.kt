@@ -1,34 +1,14 @@
-@file:OptIn(ExperimentalForeignApi::class)
-
 package org.danbrough.duckdb
 
-import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.alloc
-import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.ptr
-import kotlinx.cinterop.value
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
-import org.danbrough.duckdb.cinterops.duckdb_append_int32
-import org.danbrough.duckdb.cinterops.duckdb_append_uint64
-import org.danbrough.duckdb.cinterops.duckdb_append_uint8
-import org.danbrough.duckdb.cinterops.duckdb_close
-import org.danbrough.duckdb.cinterops.duckdb_connect
-import org.danbrough.duckdb.cinterops.duckdb_connectionVar
-import org.danbrough.duckdb.cinterops.duckdb_databaseVar
-import org.danbrough.duckdb.cinterops.duckdb_destroy_result
-import org.danbrough.duckdb.cinterops.duckdb_disconnect
-import org.danbrough.duckdb.cinterops.duckdb_open
-import org.danbrough.duckdb.cinterops.duckdb_query
-import org.danbrough.duckdb.cinterops.duckdb_result
-import org.danbrough.duckdb.cli.CommandLine
 import org.danbrough.xtras.support.getEnv
 
 
+/*
 fun test1(cmdArgs: DemoArgs) {
   memScoped {
     duckdb(cmdArgs.databasePath) {
@@ -51,8 +31,9 @@ fun test1(cmdArgs: DemoArgs) {
     }
   }
 }
+*/
 
-fun test2(cmdArgs: DemoArgs) {
+/*fun test2(cmdArgs: DemoArgs) {
   memScoped {
     val db: duckdb_databaseVar = alloc()
     val conn: duckdb_connectionVar = alloc()
@@ -89,7 +70,7 @@ fun test2(cmdArgs: DemoArgs) {
       duckdb_close(db.ptr)
     }
   }
-}
+}*/
 
 fun insertTest(cmdArgs: DemoArgs) {
   log.info { "insertTest()" }
@@ -116,34 +97,23 @@ fun insertTest(cmdArgs: DemoArgs) {
       }
 
       prepareStatement("SELECT * FROM things WHERE id > $1") {
-        bindInt32(1U, 90)
+        bind(1, 90)
 
-        executeWithResult {
+        execute {
           log.warn { "received: $rowCount rows" }
-          PosixUtils.printResult(handle)
+          //PosixUtils.printResult(handle)
         }
       }
 
       //select {id:event.id,time:event.time,type:event.type,count:event.count}::JSON from event;
       query("SELECT {id:things.id,name:things.name}::JSON FROM things") {
-        PosixUtils.printResult(handle)
+        //PosixUtils.printResult(handle)
       }
     }
   }
 
 }
 
-
-open class DemoArgs() : CommandLine() {
-  lateinit var runJob: DemoArgs.() -> Unit
-
-  fun run(args: Array<String>, block: DemoArgs.() -> Unit) {
-    runJob = block
-    main(args)
-  }
-
-  override fun run() = runJob()
-}
 
 fun dbTest(args: DemoArgs) {
   log.info { "dbTest" }
@@ -157,11 +127,10 @@ fun dbTest(args: DemoArgs) {
         var id = query("SELECT id FROM EVENT ORDER BY id DESC LIMIT 1").getUInt(0UL, 0UL).toInt()
         log.trace { "id: $id" }
         append("event") {
-          val appendHandle = this.handle
           row {
             append(++id)
             append(Clock.System.now().toEpochMilliseconds().toULong())
-            append("beer")
+            append("BEER")
             append(1)
           }
         }
@@ -194,7 +163,10 @@ fun dbTest(args: DemoArgs) {
 
 fun demo1(args: Array<String>) {
   //klog.kloggingDisabled() //to disable klog
-  DemoArgs().run(args) {
+
+  DemoArgs(args).run {
+
+/*
 
     val flags = PosixUtils.duckdbConfigFlags()
     println()
@@ -216,6 +188,7 @@ fun demo1(args: Array<String>) {
           .atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
       }"
     }
+*/
 
 
     //test1(this)

@@ -24,8 +24,6 @@ fun Project.generateTypesEnumTask() = tasks.register(TASK_GENERATE_TYPES_ENUM) {
         """
 					package org.danbrough.duckdb
 					
-	
-					
 					/**
 						Generated from the :generateTypesEnum gradle task
 					**/
@@ -42,9 +40,6 @@ fun Project.generateTypesEnumTask() = tasks.register(TASK_GENERATE_TYPES_ENUM) {
 
       output.println(
         """;
-	companion object{
-		fun valueOf(ord:UInt) = DuckDbType.entries[ord.toInt()]
-	}
 }
 				""".trimIndent()
       )

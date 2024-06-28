@@ -56,7 +56,6 @@ actual class Appender(
 
   actual inner class Row {
 
-
     actual inline fun appendNull(): Row {
       duckdb_append_null(handle.value).handleAppendError {
         "duckdb_append_null failed"
@@ -72,8 +71,8 @@ actual class Appender(
     }
 
     actual inline fun <T : Any> append(value: T): Row {
-
       when (value) {
+
         is String -> duckdb_append_varchar(handle.value, value)
         is Byte -> duckdb_append_int8(handle.value, value)
         is Short -> duckdb_append_int16(handle.value, value)
@@ -85,8 +84,8 @@ actual class Appender(
         is ULong -> duckdb_append_uint64(handle.value, value)
         is Float -> duckdb_append_float(handle.value, value)
         is Double -> duckdb_append_double(handle.value, value)
-
         else -> error("invalid value: $value")
+
       }.handleAppendError { "duckdb_append $value failed" }
       return this
     }

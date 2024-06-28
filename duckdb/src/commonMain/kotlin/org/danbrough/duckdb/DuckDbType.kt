@@ -1,7 +1,5 @@
 package org.danbrough.duckdb
 
-
-
 /**
 	Generated from the :generateTypesEnum gradle task
 **/
@@ -42,7 +40,4 @@ enum class DuckDbType{
 	UHUGEINT,//32
 	ARRAY,//33
 ;
-	companion object{
-		fun valueOf(ord:UInt) = DuckDbType.entries[ord.toInt()]
-	}
 }

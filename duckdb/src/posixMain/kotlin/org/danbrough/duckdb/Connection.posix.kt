@@ -49,4 +49,3 @@ actual class Connection(actual val database: Database) : ConnectionPeer {
    */
 }
 
-fun Connection.append(table: String, block: Appender.() -> Unit) = append(table).use(block)

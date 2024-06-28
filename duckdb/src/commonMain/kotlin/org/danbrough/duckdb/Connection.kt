@@ -13,11 +13,11 @@ expect class Connection : ConnectionPeer {
   fun prepareStatement(sql: String): PreparedStatement
 
   override fun close()
-
 }
 
 fun <R> Connection.query(sql: String, block: Result.() -> R) = query(sql).use(block)
 
+fun Connection.append(table: String, block: Appender.() -> Unit) = append(table).use(block)
 
 fun Connection.prepareStatement(sql: String, block: PreparedStatement.() -> Unit) =
   prepareStatement(sql).use(block)

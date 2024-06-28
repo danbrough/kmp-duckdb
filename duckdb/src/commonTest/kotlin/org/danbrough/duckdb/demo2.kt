@@ -1,6 +1,6 @@
 package org.danbrough.duckdb
 
-fun demo(args: Array<String>) {
+fun demo2(args: Array<String>) {
   duckdb("stuff.db") {
     connect {
       query("CREATE TABLE IF NOT EXISTS stuff(id INTEGER PRIMARY KEY,name VARCHAR)") {}

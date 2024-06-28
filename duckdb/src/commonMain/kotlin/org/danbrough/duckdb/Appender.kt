@@ -19,3 +19,4 @@ expect class Appender : NativeAppender {
 
   fun row(block: Row.() -> Unit)
 }
+

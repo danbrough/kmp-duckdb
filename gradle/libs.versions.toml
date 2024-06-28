@@ -7,6 +7,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 org-jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
 xtras-openssl = { id = "org.danbrough.xtras.openssl", version.ref = "xtras" }
 xtras-mqtt = { id = "org.danbrough.xtras.mqtt", version.ref = "xtras-mqtt" }
@@ -37,7 +38,15 @@ androidx-test-junit = "1.1.5"
 androidx-espresso-core = "3.5.1"
 decompose = "3.0.0"
 
-agp = "8.4.1"
+agp ="8.5.0"
+##⬆= "8.6.0-alpha01"
+##⬆= "8.6.0-alpha02"
+##⬆= "8.6.0-alpha03"
+##⬆= "8.6.0-alpha04"
+##⬆= "8.6.0-alpha05"
+##⬆= "8.6.0-alpha06"
+##⬆= "8.6.0-alpha07"
+##⬆= "8.6.0-alpha08"
 duckdb_jdbc = "1.0.0"
 kotlin = "2.0.0"
 ##  ⬆ = "2.0.20-Beta1"
@@ -54,7 +63,7 @@ slf4j-simple = "2.0.12"
 logback-classic = "1.5.6"
 kotlinx-coroutines = "1.8.1"
 ##              ⬆ = "1.9.0-RC"
-ktor = "2.3.11"
+ktor = "2.3.12"
 
 kotlinx-datetime = "0.6.0"
 sqldelight = "2.0.2"
@@ -73,6 +82,7 @@ supabase = "2.4.2"
 kotlinx-serialization = "1.6.3"
 uiToolingPreviewDesktop = "1.6.7"
 uiToolingPreviewAndroid = "1.6.7"
+clikt = "4.4.0"
 
 [libraries]
 
@@ -159,8 +169,11 @@ sqldelight-driver-jdbc = { module = "app.cash.sqldelight:jdbc-driver", version.r
 sqldelight-dialect-postgres = { module = "app.cash.sqldelight:postgresql-dialect", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 
-postgresql-jdbc = { module = "org.postgresql:postgresql", version = "42.7.3" }
+postgresql-jdbc = { module = "org.postgresql:postgresql", version.ref = "clikt" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version = "4.4.0" }
+clikt-linuxx64 = { module = "com.github.ajalt.clikt:clikt-linuxx64", version.ref = "clikt" }
+clikt-macosx64 = { module = "com.github.ajalt.clikt:clikt-macosx64", version.ref = "clikt" }
+clikt-macosarm64 = { module = "com.github.ajalt.clikt:clikt-macosarm64", version.ref = "clikt" }
 
 sqldelight-postgres-native-driver = { module = "org.danbrough:postgres-native-sqldelight-driver", version.ref = "sqldelight-postgres-native" }
 sqldelight-postgres-native-dialect = { module = "org.danbrough:postgres-native-sqldelight-dialect", version.ref = "sqldelight-postgres-native" }

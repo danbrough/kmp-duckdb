@@ -24,6 +24,10 @@ actual class PreparedStatement : NativePreparedStatement {
     TODO("Not yet implemented")
   }
 
+  actual fun <R> execute(block: Result.() -> R): R {
+    TODO("Not yet implemented")
+  }
+
 }
 
 actual interface NativePreparedStatement : AutoCloseable
