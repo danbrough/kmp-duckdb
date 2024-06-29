@@ -14,7 +14,7 @@ class JvmTests {
     log.info { "opening db: $db" }
 
     val config = databaseConfig {
-      setAccessMode(DatabaseConfig.AccessMode.READ_WRITE)
+      setAccessMode(AccessMode.READ_WRITE)
       setThreads(4)
     }
 

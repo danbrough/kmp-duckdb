@@ -25,9 +25,7 @@ actual class DatabaseConfig : NativePeer(), DatabaseConfigPeer {
   actual operator fun set(name: String, option: String) =
     setOption(handle, name, option)
 
-  actual enum class AccessMode {
-    AUTOMATIC, READ_ONLY, READ_WRITE;
-  }
+
 
 }
 

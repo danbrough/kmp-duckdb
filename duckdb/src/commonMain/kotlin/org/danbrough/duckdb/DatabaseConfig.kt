@@ -2,11 +2,12 @@ package org.danbrough.duckdb
 
 expect interface DatabaseConfigPeer : AutoCloseable
 
+enum class AccessMode {
+  AUTOMATIC, READ_ONLY, READ_WRITE;
+}
+
 expect class DatabaseConfig() : DatabaseConfigPeer {
 
-  enum class AccessMode {
-    AUTOMATIC, READ_ONLY, READ_WRITE;
-  }
 
   operator fun set(name: String, option: String)
 
@@ -14,7 +15,7 @@ expect class DatabaseConfig() : DatabaseConfigPeer {
 }
 
 
-fun DatabaseConfig.setAccessMode(accessMode: DatabaseConfig.AccessMode) {
+fun DatabaseConfig.setAccessMode(accessMode: AccessMode) {
   set("access_mode", accessMode.name)
 }
 
@@ -23,7 +24,7 @@ fun DatabaseConfig.setThreads(threads: Int) {
 }
 
 fun databaseConfig(
-  accessMode: DatabaseConfig.AccessMode? = null,
+  accessMode: AccessMode? = null,
   block: DatabaseConfig.() -> Unit = {}
 ) = DatabaseConfig().apply {
   if (accessMode != null) setAccessMode(accessMode)

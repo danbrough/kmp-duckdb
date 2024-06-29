@@ -25,10 +25,6 @@ actual class DatabaseConfig : DatabaseConfigPeer {
   }
 
 
-  actual enum class AccessMode {
-    AUTOMATIC, READ_ONLY, READ_WRITE;
-  }
-
   actual operator fun set(name: String, option: String) {
     duckdb_set_config(handle.value, name, option).handleDuckDbError {
       "duckdb_set_config [$name = $option] failed"
