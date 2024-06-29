@@ -2,23 +2,32 @@ package org.danbrough.duckdb
 
 actual interface DatabaseConfigPeer : AutoCloseable
 
-actual class DatabaseConfig actual constructor(
-  actual var accessMode: AccessMode,
-  options: Map<String, String>
-) : DatabaseConfigPeer {
-  actual override fun close() {
+actual class DatabaseConfig : NativePeer(), DatabaseConfigPeer {
+
+
+  companion object {
+
+    @JvmStatic
+    external fun create(): Long
+
+    @JvmStatic
+    external fun destroy(handle: Long)
+
+    @JvmStatic
+    external fun setOption(handle: Long, name: String, value: String)
   }
 
-  actual operator fun set(name: String, option: String) {
-  }
+  override fun nativeCreate(): Long = create()
+
+  override fun nativeDestroy(ref: Long) = destroy(ref)
+
+
+  actual operator fun set(name: String, option: String) =
+    setOption(handle, name, option)
 
   actual enum class AccessMode {
     AUTOMATIC, READ_ONLY, READ_WRITE;
   }
 
-
-  actual var threads: Int
-    get() = TODO("Not yet implemented")
-    set(value) {}
 }
 

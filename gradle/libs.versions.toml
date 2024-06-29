@@ -116,6 +116,8 @@ java-jwt = { module = "com.auth0:java-jwt", version.ref = "java-jwt-version" }
 jwks-rsa = { module = "com.auth0:jwks-rsa", version.ref = "jwks-rsa-version" }
 
 xtras-support = { group = "org.danbrough.xtras", name = "support", version = "0.0.1-beta01" }
+xtras-jni = { group = "org.danbrough.xtras", name = "jni", version = "0.0.1-beta01" }
+
 xtras-core = { group = "org.danbrough.xtras", name = "core", version = "0.0.1-beta01" }
 
 io-kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version = "5.8.0" }

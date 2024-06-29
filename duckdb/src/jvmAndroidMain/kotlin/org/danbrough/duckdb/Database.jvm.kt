@@ -1,18 +1,29 @@
 package org.danbrough.duckdb
 
-actual interface DatabasePeer : NativePeer, AutoCloseable
+actual interface DatabasePeer : AutoCloseable
+
+
 actual class Database actual constructor(
   actual val path: String?,
   actual val config: DatabaseConfig?
-) : DatabasePeer {
-  override var handle: Long = 0L
+) : NativePeer(), DatabasePeer {
+
+  companion object {
+    @JvmStatic
+    external fun create(path: String?): Long
+
+    @JvmStatic
+    external fun destroy(handle: Long)
+  }
 
   actual fun connect(): Connection {
     TODO("Not yet implemented")
   }
 
+  override fun nativeCreate(): Long = create(path)
 
-  actual override fun close() {
-  }
+
+  override fun nativeDestroy(ref: Long) = destroy(ref)
+
 
 }

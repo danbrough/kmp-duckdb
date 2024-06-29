@@ -1,5 +1,8 @@
 package org.danbrough.duckdb
 
-class JNITest {
+object JNITest {
+  init {
+    System.loadLibrary("duckdbkt")
+  }
   external fun test()
 }

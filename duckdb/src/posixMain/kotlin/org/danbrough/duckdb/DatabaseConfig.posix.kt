@@ -15,29 +15,14 @@ import org.danbrough.duckdb.cinterops.duckdb_set_config
 
 actual interface DatabaseConfigPeer : AutoCloseable, NativePeer<duckdb_configVar>
 
-actual class DatabaseConfig actual constructor(
-  accessMode: AccessMode,
-  options: Map<String, String>
-) : DatabaseConfigPeer {
+actual class DatabaseConfig : DatabaseConfigPeer {
   override val handle: duckdb_configVar = nativeHeap.alloc()
 
   init {
     duckdb_create_config(handle.ptr).handleDuckDbError {
       "duckdb_create_config failed"
     }
-
-    options.forEach {
-      set(it.key, it.value)
-    }
-    set("access_mode", accessMode.toString())
   }
-
-
-  actual var accessMode: AccessMode = accessMode
-    set(value) {
-      field = value
-      set("access_mode", value.toString())
-    }
 
 
   actual enum class AccessMode {
@@ -59,13 +44,6 @@ actual class DatabaseConfig actual constructor(
     duckdb_destroy_config(handle.ptr)
     nativeHeap.free(handle)
   }
-
-  actual var threads: Int = 0
-    get() = TODO("Reading threads not supported")
-    set(value) {
-      field = value
-      set("threads", value.toString())
-    }
 
 
 }

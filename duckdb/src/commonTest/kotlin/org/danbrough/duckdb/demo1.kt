@@ -120,7 +120,7 @@ fun dbTest(args: DemoArgs) {
   runBlocking {
     duckdb(
       "${getEnv("HOME")}/.habitrack/database",
-      DatabaseConfig(DatabaseConfig.AccessMode.READ_WRITE)
+      databaseConfig(DatabaseConfig.AccessMode.READ_WRITE)
     ) {
 
       connect {
@@ -138,7 +138,7 @@ fun dbTest(args: DemoArgs) {
     }
     duckdb(
       "${getEnv("HOME")}/.habitrack/database",
-      DatabaseConfig(DatabaseConfig.AccessMode.READ_ONLY)
+      databaseConfig(DatabaseConfig.AccessMode.READ_ONLY)
     ) {
       val midnight = Clock.System.todayIn(TimeZone.currentSystemDefault())
         .atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
