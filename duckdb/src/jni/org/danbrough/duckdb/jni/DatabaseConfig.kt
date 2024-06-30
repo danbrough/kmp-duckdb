@@ -45,16 +45,7 @@ fun databaseConfigCreate(env: CPointer<JNIEnvVar>, clazz: jclass, jPath: jstring
       "duckdb_create_config failed"
     }
 
-
-//duckdb_state duckdb_get_config_flag(size_t index, const char **out_name, const char **out_description);
-//    duckdbConfigFlags().forEach {
-//      log.debug { "${it.key}:${it.value}" }
-//    }
-
-
-    val p = handle.value.toLong()
-    log.trace { "databaseConfigCreate() -> $p" }
-    return p
+    return handle.value.toLong()
   }
 }
 

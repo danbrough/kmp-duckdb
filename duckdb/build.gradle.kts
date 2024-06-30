@@ -167,6 +167,15 @@ kotlin {
       if (konanTarget.supportsJNI) {
         sharedLib("duckdbkt") {
           copyToJniLibs()
+          if (konanTarget == HostManager.host && buildType == NativeBuildType.DEBUG){
+            val libDir = linkTask.outputs.files.first()
+            tasks.withType<KotlinJvmTest>{
+              dependsOn(linkTask)
+              val ldPath = pathOf( environment[HostManager.host.envLibraryPathName],libDir, HostManager.host.duckdbBinDir)
+              environment[HostManager.host.envLibraryPathName] = ldPath
+              logInfo("$name: ldPath = $ldPath")
+            }
+          }
         }
       }
       demos.forEach { demoInfo ->
@@ -301,6 +310,7 @@ android {
     targetCompatibility = project.xtras.javaVersion
   }
 }
+/*
 
 afterEvaluate {
   tasks.withType<KotlinJvmTest> {
@@ -309,15 +319,5 @@ afterEvaluate {
     environment(HostManager.host.envLibraryPathName, ldPath)
   }
 
-/*
-  kotlin.targets.withType<KotlinNativeTarget> {
-    if (konanTarget.family == Family.ANDROID) {
-      binaries.all {
-        if (this is SharedLibrary && buildType == NativeBuildType.RELEASE) {
-          tasks.getByName("mergeDebugJniLibFolders").dependsOn(linkTask)
-          tasks.getByName("mergeReleaseJniLibFolders").dependsOn(linkTask)
-        }
-      }
-    }
-  }*/
 }
+*/

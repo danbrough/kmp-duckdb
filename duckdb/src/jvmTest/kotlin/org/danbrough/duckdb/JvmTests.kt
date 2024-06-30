@@ -15,6 +15,7 @@ class JvmTests {
 
     duckdb(dbPath) {
       log.debug { "got db: $this" }
+
     }
   }
 }
