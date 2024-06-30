@@ -10,17 +10,11 @@ class JvmTests {
 
   @Test
   fun test1() {
-    val db = File(System.getProperty("java.io.tmpdir")).resolve("test.db").absolutePath
-    log.info { "opening db: $db" }
+    val dbPath = File(System.getProperty("java.io.tmpdir")).resolve("stuff/test.db").absolutePath
+    log.info { "opening db: $dbPath" }
 
-    val config = databaseConfig {
-      setAccessMode(AccessMode.READ_WRITE)
-      setThreads(4)
+    duckdb(dbPath) {
+      log.debug { "got db: $this" }
     }
-
-    log.trace { "got config: $config" }
-    config.close()
-
-
   }
 }

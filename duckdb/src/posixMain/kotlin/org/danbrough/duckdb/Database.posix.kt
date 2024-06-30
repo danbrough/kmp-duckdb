@@ -9,6 +9,7 @@ import kotlinx.cinterop.CPointerVar
 import kotlinx.cinterop.CPointerVarOf
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.free
+import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.nativeHeap
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
@@ -22,30 +23,29 @@ import org.danbrough.duckdb.cinterops.duckdb_open_ext
 
 actual interface DatabasePeer : NativePeer<duckdb_databaseVar>, AutoCloseable
 
-@Suppress("unused", "CanBePrimaryConstructorProperty")
+@Suppress("unused")
 actual class Database actual constructor(
   actual val path: String?,
   actual val config: DatabaseConfig?
-) :
-  DatabasePeer {
+) : DatabasePeer {
 
 
   override val handle: duckdb_databaseVar = nativeHeap.alloc()
 
   init {
     //val error: CPointerVarOf<CPointer<ByteVarOf<Byte>>> = nativeHeap.alloc()
-    val error: CPointerVarOf<CPointer<ByteVar>> = nativeHeap.alloc()
+    memScoped {
+      val error: CPointerVarOf<CPointer<ByteVar>> = alloc()
 
-    val errMessage =
-      if (duckdb_open_ext(path, handle.ptr, config?.handle?.value, error.ptr) == DuckDBError) {
-        "duckdb_open_ext failed: ${error.value?.toKString()}"
-      } else null
-
-    if (errMessage != null) log.error { errMessage }
-
-    duckdb_free(error.ptr)
-
-    if (errMessage != null) error(errMessage)
+      duckdb_open_ext(
+        path,
+        handle.ptr,
+        config?.handle?.value,
+        error.ptr
+      ).takeIf { it == DuckDBError }.also {
+        error("duckdb_open_ext failed: ${error.value?.toKString()}")
+      }
+    }
   }
 
 

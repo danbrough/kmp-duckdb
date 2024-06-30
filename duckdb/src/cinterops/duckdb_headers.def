@@ -2,6 +2,8 @@
 package = org.danbrough.duckdb.cinterops
 headers = duckdb.h
 linkerOpts = -lduckdb
+#staticLibraries = libduckdb_static.a
+
 
 # end of duckdb_headers.def
 

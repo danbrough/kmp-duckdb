@@ -8,7 +8,6 @@ enum class AccessMode {
 
 expect class DatabaseConfig() : DatabaseConfigPeer {
 
-
   operator fun set(name: String, option: String)
 
   override fun close()

@@ -17,14 +17,18 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 io-kvision = { id = "io.kvision", version.ref = "io-kvision" }
-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+
+
+
+
 
 [versions]
 
 compose = "1.7.0-beta02"
 compose-plugin = "1.6.11"
-compose-compiler = "1.5.14"
 compose-navigation = "2.8.0-beta02"
 android-minSdk = "24"
 android-compileSdk = "34"
@@ -83,6 +87,9 @@ kotlinx-serialization = "1.6.3"
 uiToolingPreviewDesktop = "1.6.7"
 uiToolingPreviewAndroid = "1.6.7"
 clikt = "4.4.0"
+junit = "4.13.2"
+lifecycleRuntimeKtx = "2.8.1"
+composeBom = "2024.04.01"
 
 [libraries]
 
@@ -200,3 +207,10 @@ supabase-coil-integration = { module = "io.github.jan-tennert.supabase:coil-inte
 supabase-imageloader-integration = { module = "io.github.jan-tennert.supabase:imageloader-integration", version.ref = "supabase" }
 androidx-ui-tooling-preview-desktop = { group = "androidx.compose.ui", name = "ui-tooling-preview-desktop", version.ref = "uiToolingPreviewDesktop" }
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }

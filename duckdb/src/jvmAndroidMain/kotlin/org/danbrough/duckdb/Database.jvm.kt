@@ -10,7 +10,7 @@ actual class Database actual constructor(
 
   companion object {
     @JvmStatic
-    external fun create(path: String?): Long
+    external fun create(path: String?, config: DatabaseConfig?): Long
 
     @JvmStatic
     external fun destroy(handle: Long)
@@ -20,7 +20,7 @@ actual class Database actual constructor(
     TODO("Not yet implemented")
   }
 
-  override fun nativeCreate(): Long = create(path)
+  override fun nativeCreate(): Long = create(path, config)
 
 
   override fun nativeDestroy(ref: Long) = destroy(ref)
