@@ -178,6 +178,7 @@ kotlin {
           }
         }
       }
+
       demos.forEach { demoInfo ->
         executable(demoInfo.name, buildTypes = setOf(NativeBuildType.DEBUG)) {
           entryPoint = demoInfo.entryPoint

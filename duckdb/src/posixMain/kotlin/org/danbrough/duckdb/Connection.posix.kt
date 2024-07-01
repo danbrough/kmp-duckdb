@@ -27,9 +27,9 @@ actual class Connection(actual val database: Database) : ConnectionPeer {
     nativeHeap.free(handle)
   }
 
-  actual fun query(sql: String): Result = Result(this, sql)
+  actual fun  query(sql: String) = Result(this, sql)
 
-  actual fun append(table: String): Appender = Appender(this, table)
+  actual fun append(table: String) = Appender(this, table)
 
   actual fun prepareStatement(sql: String) = PreparedStatement(this, sql)
 

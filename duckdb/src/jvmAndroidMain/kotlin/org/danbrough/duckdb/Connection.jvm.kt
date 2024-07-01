@@ -1,24 +1,36 @@
 package org.danbrough.duckdb
+
 actual interface ConnectionPeer : AutoCloseable
 
-actual class Connection : ConnectionPeer {
-  actual val database: Database
-    get() = TODO("Not yet implemented")
+actual class Connection(actual val database: Database) : NativePeer(), ConnectionPeer {
 
-  actual fun query(sql: String): Result {
-    TODO("Not yet implemented")
+
+  companion object {
+    @JvmStatic
+    external fun create(db: Long): Long
+
+    @JvmStatic
+    external fun destroy(handle: Long)
+
+    @JvmStatic
+    external fun query(conn: Long, sql: String): Long
   }
 
-  actual fun append(table: String): Appender {
-    TODO("Not yet implemented")
-  }
+  override val handle: Long = create(database.handle)
+
+  actual fun query(sql: String) = Result(Companion.query(handle, sql))
+
 
   actual fun prepareStatement(sql: String): PreparedStatement {
     TODO("Not yet implemented")
   }
 
-  actual override fun close() {
+  override fun nativeDestroy() = destroy(handle)
+
+  actual fun append(table: String): Appender {
+    TODO("Not yet implemented")
   }
+
 
 }
 

@@ -1,11 +1,12 @@
 package org.danbrough.duckdb
 
+import org.danbrough.duckdb.Connection.Companion
+
 actual interface DatabaseConfigPeer : AutoCloseable
 
 actual class DatabaseConfig : NativePeer(), DatabaseConfigPeer {
 
-
-  companion object {
+  internal companion object {
 
     @JvmStatic
     external fun create(): Long
@@ -17,10 +18,9 @@ actual class DatabaseConfig : NativePeer(), DatabaseConfigPeer {
     external fun setOption(handle: Long, name: String, value: String)
   }
 
-  override fun nativeCreate(): Long = create()
+  override val handle: Long = create()
 
-  override fun nativeDestroy(ref: Long) = destroy(ref)
-
+  override fun nativeDestroy() = destroy(handle)
 
   actual operator fun set(name: String, option: String) =
     setOption(handle, name, option)

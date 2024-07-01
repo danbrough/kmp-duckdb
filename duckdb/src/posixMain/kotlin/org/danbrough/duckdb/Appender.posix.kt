@@ -8,7 +8,6 @@ import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.value
 import org.danbrough.duckdb.cinterops.DuckDBError
-import org.danbrough.duckdb.cinterops.duckdb_append_bool
 import org.danbrough.duckdb.cinterops.duckdb_append_date
 import org.danbrough.duckdb.cinterops.duckdb_append_double
 import org.danbrough.duckdb.cinterops.duckdb_append_float
@@ -22,9 +21,7 @@ import org.danbrough.duckdb.cinterops.duckdb_append_uint32
 import org.danbrough.duckdb.cinterops.duckdb_append_uint64
 import org.danbrough.duckdb.cinterops.duckdb_append_uint8
 import org.danbrough.duckdb.cinterops.duckdb_append_varchar
-import org.danbrough.duckdb.cinterops.duckdb_appender
 import org.danbrough.duckdb.cinterops.duckdb_appenderVar
-import org.danbrough.duckdb.cinterops.duckdb_appender_begin_row
 import org.danbrough.duckdb.cinterops.duckdb_appender_close
 import org.danbrough.duckdb.cinterops.duckdb_appender_create
 import org.danbrough.duckdb.cinterops.duckdb_appender_destroy
@@ -32,8 +29,6 @@ import org.danbrough.duckdb.cinterops.duckdb_appender_end_row
 import org.danbrough.duckdb.cinterops.duckdb_appender_error
 import org.danbrough.duckdb.cinterops.duckdb_appender_flush
 import org.danbrough.duckdb.cinterops.duckdb_date
-import org.danbrough.duckdb.cinterops.duckdb_state
-import kotlin.reflect.KClass
 
 actual interface NativeAppender : NativePeer<duckdb_appenderVar>, AutoCloseable
 

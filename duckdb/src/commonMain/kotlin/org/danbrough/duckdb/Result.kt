@@ -5,15 +5,16 @@ expect interface ResultHandle : AutoCloseable
 
 expect class Result : ResultHandle {
 
-	val rowCount: ULong
+  val rowCount: Long
 
-	val columnCount: ULong
+  val columnCount: Long
 
-	val rowsChanged: ULong
-	override fun close()
+  val rowsChanged: Long
 
-	fun getVarchar(row: ULong, col: ULong): String
-	fun getULong(row: ULong, col: ULong): ULong
-	fun getUInt(row: ULong, col: ULong): UInt
+  override fun close()
+
+  fun isNull(row: Long, col: Long): Boolean
+
+  inline fun <reified T : Any?> get(row: Long, col: Long): T
 
 }

@@ -1,5 +1,7 @@
 package org.danbrough.duckdb
 
+import org.danbrough.duckdb.Connection.Companion
+
 actual interface DatabasePeer : AutoCloseable
 
 
@@ -14,16 +16,13 @@ actual class Database actual constructor(
 
     @JvmStatic
     external fun destroy(handle: Long)
+    @JvmStatic
+    external fun test()
   }
 
-  actual fun connect(): Connection {
-    TODO("Not yet implemented")
-  }
+  override val handle: Long = create(path, config)
 
-  override fun nativeCreate(): Long = create(path, config)
+  actual fun connect() = Connection(this)
 
-
-  override fun nativeDestroy(ref: Long) = destroy(ref)
-
-
+  override fun nativeDestroy() = destroy(handle)
 }

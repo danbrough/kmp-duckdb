@@ -1,29 +1,27 @@
 package org.danbrough.duckdb
 
+/**
+ * Base class for objects that encapsulate a native object
+ */
+
 abstract class NativePeer : LibrarySupport(), AutoCloseable {
 
-
-  @Suppress("LeakingThis")
-  protected var handle: Long = nativeCreate()
-
-  /**
-   * Create native peer and return stable reference to it
-   */
-  abstract fun nativeCreate(): Long
-
+  abstract val handle: Long
+  
   /**
    * Destroy the native peer
    */
-  abstract fun nativeDestroy(ref: Long)
+  protected abstract fun nativeDestroy()
 
   final override fun close() {
     onClose()
-    if (handle != 0L) {
-      nativeDestroy(handle)
-      handle = 0L
-    }
+    if (handle != 0L)
+      nativeDestroy()
   }
 
+  /**
+   * Perform additional cleanup before the handle is destroyed
+   */
   protected open fun onClose() {}
 
   protected fun finalize() {

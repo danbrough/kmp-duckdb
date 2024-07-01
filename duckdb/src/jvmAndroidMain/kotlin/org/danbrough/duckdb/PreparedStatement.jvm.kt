@@ -1,11 +1,21 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package org.danbrough.duckdb
 
-actual class PreparedStatement : NativePreparedStatement {
+import org.danbrough.duckdb.DatabaseConfig.Companion.destroy
+
+actual class PreparedStatement : NativePeer(), NativePreparedStatement {
+
+  internal companion object {
+    @JvmStatic
+    external fun create(): Long
+
+    @JvmStatic
+    external fun destroy(handle:Long)
+  }
+
   actual val connection: Connection
     get() = TODO("Not yet implemented")
-
-  actual override fun close() {
-  }
 
   actual val sql: String
     get() = TODO("Not yet implemented")
@@ -27,6 +37,11 @@ actual class PreparedStatement : NativePreparedStatement {
   actual fun <R> execute(block: Result.() -> R): R {
     TODO("Not yet implemented")
   }
+
+  override val handle: Long = create()
+
+
+  override fun nativeDestroy() = destroy(handle)
 
 }
 

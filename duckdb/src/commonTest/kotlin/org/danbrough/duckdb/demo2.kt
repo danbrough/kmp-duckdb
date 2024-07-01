@@ -1,12 +1,16 @@
 package org.danbrough.duckdb
 
+fun getMessage() = "Hello WOlrd"
+
 fun demo2(args: Array<String>) {
+  getMessage()
+
   duckdb("stuff.db") {
     connect {
       query("CREATE TABLE IF NOT EXISTS stuff(id INTEGER PRIMARY KEY,name VARCHAR)") {}
 
       val size = query("SELECT COUNT(*) FROM stuff") {
-        getULong(0UL, 0UL)
+        get<ULong>(0UL, 0UL)
       }
       log.info { "stuff size: $size" }
 
@@ -23,7 +27,7 @@ fun demo2(args: Array<String>) {
 
       query("SELECT name FROM stuff LIMIT 1000") {
         repeat(rowCount.toInt()) {
-          println(getVarchar(it.toULong(), 0UL))
+          println(get<String>(it.toULong(), 0UL))
         }
       }
     }

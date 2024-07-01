@@ -124,7 +124,7 @@ fun dbTest(args: DemoArgs) {
     ) {
 
       connect {
-        var id = query("SELECT id FROM EVENT ORDER BY id DESC LIMIT 1").getUInt(0UL, 0UL).toInt()
+        var id = query("SELECT id FROM EVENT ORDER BY id DESC LIMIT 1") { get<Int>(0UL, 0UL) }
         log.trace { "id: $id" }
         append("event") {
           row {
@@ -149,7 +149,7 @@ fun dbTest(args: DemoArgs) {
           log.trace { "rowCount: $rowCount colCount: $columnCount" }
 
           for (n in 0UL until rowCount) {
-            log.debug { getVarchar(n, 0UL) }
+            log.debug { get(n, 0UL) }
           }
 
           //log.debug { getVarchar(0UL, 1UL) }
