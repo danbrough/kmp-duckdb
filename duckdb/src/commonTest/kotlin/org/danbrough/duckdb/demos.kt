@@ -42,19 +42,18 @@ fun demo4() {
         for (n in 0 until rowCount) {
           log.debug { "id: ${get<Long>(n, 0)}, ${get<String>(n, 1)}, ${get<Int>(n, 2)}" }
         }
-
-        /*          for (n in 0L until rowCount) {
-                    log.trace { "${get<Long>(n, 0)}, ${get<String>(n, 0)}, ${get<Int>(n, 0)}" }
-                  }*/
-
       }
 
-      query("SELECT 1234568912345678912::INT64"){
-        log.debug { "1234568912345678912 == ${get<Long>(0,0)}" }
+      query("SELECT 1234568912345678912::INT64") {
+        log.debug { "1234568912345678912 == ${get<Long>(0, 0)}" }
       }
-      query("select 12345689123456789123::UINT64"){
-        log.debug { "12345689123456789123 == ${get<ULong>(0,0)}" }
+      query("select 12345689123456789123::UINT64") {
+        log.debug { "12345689123456789123 == ${get<ULong>(0, 0)}" }
       }
+
+      val sql = "SELECT '2022-10-08 13:13:34 Europe/Amsterdam'::TIMESTAMPTZ::VARCHAR"
+      val timestamp = query(sql) { get<String>(0, 0) }
+      log.info { "$sql => $timestamp" } //2022-10-09 00:13:34+13
     }
   }
 }
