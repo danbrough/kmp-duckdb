@@ -73,6 +73,9 @@ val demos = listOf(
   Demo(
     "demo3", "org.danbrough.duckdb.demo3"
   ),
+  Demo(
+    "demo4", "org.danbrough.duckdb.demo4"
+  ),
 )
 
 kotlin {

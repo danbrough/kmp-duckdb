@@ -38,7 +38,7 @@ actual class PreparedStatement : NativePeer(), NativePreparedStatement {
     TODO("Not yet implemented")
   }
 
-  override val handle: Long = create()
+  override var handle: Long = create()
 
 
   override fun nativeDestroy() = destroy(handle)

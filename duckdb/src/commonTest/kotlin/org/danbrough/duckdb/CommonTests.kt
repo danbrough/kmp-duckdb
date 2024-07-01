@@ -6,39 +6,38 @@ import kotlin.test.Test
 class CommonTests {
   @Test
   fun test1() {
-    val dbPath = "${getEnv("HOME")}/.habitrack/database"
-    log.info { "test1() home:${getEnv("HOME")}" }
-    duckdb(dbPath) {
-      log.debug { "opened db: $this" }
+    duckdb {
+      log.info { "database: $this" }
       connect {
-        log.debug { "connected: $this" }
+        log.info { "connected: $this" }
+
+        query("SELECT NULL::VARCHAR") {
+          log.debug { "got query: $this" }
+          log.info { get<String?>(0, 0) }
+        }
       }
     }
-
   }
 
 
   @Test
   fun test2() {
-//    val dbPath = File(System.getProperty("java.io.tmpdir")).resolve("stuff/test.db").absolutePath
-//    log.info { "opening db: $dbPath" }
-
-
     duckdb {
       log.info { "database: $this" }
       connect {
         log.info { "connected: $this" }
         query("SELECT current_timestamp::VARCHAR") {
           log.debug { "got query: $this" }
-          log.info { get(0, 0) }
+          log.info { get<String>(0, 0) }
         }
-        query("SELECT NULL::VARCHAR") {
-          log.debug { "got query: $this" }
-          log.info { get(0, 0) }
-        }
+        /*        query("SELECT NULL::VARCHAR") {
+                  log.debug { "got query: $this" }
+                  log.info { get<String?>(0, 0) }
+                }*/
       }
     }
   }
+
 
   @Test
   fun testDemo1() {
@@ -53,5 +52,10 @@ class CommonTests {
   @Test
   fun testDemo3() {
     demo3()
+  }
+
+  @Test
+  fun testDemo4() {
+    demo4()
   }
 }

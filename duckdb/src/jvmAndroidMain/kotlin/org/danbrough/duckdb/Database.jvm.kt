@@ -20,7 +20,7 @@ actual class Database actual constructor(
     external fun test()
   }
 
-  override val handle: Long = create(path, config)
+  override var handle: Long = create(path, config)
 
   actual fun connect() = Connection(this)
 

@@ -20,26 +20,49 @@ io-kvision = { id = "io.kvision", version.ref = "io-kvision" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
-
-
-
-
-
 [versions]
 
 compose = "1.7.0-beta02"
+##   ⬆ = "1.7.0-beta03"
+##   ⬆ = "1.7.0-beta04"
 compose-plugin = "1.6.11"
+##          ⬆ = "1.6.20-dev1646"
+##          ⬆ = "1.6.20-dev1663"
+##          ⬆ = "1.6.20-dev1667"
+##          ⬆ = "1.6.20-dev1673"
+##          ⬆ = "1.7.0-dev1686"
+##          ⬆ = "1.7.0-dev1698"
+##          ⬆ = "1.7.0-dev1703"
 compose-navigation = "2.8.0-beta02"
 android-minSdk = "24"
 android-compileSdk = "34"
 android-targetSdk = "34"
 androidx-activityCompose = "1.9.0"
+##                    ⬆ = "1.10.0-alpha01"
 androidx-core-ktx = "1.13.1"
+##             ⬆ = "1.14.0-alpha01"
+##             ⬆ = "1.15.0-alpha01"
 androidx-appcompat = "1.7.0"
 androidx-material = "1.12.0"
 androidx-constraintlayout = "2.1.4"
 androidx-test-junit = "1.1.5"
+##               ⬆ = "1.2.0-alpha01"
+##               ⬆ = "1.2.0-alpha02"
+##               ⬆ = "1.2.0-alpha03"
+##               ⬆ = "1.2.0-alpha04"
+##               ⬆ = "1.2.0-beta01"
+##               ⬆ = "1.2.0-rc01"
+##               ⬆ = "1.2.0"
+##               ⬆ = "1.2.1"
 androidx-espresso-core = "3.5.1"
+##                  ⬆ = "3.6.0-alpha01"
+##                  ⬆ = "3.6.0-alpha02"
+##                  ⬆ = "3.6.0-alpha03"
+##                  ⬆ = "3.6.0-alpha04"
+##                  ⬆ = "3.6.0-beta01"
+##                  ⬆ = "3.6.0-rc01"
+##                  ⬆ = "3.6.0"
+##                  ⬆ = "3.6.1"
 decompose = "3.0.0"
 
 agp ="8.5.0"
@@ -89,7 +112,11 @@ uiToolingPreviewAndroid = "1.6.7"
 clikt = "4.4.0"
 junit = "4.13.2"
 lifecycleRuntimeKtx = "2.8.1"
+##               ⬆ = "2.8.2"
+##               ⬆ = "2.8.3"
 composeBom = "2024.04.01"
+##      ⬆ = "2024.05.00"
+##      ⬆ = "2024.06.00"
 
 [libraries]
 

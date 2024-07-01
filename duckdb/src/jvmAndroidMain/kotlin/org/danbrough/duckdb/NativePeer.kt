@@ -6,7 +6,7 @@ package org.danbrough.duckdb
 
 abstract class NativePeer : LibrarySupport(), AutoCloseable {
 
-  abstract val handle: Long
+  abstract var handle: Long
 
   /**
    * Destroy the native peer
@@ -14,9 +14,15 @@ abstract class NativePeer : LibrarySupport(), AutoCloseable {
   protected abstract fun nativeDestroy()
 
   final override fun close() {
-    onClose()
-    if (handle != 0L)
-      nativeDestroy()
+    if (handle != 0L) {
+      synchronized(this) {
+        if (handle != 0L) {
+          onClose()
+          nativeDestroy()
+          handle = 0L
+        }
+      }
+    }
   }
 
   /**
@@ -25,6 +31,7 @@ abstract class NativePeer : LibrarySupport(), AutoCloseable {
   protected open fun onClose() {}
 
   protected fun finalize() {
+    if (handle != 0L) log.error { "$this: finalize: handle: $handle" }
     close()
   }
 }

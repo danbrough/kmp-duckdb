@@ -16,16 +16,15 @@ actual class Connection(actual val database: Database) : NativePeer(), Connectio
     external fun query(conn: Long, sql: String): Long
   }
 
-  override val handle: Long = create(database.handle)
+  override var handle: Long = create(database.handle)
 
   actual fun query(sql: String) = Result(Companion.query(handle, sql))
-
 
   actual fun prepareStatement(sql: String): PreparedStatement {
     TODO("Not yet implemented")
   }
 
-  override fun nativeDestroy() = destroy(handle)
+  override fun nativeDestroy()=destroy(handle)
 
   actual fun append(table: String): Appender {
     TODO("Not yet implemented")

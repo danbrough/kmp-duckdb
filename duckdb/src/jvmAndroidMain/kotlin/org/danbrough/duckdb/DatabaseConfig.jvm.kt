@@ -18,7 +18,7 @@ actual class DatabaseConfig : NativePeer(), DatabaseConfigPeer {
     external fun setOption(handle: Long, name: String, value: String)
   }
 
-  override val handle: Long = create()
+  override var handle: Long = create()
 
   override fun nativeDestroy() = destroy(handle)
 
