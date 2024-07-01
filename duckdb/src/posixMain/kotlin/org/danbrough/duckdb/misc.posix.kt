@@ -1,10 +1,7 @@
 package org.danbrough.duckdb
 
-import kotlinx.cinterop.MemScope
 import kotlinx.cinterop.toKString
 import org.danbrough.duckdb.cinterops.DuckDBError
-import org.danbrough.duckdb.cinterops.duckdb_database
-import org.danbrough.duckdb.cinterops.duckdb_result
 import platform.posix.errno
 import platform.posix.strerror
 

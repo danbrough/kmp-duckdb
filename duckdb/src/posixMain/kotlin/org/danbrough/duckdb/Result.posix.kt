@@ -42,7 +42,7 @@ actual class Result(val connection: Connection) : ResultHandle {
 
     }
   */
-  
+
   actual val rowCount: Long
     get() = duckdb_row_count(handle.ptr).toLong()
 
@@ -55,7 +55,6 @@ actual class Result(val connection: Connection) : ResultHandle {
 
 
   actual override fun close() {
-    log.warn { "closing result" }
     duckdb_destroy_result(handle.ptr)
     nativeHeap.free(handle)
   }
@@ -82,7 +81,8 @@ actual class Result(val connection: Connection) : ResultHandle {
       else -> error("Invalid type: ${T::class}")
     } as T
 
-  actual fun isNull(row: Long, col: Long): Boolean = duckdb_value_is_null(handle.ptr, col.toULong(), row.toULong())
+  actual fun isNull(row: Long, col: Long): Boolean =
+    duckdb_value_is_null(handle.ptr, col.toULong(), row.toULong())
 
 
 }

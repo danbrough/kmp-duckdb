@@ -29,13 +29,9 @@ actual class Database actual constructor(
   actual val config: DatabaseConfig?
 ) : DatabasePeer {
 
-
-  override val handle: duckdb_databaseVar = nativeHeap.alloc<duckdb_databaseVar>().also {
-    log.trace { "created duckdb_databaseVar " }
-  }
+  override val handle: duckdb_databaseVar = nativeHeap.alloc<duckdb_databaseVar>()
 
   init {
-    //val error: CPointerVarOf<CPointer<ByteVarOf<Byte>>> = nativeHeap.alloc()
     memScoped {
       val error: CPointerVarOf<CPointer<ByteVar>> = alloc()
 
@@ -51,7 +47,6 @@ actual class Database actual constructor(
       }
     }
   }
-
 
   actual fun connect(): Connection = Connection(this)
 

@@ -15,8 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.danbrough.demo.ui.theme.DuckdbkmpTheme
+import org.danbrough.duckdb.Connection
+import org.danbrough.duckdb.Database
 import org.danbrough.duckdb.connect
 import org.danbrough.duckdb.duckdb
 import org.danbrough.duckdb.query
@@ -25,7 +28,7 @@ private val log = klog.logger("DEMO")
 
 
 class MainActivity : ComponentActivity() {
-  companion object{
+  companion object {
     init {
       log.warn { "init .. loading libraries .." }
       System.loadLibrary("duckdb")
@@ -33,6 +36,7 @@ class MainActivity : ComponentActivity() {
       System.loadLibrary("duckdbkt")
     }
   }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
@@ -59,7 +63,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         modifier = modifier
       )
 
-      Button(onClick = { coroutineScope.launch { test1() } }) {
+      Button(onClick = { coroutineScope.launch(Dispatchers.IO){ test1() } }) {
         Text(
           text = "Test 1",
           modifier = modifier
@@ -80,21 +84,31 @@ fun GreetingPreview() {
 }
 
 
+private lateinit var conn: Connection
 
 suspend fun test1() {
   log.info { "test1() running" }
   log.trace { "trace message" }
   log.debug { "debugging it man" }
-  duckdb {
-    org.danbrough.duckdb.log.debug { "got db: $this" }
+  if (!::conn.isInitialized) {
+    conn = duckdb { connect() }
   }
 
-  /*duckdb(null, null) {
-    connect {
-      query("SELECT current_timestamp::VARCHAR"){
-        val s = getVarchar(0UL,0UL)
-        log.warn { s }
+  conn.apply {
+
+    query("SELECT current_timestamp::VARCHAR") {
+      log.info { get<String>(0, 0) }
+    }
+
+    query("CREATE SEQUENCE IF NOT EXISTS seq_id") {}
+
+    query("select nextval('seq_id'),COLUMNS(*),3   as A  from range(DATE '1992-01-01', DATE '1994-11-01', INTERVAL '1' MONTH)") {
+      log.info { "rowCount: $rowCount colCount: $columnCount rowsChanged: $rowsChanged" }
+      for (n in 0 until rowCount) {
+        log.info {
+          "id: ${get<Long>(n, 0)}, ${get<String>(n, 1)}, ${get<Int>(n, 2)}"
+        }
       }
     }
-  }*/
+  }
 }

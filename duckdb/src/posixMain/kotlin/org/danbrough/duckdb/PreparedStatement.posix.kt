@@ -26,7 +26,6 @@ import org.danbrough.duckdb.cinterops.duckdb_execute_prepared
 import org.danbrough.duckdb.cinterops.duckdb_prepare
 import org.danbrough.duckdb.cinterops.duckdb_prepare_error
 import org.danbrough.duckdb.cinterops.duckdb_prepared_statementVar
-import org.danbrough.duckdb.cinterops.idx_t
 
 actual interface NativePreparedStatement : AutoCloseable, NativePeer<duckdb_prepared_statementVar>
 
@@ -61,11 +60,6 @@ actual class PreparedStatement(
 
   actual fun <R> execute(block: Result.() -> R) =
     executeWithResult().use(block)
-
- /* fun execute() {
-    if (duckdb_execute_prepared(handle.value, null) == DuckDBError)
-      error("duckdb_execute_prepared failed: ${prepareError()}")
-  }*/
 
   private fun prepareError(): String? =
     duckdb_prepare_error(handle.value)?.toKString()

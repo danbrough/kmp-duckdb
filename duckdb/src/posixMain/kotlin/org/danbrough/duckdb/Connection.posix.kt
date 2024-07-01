@@ -22,7 +22,7 @@ actual class Connection(actual val database: Database) : ConnectionPeer {
   }
 
   actual override fun close() {
-    log.trace { "DuckDBConnection::close()" }
+    log.trace { "Connection::close()" }
     duckdb_disconnect(handle.ptr)
     nativeHeap.free(handle)
   }
@@ -33,19 +33,5 @@ actual class Connection(actual val database: Database) : ConnectionPeer {
 
   actual fun prepareStatement(sql: String) = PreparedStatement(this, sql)
 
-
-  /*
-
-
-
-
-
-
-
-
-	fun append(table: String) = Appender(this, table, memScope.alloc())
-
-	fun append(table: String, block: Appender.() -> Unit) = append(table).use(block)
-   */
 }
 
