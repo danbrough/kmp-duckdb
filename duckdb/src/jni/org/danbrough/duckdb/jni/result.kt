@@ -26,7 +26,9 @@ import org.danbrough.duckdb.cinterops.duckdb_free
 import org.danbrough.duckdb.cinterops.duckdb_open_ext
 import org.danbrough.duckdb.cinterops.duckdb_result
 import org.danbrough.duckdb.cinterops.duckdb_row_count
+import org.danbrough.duckdb.cinterops.duckdb_rows_changed
 import org.danbrough.duckdb.cinterops.duckdb_value_int32
+import org.danbrough.duckdb.cinterops.duckdb_value_int64
 import org.danbrough.duckdb.cinterops.duckdb_value_varchar
 import org.danbrough.duckdb.cinterops.duckdb_value_varchar_internal
 import org.danbrough.xtras.jni.JNIEnvVar
@@ -80,6 +82,13 @@ fun resultColCount(
   handle: jlong
 ): jlong = duckdb_column_count(handle.toCPointer()!!).toLong()
 
+@CName("${JNI_PREFIX}_rowsChanged")
+fun resultRowsChanged(
+  env: CPointer<JNIEnvVar>,
+  clazz: jclass,
+  handle: jlong
+): jlong = duckdb_rows_changed(handle.toCPointer()!!).toLong()
+
 
 @CName("${JNI_PREFIX}_getInt32")
 fun resultGetInt32(
@@ -88,43 +97,16 @@ fun resultGetInt32(
   handle: jlong,
   row: jlong,
   col: jlong
-): jint = duckdb_value_int32(handle.toCPointer()!!, col.toULong(), row.toULong())
+): jint? = duckdb_value_int32(handle.toCPointer()!!, col.toULong(), row.toULong())
+
+@CName("${JNI_PREFIX}_getInt64")
+fun resultGetInt64(
+  env: CPointer<JNIEnvVar>,
+  clazz: jclass,
+  handle: jlong,
+  row: jlong,
+  col: jlong
+): jlong? = duckdb_value_int64(handle.toCPointer()!!, col.toULong(), row.toULong())
 
 
-/*
 
-
-
-
-@OptIn(ExperimentalStdlibApi::class)
-@CName("${JNI_PREFIX}_destroy")
-fun databaseDestroy(env: CPointer<JNIEnvVar>, clazz: jclass, handle: jlong) {
-  log.warn { "databaseDestroy(): handle: ${handle.toHexString()}" }
-  val db: CPointer<duckdb_databaseVar> = handle.toCPointer()!!
-  log.debug { "got handle: $db: ${db.toLong().toHexString()}" }
-  duckdb_close(db)
-  nativeHeap.free(db)
-}
-
-@OptIn(ExperimentalStdlibApi::class)
-@CName("${JNI_PREFIX}_test")
-fun databaseTest(env: CPointer<JNIEnvVar>, clazz: jclass) {
-  log.info { "databaseTest()" }
-
-  val dbHandle: duckdb_databaseVar = nativeHeap.alloc()
-  val error: CPointerVarOf<CPointer<ByteVar>> = nativeHeap.alloc()
-  //config?.handle?.value
-
-  if (duckdb_open_ext(null, dbHandle.ptr, null, error.ptr) == DuckDBError) {
-    error("duckdb_open_ext failed: ${error.value?.toKString()}")
-  }
-
-  val l = dbHandle.ptr.toLong()
-
-  val p: CPointer<duckdb_databaseVar> = l.toCPointer()!!
-  log.debug { "got pointer: $p" }
-  duckdb_close(p)
-  nativeHeap.free(dbHandle.ptr)
-}
-
-*/

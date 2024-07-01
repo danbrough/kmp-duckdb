@@ -36,13 +36,14 @@ fun connectionCreate(
   clazz: jclass,
   jDatabase: jlong
 ): jlong {
-  log.trace { "connectionCreate(): $jDatabase " }
+  log.trace { "connectionCreate(): database:${jDatabase.toHexString()} " }
   memScoped {
     val conn: duckdb_connectionVar = nativeHeap.alloc()
     val db: CPointer<duckdb_databaseVar> = jDatabase.toCPointer()!!
     duckdb_connect(db.pointed.value, conn.ptr).handleDuckDbError {
       "duckdb_connect failed"
     }
+    log.trace { "created connection: ${conn.ptr.toLong().toHexString()}" }
     return conn.ptr.toLong()
   }
 }
@@ -54,7 +55,7 @@ fun connectionDestroy(
   clazz: jclass,
   connectionHandle: jlong
 ) {
-  log.trace { "connectionDestroy()" }
+  log.trace { "connectionDestroy(): ${connectionHandle.toHexString()}" }
   val p: CPointer<duckdb_connectionVar> = connectionHandle.toCPointer()!!
   duckdb_disconnect(p)
   nativeHeap.free(p)

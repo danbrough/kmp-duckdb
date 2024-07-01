@@ -19,6 +19,9 @@ actual class Result(override val handle: Long) : NativePeer(), ResultHandle {
     external fun getInt32(handle: Long, row: Long, col: Long): Int?
 
     @JvmStatic
+    external fun getInt64(handle: Long, row: Long, col: Long): Long?
+
+    @JvmStatic
     external fun isNull(handle: Long, row: Long, col: Long): Boolean
 
     @JvmStatic
@@ -43,8 +46,9 @@ actual class Result(override val handle: Long) : NativePeer(), ResultHandle {
   actual inline fun <reified T : Any?> get(row: Long, col: Long): T =
     when (T::class) {
       Boolean::class -> getBooleanValue(handle, row, col)
-      String::class -> getStringValue(handle, row.toLong(), col.toLong())
+      String::class -> getStringValue(handle, row, col)
       Int::class -> getInt32(handle, row, col)
+      Long::class -> getInt64(handle, row, col)
       /*      Boolean::class -> duckdb_value_boolean(handle.ptr,col,row)
             String::class -> duckdb_value_varchar(handle.ptr,col,row).let {data->
               val s = data?.toKStringFromUtf8()

@@ -55,7 +55,6 @@ fun databaseCreate(
 fun databaseDestroy(env: CPointer<JNIEnvVar>, clazz: jclass, handle: jlong) {
   log.warn { "databaseDestroy(): handle: ${handle.toHexString()}" }
   val db: CPointer<duckdb_databaseVar> = handle.toCPointer()!!
-  log.debug { "got handle: $db: ${db.toLong().toHexString()}" }
   duckdb_close(db)
   nativeHeap.free(db)
 }

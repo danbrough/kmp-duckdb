@@ -30,19 +30,23 @@ actual class Database actual constructor(
 ) : DatabasePeer {
 
 
-  override val handle: duckdb_databaseVar = nativeHeap.alloc()
+  override val handle: duckdb_databaseVar = nativeHeap.alloc<duckdb_databaseVar>().also {
+    log.trace { "created duckdb_databaseVar " }
+  }
 
   init {
     //val error: CPointerVarOf<CPointer<ByteVarOf<Byte>>> = nativeHeap.alloc()
     memScoped {
       val error: CPointerVarOf<CPointer<ByteVar>> = alloc()
 
-      duckdb_open_ext(
-        path,
-        handle.ptr,
-        config?.handle?.value,
-        error.ptr
-      ).takeIf { it == DuckDBError }.also {
+      log.trace { "Database::calling open with path: $path config:$config .." }
+      if (duckdb_open_ext(
+          path,
+          handle.ptr,
+          config?.handle?.value,
+          error.ptr
+        ) == DuckDBError
+      ) {
         error("duckdb_open_ext failed: ${error.value?.toKString()}")
       }
     }

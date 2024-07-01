@@ -7,7 +7,7 @@ package org.danbrough.duckdb
 abstract class NativePeer : LibrarySupport(), AutoCloseable {
 
   abstract val handle: Long
-  
+
   /**
    * Destroy the native peer
    */

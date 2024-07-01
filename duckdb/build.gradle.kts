@@ -70,6 +70,9 @@ val demos = listOf(
     "demo1", "org.danbrough.duckdb.demo1",
     "-d", file("test.db").absolutePath
   ),
+  Demo(
+    "demo3", "org.danbrough.duckdb.demo3"
+  ),
 )
 
 kotlin {

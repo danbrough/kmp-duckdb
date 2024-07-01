@@ -21,11 +21,11 @@ class JvmTests {
         log.info { "connected: $this" }
         query("SELECT current_timestamp::VARCHAR") {
           log.debug { "got query: $this" }
-          log.info { get(0UL, 0UL) }
+          log.info { get(0, 0) }
         }
         query("SELECT NULL::VARCHAR") {
           log.debug { "got query: $this" }
-          log.info { get(0UL, 0UL) }
+          log.info { get(0, 0) }
         }
       }
     }
@@ -33,14 +33,18 @@ class JvmTests {
 
   @Test
   fun test2() {
-    val b = Long.MIN_VALUE
-    log.debug { "b: $b = ${b.toULong()} = ${b.toULong().toLong()}" }
-
     duckdb {
       connect {
-        query("CREATE SEQUENCE seq_id")
+        query("CREATE SEQUENCE seq_id"){}
 
         query("select nextval('seq_id'),COLUMNS(*),3   as A  from range(DATE '1992-01-01', DATE '1994-03-01', INTERVAL '1' MONTH)") {
+          log.info { "rowCount: $rowCount colCount: $columnCount rowsChanged: $rowsChanged" }
+
+          log.debug { "id: ${get<String>(0,1)}" }
+
+/*          for (n in 0L until rowCount) {
+            log.trace { "${get<Long>(n, 0)}, ${get<String>(n, 0)}, ${get<Int>(n, 0)}" }
+          }*/
 
         }
       }
