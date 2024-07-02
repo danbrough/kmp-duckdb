@@ -11,6 +11,7 @@ import org.danbrough.xtras.pathOf
 import org.danbrough.xtras.supportsJNI
 import org.danbrough.xtras.xtras
 import org.danbrough.xtras.xtrasAndroidConfig
+import org.danbrough.xtras.xtrasDeclareLocalRepository
 import org.danbrough.xtras.xtrasDeclareXtrasRepository
 import org.danbrough.xtras.xtrasTesting
 import org.gradle.jvm.tasks.Jar
@@ -31,12 +32,10 @@ import org.jetbrains.kotlin.konan.target.presetName
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
-  `maven-publish`
-
   alias(libs.plugins.xtras)
   alias(libs.plugins.android.library)
-
   alias(libs.plugins.org.jetbrains.dokka)
+  `maven-publish`
 }
 
 
@@ -45,7 +44,7 @@ val KonanTarget.duckdbBinDir: File
     KonanTarget.LINUX_X64 -> file("../bin/amd64")
     KonanTarget.LINUX_ARM64 -> file("../bin/aarch64")
     KonanTarget.MINGW_X64 -> file("../bin/windows")
-    KonanTarget.ANDROID_X64, KonanTarget.ANDROID_ARM64 -> file("../bin/android/$androidLibDir")
+    KonanTarget.ANDROID_X64, KonanTarget.ANDROID_ARM64,KonanTarget.ANDROID_ARM32 -> file("../bin/android/$androidLibDir")
     KonanTarget.MACOS_X64, KonanTarget.MACOS_ARM64 -> file("../bin/darwin")
     else -> TODO("Handle target: $this")
   }
@@ -99,6 +98,7 @@ kotlin {
   }
   androidNativeX64()
   androidNativeArm64()
+  //androidNativeArm32()
 
   @OptIn(ExperimentalKotlinGradlePluginApi::class)
   compilerOptions {
@@ -294,7 +294,7 @@ xtras {
   }
 }
 
-xtrasDeclareXtrasRepository()
+xtrasDeclareLocalRepository()
 
 xtrasTesting {}
 

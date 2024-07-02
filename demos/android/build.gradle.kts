@@ -22,7 +22,8 @@ android {
     }
 
     ndk {
-      abiFilters.add("arm64-v4a")
+      //abiFilters.add("armeabi-v7a")
+      abiFilters.add("arm64-v8a")
       abiFilters.add("x86_64")
     }
   }
@@ -33,19 +34,23 @@ android {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
   }
+
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
   }
+
   kotlinOptions {
     jvmTarget = "11"
   }
   buildFeatures {
     compose = true
   }
+
   composeOptions {
     kotlinCompilerExtensionVersion = "1.5.1"
   }
+
   packaging {
     resources {
       excludes += "/META-INF/{AL2.0,LGPL2.1}"
