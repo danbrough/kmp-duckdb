@@ -18,6 +18,13 @@ on:
         # The data type of the input
         type: string
 
+      duckdb_version:
+        description: "Git commit of duckdb to compile"
+        default: "v1.0.0"
+        required: true
+        type: string
+
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "greet"
@@ -30,11 +37,36 @@ jobs:
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ inputs.name }} at `date`"
-    - name: Apt update
-      run: apt update && apt -y upgrade
-    - name: Install stuff
-      run: apt -y install nano  git build-essential
-    - name: Random things
-      run: echo user $USER at pwd $PWD  && ./scripts/build_android.sh
-      
 
+    - name: Upgrade
+      shell: bash
+      run: |
+        if [ ! -f upgraded ]; then
+          
+          apt-get install -y wget apt-transport-https gnupg
+          wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | apt-key add -
+          echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+          apt update
+          apt -y upgrade
+          
+          touch upgraded
+        fi
+
+    - name: Install
+      shell: bash
+      run: |
+        if [ ! -f updated ]; then
+          apt update
+          apt -y upgrade
+          apt -y install nano  git build-essential clang temurin-17-jdk
+          touch updated
+        fi
+
+    - name: Configure source
+      shell: bash
+      run: |
+        if [ ! -d duckdb ]; then
+          git clone https://github.com/duckdb/duckdb
+          cd duckdb
+          git checkout ${{ inputs.duckdb_version }}
+        fi
