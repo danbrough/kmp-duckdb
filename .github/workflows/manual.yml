@@ -41,10 +41,8 @@ jobs:
     - name: Upgrade
       shell: bash
       run: |
-        if [ ! -f upgraded ]; then
-          
-          sudo apt-get install -y wget apt-transport-https gnupg
-          wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | apt-key add -
+        if [ ! -f upgraded ]; then          
+          wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
           echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
           sudo apt update
           sudo apt -y upgrade          
