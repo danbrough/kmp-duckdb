@@ -1,0 +1,20 @@
+name: Demo workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+
+jobs:
+  example-job:
+    name: Save output
+    runs-on: ubuntu-22.04
+    steps:
+      - shell: bash
+        run: |
+          echo The date is `date` > message.txt
+      - name: Upload message file
+        uses: actions/upload-artifact@v4
+        with:
+          name: message-file
+          path: message.txt

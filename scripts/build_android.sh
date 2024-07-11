@@ -31,6 +31,8 @@ fi
 ANDROID_ABI=x86_64
 #ANDROID_ABI=armeabi-v7a
 
+[ ! -z "$1" ] && ANDROID_ABI="$1"
+
 
 ANDROID_PLATFORM=24
 DUCKDB_EXTENSIONS="icu;json;parquet"
@@ -52,3 +54,8 @@ cmake -G "Ninja" -DEXTENSION_STATIC_BUILD=1 \
 -DANDROID_ABI=$ANDROID_ABI -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
 -DCMAKE_BUILD_TYPE=Release ../.. && \
 cmake --build . --config Release
+JNI_LIBDIR=../duckdb/src/androidMain/jniLibs/$ANDROID_ABI
+mkdir -p $JNI_LIBDIR
+cp build/android_$ANDROID_ABI/src/libduckdb.so $JNI_LIBDIR
+
+

@@ -30,15 +30,15 @@ jobs:
 
 
   # This workflow contains a single job called "greet"
-  greet:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-22.04
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ inputs.name }} at `date`" | tee greeting.txt
+#  greet:
+#    # The type of runner that the job will run on
+#    runs-on: ubuntu-22.04
+#
+#    # Steps represent a sequence of tasks that will be executed as part of the job
+#    steps:
+#    # Runs a single command using the runners shell
+#    - name: Send greeting
+#      run: echo "Hello ${{ inputs.name }} at `date`" | tee greeting.txt
 
 
   upgrade:
@@ -56,7 +56,8 @@ jobs:
             echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
             sudo apt update
             sudo apt -y upgrade
-            sudo apt install cmake libssl-dev build-essential  libffi-dev curl libz-dev ninja-build
+            sudo apt install cmake libssl-dev build-essential  libffi-dev curl libz-dev ninja-build \
+          temurin-17-jdk
             touch upgraded
           fi
           echo GEN is $GEN
@@ -73,8 +74,10 @@ jobs:
             mv android-ndk-r26d android-ndk
           fi
       - name: Build
-        run: ./scripts/build_android.sh
-  
+        run: |
+            ./scripts/build_android.sh x86_64
+            ./scripts/build_android.sh arm64-v8a
+          
 
 #    - name: Install
 #      shell: bash
