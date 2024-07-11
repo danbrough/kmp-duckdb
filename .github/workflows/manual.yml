@@ -47,6 +47,7 @@ jobs:
       GEN: ninja
 
     steps:
+      - uses: actions/checkout@v4
       - name: Upgrade
         shell: bash
         run: |
@@ -54,7 +55,8 @@ jobs:
             wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
             echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
             sudo apt update
-            sudo apt -y upgrade          
+            sudo apt -y upgrade
+            sudo apt install cmake libssl-dev build-essential  libffi-dev curl libz-dev ninja-build
             touch upgraded
           fi
           echo GEN is $GEN
@@ -64,9 +66,14 @@ jobs:
         run: |
           if [ ! -d android-ndk ]; then
             URL=https://dl.google.com/android/repository/android-ndk-r26d-linux.zip
-            echo ANDROID_NDK not set .. downloading $URL
-            wget $URL && unzip android-ndk-r26d-linux.zip && mv android-ndk-r26d-linux android-ndk
+            if [ ! -f android-ndk-r26d-linux.zip ]; then 
+              echo  downloading $URL
+              wget $URL && unzip android-ndk-r26d-linux.zip
+            fi 
+            mv android-ndk-r26d android-ndk
           fi
+      - name: Build
+        run: ./scripts/build_android.sh
   
 
 #    - name: Install
