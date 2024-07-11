@@ -18,50 +18,79 @@ on:
         # The data type of the input
         type: string
 
-      duckdb_version:
-        description: "Git commit of duckdb to compile"
-        default: "v1.0.0"
-        required: true
-        type: string
+#      duckdb_version:
+#        description: "Git commit of duckdb to compile"
+#        default: "v1.0.0"
+#        required: true
+#        type: string
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+
+
   # This workflow contains a single job called "greet"
   greet:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
     - name: Send greeting
-      run: echo "Hello ${{ inputs.name }} at `date`"
+      run: echo "Hello ${{ inputs.name }} at `date`" | tee greeting.txt
 
-    - name: Upgrade
-      shell: bash
-      run: |
-        if [ ! -f upgraded ]; then          
-          wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
-          echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
-          sudo apt update
-          sudo apt -y upgrade          
-          touch upgraded
-        fi
 
-    - name: Install
-      shell: bash
-      run: |
-        if [ ! -f installed ]; then
-          sudo apt -y install nano  git build-essential clang temurin-17-jdk
-          touch installed
-        fi
+  upgrade:
+    runs-on: ubuntu-22.04
+    env:
+      GEN: ninja
 
-    - name: Configure source
-      shell: bash
-      run: |
-        if [ ! -d duckdb ]; then
-          git clone https://github.com/duckdb/duckdb
-          cd duckdb
-          git checkout ${{ inputs.duckdb_version }}
-        fi
+    steps:
+      - name: Upgrade
+        shell: bash
+        run: |
+          if [ ! -f upgraded ]; then          
+            wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
+            echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
+            sudo apt update
+            sudo apt -y upgrade          
+            touch upgraded
+          fi
+          echo GEN is $GEN
+
+      - name: NDK Setup
+        shell: bash
+        run: |
+          if [ ! -d android-ndk ]; then
+            URL=https://dl.google.com/android/repository/android-ndk-r26d-linux.zip
+            echo ANDROID_NDK not set .. downloading $URL
+            wget $URL && unzip android-ndk-r26d-linux.zip && mv android-ndk-r26d-linux android-ndk
+          fi
+  
+
+#    - name: Install
+#      shell: bash
+#      run: |
+#        if [ ! -f installed ]; then
+#          sudo apt -y install nano  git build-essential clang temurin-17-jdk
+#          touch installed
+#        fi
+#
+#    - name: Configure source
+#      shell: bash
+#      run: |
+#        if [ ! -d duckdb ]; then
+#          git clone https://github.com/duckdb/duckdb
+#          cd duckdb
+#          git checkout ${{ inputs.duckdb_version }}
+#        fi
+
+  test-something:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: THang
+        shell: bash
+        run: ls -al
+
