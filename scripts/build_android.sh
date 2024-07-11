@@ -19,12 +19,8 @@ fi
 
 
 if [ -z "$ANDROID_NDK" ]; then
-  URL=https://dl.google.com/android/repository/android-ndk-r26d-linux.zip
-  echo ANDROID_NDK not set .. downloading $URL
-  wget $URL && \
-  unzip android-ndk-r26d-linux.zip && \
-  mv android-ndk-r26d-linux android-ndk
-  ANDROID_NDK="$PWD/android-ndk"
+  echo "\$ANDROID_NDK not set."
+  exit 1
 fi
 
 #ANDROID_ABI=arm64-v8a 

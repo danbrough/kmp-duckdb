@@ -43,11 +43,23 @@ jobs:
 
   upgrade:
     runs-on: ubuntu-22.04
+
     env:
       GEN: ninja
 
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r26d
+          add-to-path: true
+        env:
+          ANDROID_NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
       - name: Upgrade
         shell: bash
         run: |
@@ -56,23 +68,10 @@ jobs:
             echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
             sudo apt update
             sudo apt -y upgrade
-            sudo apt install cmake libssl-dev build-essential  libffi-dev curl libz-dev ninja-build \
-          temurin-17-jdk
+            sudo apt install cmake libssl-dev build-essential  libffi-dev curl libz-dev ninja-build 
             touch upgraded
           fi
           echo GEN is $GEN
-
-      - name: NDK Setup
-        shell: bash
-        run: |
-          if [ ! -d android-ndk ]; then
-            URL=https://dl.google.com/android/repository/android-ndk-r26d-linux.zip
-            if [ ! -f android-ndk-r26d-linux.zip ]; then 
-              echo  downloading $URL
-              wget $URL && unzip android-ndk-r26d-linux.zip
-            fi 
-            mv android-ndk-r26d android-ndk
-          fi
       - name: Build
         run: |
             ./scripts/build_android.sh x86_64
