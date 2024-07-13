@@ -99,14 +99,11 @@ jobs:
         shell: bash
         run: |
           if [ ! -f upgraded ]; then          
-            wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
-            echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
             sudo apt -qq update
             sudo apt -qq -y upgrade
             sudo apt -qq install cmake libssl-dev build-essential libffi-dev curl libz-dev ninja-build 
             touch upgraded
           fi
-          echo GEN is $GEN
       - name: Build x86_64
         shell: bash
         run: ./scripts/build_android.sh x86_64
