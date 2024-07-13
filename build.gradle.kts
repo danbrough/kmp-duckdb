@@ -20,3 +20,8 @@ allprojects{
 	version = projectVersion
 }
 
+tasks.register("thang"){
+	doFirst {
+		println("Hello from thang")
+	}
+}

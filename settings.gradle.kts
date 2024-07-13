@@ -22,7 +22,7 @@ dependencyResolutionManagement {
   //repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   @Suppress("UnstableApiUsage")
   repositories {
-    mavenLocal()
+    maven("https://s01.oss.sonatype.org/content/groups/staging")
     maven("https://maven.danbrough.org")
     google()
     mavenCentral()

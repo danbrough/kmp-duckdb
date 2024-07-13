@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Manual workflow
+name: Build workflow
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -46,6 +46,8 @@ jobs:
 
     env:
       GEN: ninja
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
 
     steps:
       - uses: actions/checkout@v4
@@ -53,6 +55,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
+
+      - name: Set up Android SDK
+        if: ${{ env.ACT }} # Only run on local act setups, as GitHub Actions provides the Android SDK on Ubuntu
+        uses: android-actions/setup-android@v2
+
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
         with:
@@ -60,6 +68,7 @@ jobs:
           add-to-path: true
         env:
           ANDROID_NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
+
       - name: Upgrade
         shell: bash
         run: |
