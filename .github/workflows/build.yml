@@ -108,8 +108,10 @@ jobs:
           fi
           echo GEN is $GEN
       - name: Build x86_64
+        shell: bash
         run: ./scripts/build_android.sh x86_64
       - name: Build arm64-v8a
+        shell: bash
         run: ./scripts/build_android.sh arm64-v8a
 
 #    - name: Install
