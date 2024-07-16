@@ -64,7 +64,9 @@ kotlin = "2.0.0"
 io-kvision = "7.4.5"
 flyway = "10.13.0"
 xtrasPackage = "org.danbrough.xtras"
-xtras = "0.0.1-alpha06"
+xtras = "0.0.1-alpha07"
+xtras-jni = "0.0.1-alpha07"
+xtras-support = "0.0.1-alpha07"
 xtras-mqtt = "0.0.1-alpha01"
 kotlin-logging = "0.0.1-beta01"
 dokka = "1.9.20"
@@ -79,7 +81,7 @@ ktor = "2.3.12"
 kotlinx-datetime = "0.6.0"
 sqldelight = "2.0.2"
 koin-bom = "2.2.0-rc-4"
-klog = "0.0.3-beta02"
+klog = "0.0.3-beta03"
 shadow = "8.1.1"
 
 jwks-rsa-version = "0.22.1"
@@ -117,8 +119,8 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 
 
 
-xtras-support = { group = "org.danbrough.xtras", name = "support", version = "0.0.1-beta01" }
-xtras-jni = { group = "org.danbrough.xtras", name = "jni", version = "0.0.1-beta01" }
+xtras-support = { group = "org.danbrough.xtras", name = "support", version.ref = "xtras-support" }
+xtras-jni = { group = "org.danbrough.xtras", name = "jni", version.ref = "xtras-jni" }
 
 xtras-core = { group = "org.danbrough.xtras", name = "core", version = "0.0.1-beta01" }
 

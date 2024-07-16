@@ -11,3 +11,8 @@ plugins {
 
 
 
+tasks.register("thang"){
+	doFirst {
+
+	}
+}

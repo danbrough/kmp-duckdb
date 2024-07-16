@@ -31,10 +31,14 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "duckdb-kmp"
+//include(":thang")
 include(":duckdb")
+/*
+
 
 listOf("android").forEach {
   include(":demos:$it")
 }
 
+*/
 

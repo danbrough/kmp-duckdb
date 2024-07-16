@@ -6,23 +6,6 @@ name: Build workflow
 # or API.
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
-        # The data type of the input
-        type: string
-
-#      duckdb_version:
-#        description: "Git commit of duckdb to compile"
-#        default: "v1.0.0"
-#        required: true
-#        type: string
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -96,6 +79,7 @@ jobs:
           ANDROID_NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Upgrade
+        if: ${{ env.ACT }} # Only run on local act setups, as GitHub Actions provides the Android SDK on Ubuntu
         shell: bash
         run: |
           if [ ! -f upgraded ]; then          
@@ -104,6 +88,7 @@ jobs:
             sudo apt -qq install cmake libssl-dev build-essential libffi-dev curl libz-dev ninja-build 
             touch upgraded
           fi
+
       - name: Build x86_64
         shell: bash
         run: ./scripts/build_android.sh x86_64
