@@ -32,7 +32,6 @@ import org.jetbrains.kotlin.konan.target.presetName
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
-  alias(libs.plugins.xtras)
   alias(libs.plugins.android.library)
   alias(libs.plugins.org.jetbrains.dokka)
   `maven-publish`

@@ -57,7 +57,6 @@ agp ="8.5.1"
 ##⬆= "8.6.0-alpha07"
 ##⬆= "8.6.0-alpha08"
 ##⬆= "8.6.0-beta01"
-duckdb_jdbc = "1.0.0"
 kotlin = "2.0.0"
 ##  ⬆ = "2.0.10-RC"
 ##  ⬆ = "2.0.20-Beta1"
@@ -65,11 +64,11 @@ kotlin = "2.0.0"
 io-kvision = "7.4.5"
 flyway = "10.13.0"
 xtrasPackage = "org.danbrough.xtras"
-xtras = "0.0.1-alpha02"
+xtras = "0.0.1-alpha06"
 xtras-mqtt = "0.0.1-alpha01"
 kotlin-logging = "0.0.1-beta01"
 dokka = "1.9.20"
-kotlinx-io = "0.4.0"
+kotlinx-io = "0.5.0"
 slf4j-api = "2.0.13"
 slf4j-simple = "2.0.12"
 logback-classic = "1.5.6"
@@ -81,8 +80,6 @@ kotlinx-datetime = "0.6.0"
 sqldelight = "2.0.2"
 koin-bom = "2.2.0-rc-4"
 klog = "0.0.3-beta02"
-#sqldelight-postgres-native = "0.0.12"
-sqldelight-postgres-native = "0.0.1-beta01"
 shadow = "8.1.1"
 
 jwks-rsa-version = "0.22.1"
@@ -118,24 +115,13 @@ androidx-material = { group = "com.google.android.material", name = "material", 
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 
-doodle-core = { module = "io.nacular.doodle:core", version.ref = "doodle" }
-doodle-browser = { module = "io.nacular.doodle:browser", version.ref = "doodle" }
-doodle-controls = { module = "io.nacular.doodle:controls", version.ref = "doodle" }
-doodle-animation = { module = "io.nacular.doodle:animation", version.ref = "doodle" }
-doodle-themes = { module = "io.nacular.doodle:themes", version.ref = "doodle" }
-doodle-desktop-linux-x64 = { module = "io.nacular.doodle:desktop-jvm-linux-x64", version.ref = "doodle" }
 
-duckdb_jdbc = { module = "org.duckdb:duckdb_jdbc", version.ref = "duckdb_jdbc" }
-mockk = { module = "io.mockk:mockk", version.ref = "mockk-version" }
-java-jwt = { module = "com.auth0:java-jwt", version.ref = "java-jwt-version" }
-jwks-rsa = { module = "com.auth0:jwks-rsa", version.ref = "jwks-rsa-version" }
 
 xtras-support = { group = "org.danbrough.xtras", name = "support", version = "0.0.1-beta01" }
 xtras-jni = { group = "org.danbrough.xtras", name = "jni", version = "0.0.1-beta01" }
 
 xtras-core = { group = "org.danbrough.xtras", name = "core", version = "0.0.1-beta01" }
 
-io-kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version = "5.8.0" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin" }
@@ -176,24 +162,13 @@ ktor-client-jetty = { module = "io.ktor:ktor-client-jetty", version.ref = "ktor"
 
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
-sqldelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
-sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
-sqldelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
-sqldelight-driver-jdbc = { module = "app.cash.sqldelight:jdbc-driver", version.ref = "sqldelight" }
-sqldelight-dialect-postgres = { module = "app.cash.sqldelight:postgresql-dialect", version.ref = "sqldelight" }
-sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 
-#postgresql-jdbc = { module = "org.postgresql:postgresql", version.ref = "clikt" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version = "4.4.0" }
 clikt-linuxx64 = { module = "com.github.ajalt.clikt:clikt-linuxx64", version.ref = "clikt" }
 clikt-macosx64 = { module = "com.github.ajalt.clikt:clikt-macosx64", version.ref = "clikt" }
 clikt-macosarm64 = { module = "com.github.ajalt.clikt:clikt-macosarm64", version.ref = "clikt" }
-
-sqldelight-postgres-native-driver = { module = "org.danbrough:postgres-native-sqldelight-driver", version.ref = "sqldelight-postgres-native" }
-sqldelight-postgres-native-dialect = { module = "org.danbrough:postgres-native-sqldelight-dialect", version.ref = "sqldelight-postgres-native" }
 
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }
@@ -202,17 +177,6 @@ klog-slf4j = { module = "org.danbrough.klog:slf4j", version.ref = "klog" }
 
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 
-supabase-gotrue = { module = "io.github.jan-tennert.supabase:gotrue-kt", version.ref = "supabase" }
-supabase-realtime = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "supabase" }
-supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supabase" }
-supabase-functions = { module = "io.github.jan-tennert.supabase:functions-kt", version.ref = "supabase" }
-supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
-
-supabase-apollo-graphql = { module = "io.github.jan-tennert.supabase:apollo-graphql", version.ref = "supabase" }
-supabase-compose-auth = { module = "io.github.jan-tennert.supabase:compose-auth", version.ref = "supabase" }
-supabase-compose-auth-ui = { module = "io.github.jan-tennert.supabase:compose-auth-ui", version.ref = "supabase" }
-supabase-coil-integration = { module = "io.github.jan-tennert.supabase:coil-integration", version.ref = "supabase" }
-supabase-imageloader-integration = { module = "io.github.jan-tennert.supabase:imageloader-integration", version.ref = "supabase" }
 androidx-ui-tooling-preview-desktop = { group = "androidx.compose.ui", name = "ui-tooling-preview-desktop", version.ref = "uiToolingPreviewDesktop" }
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
