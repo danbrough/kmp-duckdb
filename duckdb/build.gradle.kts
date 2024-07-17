@@ -1,4 +1,4 @@
-
+import org.danbrough.xtras.Xtras
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -18,7 +18,8 @@ import org.danbrough.xtras.pathOf
 import org.danbrough.xtras.envLibraryPathName
 import org.danbrough.xtras.logInfo
 import org.danbrough.xtras.capitalized
-import org.danbrough.xtras.xtras
+import org.danbrough.xtras.xtrasExtension
+import org.danbrough.xtras.xtrasTesting
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
@@ -27,18 +28,20 @@ plugins {
   `maven-publish`
 }
 
-
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+}
 
 val KonanTarget.duckdbBinDir: File
   get() = when (this) {
     KonanTarget.LINUX_X64 -> file("../bin/amd64")
     KonanTarget.LINUX_ARM64 -> file("../bin/aarch64")
     KonanTarget.MINGW_X64 -> file("../bin/windows")
-    KonanTarget.ANDROID_X64, KonanTarget.ANDROID_ARM64,KonanTarget.ANDROID_ARM32 -> file("../bin/android/$androidLibDir")
+    KonanTarget.ANDROID_X64, KonanTarget.ANDROID_ARM64, KonanTarget.ANDROID_ARM32 -> file("../bin/android/$androidLibDir")
     KonanTarget.MACOS_X64, KonanTarget.MACOS_ARM64 -> file("../bin/darwin")
     else -> TODO("Handle target: $this")
   }
-
 
 val interopsDefFile = file("src/cinterops/duckdb.def")
 val generateDefFileTaskName = "generateInteropsDefFile"
@@ -69,22 +72,22 @@ val demos = listOf(
 
 kotlin {
   jvm {
-    /*@OptIn(ExperimentalKotlinGradlePluginApi::class)
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
       jvmTarget = JvmTarget.JVM_11
-    }*/
+    }
   }
-  linuxX64()
-  linuxArm64()
-  macosX64()
+  //linuxX64()
+  //linuxArm64()
+  //macosX64()
   //mingwX64()
 
   androidTarget {
     publishLibraryVariants("release")
-/*    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
       jvmTarget = JvmTarget.JVM_11
-    }*/
+    }
   }
   androidNativeX64()
   androidNativeArm64()
@@ -163,11 +166,15 @@ kotlin {
       if (konanTarget.supportsJNI) {
         sharedLib("duckdbkt") {
           copyToJniLibs()
-          if (konanTarget == HostManager.host && buildType == NativeBuildType.DEBUG){
+          if (konanTarget == HostManager.host && buildType == NativeBuildType.DEBUG) {
             val libDir = linkTask.outputs.files.first()
-            tasks.withType<KotlinJvmTest>{
+            tasks.withType<KotlinJvmTest> {
               dependsOn(linkTask)
-              val ldPath = pathOf( environment[HostManager.host.envLibraryPathName],libDir, HostManager.host.duckdbBinDir)
+              val ldPath = pathOf(
+                environment[HostManager.host.envLibraryPathName],
+                libDir,
+                HostManager.host.duckdbBinDir
+              )
               environment[HostManager.host.envLibraryPathName] = ldPath
               logInfo("$name: ldPath = $ldPath")
             }
@@ -221,10 +228,6 @@ fun SharedLibrary.copyToJniLibs() {
   }
 }
 
-
-
-
-
 tasks.register(generateDefFileTaskName) {
   dependsOn(TASK_GENERATE_TYPES_ENUM)
   val headersFile = file("src/cinterops/duckdb_headers.def")
@@ -275,9 +278,14 @@ tasks.withType<KotlinCompile> {
 tasks.withType<KotlinCompileCommon> {
   dependsOn(TASK_GENERATE_TYPES_ENUM)
 }
-
-
-
+//
+//xtras {
+//  javaVersion = JavaVersion.VERSION_11
+//  androidConfig {
+//    minSDKVersion = 24
+//  }
+//}
+/*
 xtras {
   javaVersion = JavaVersion.VERSION_11
   androidConfig {
@@ -287,8 +295,16 @@ xtras {
 
 xtrasDeclareLocalRepository()
 
+
+
+
+
+*/
+
 xtrasTesting {}
 
+//val xtras by extensions.getting<Xtras>()
+val xtras = xtrasExtension
 
 android {
   namespace = project.group.toString()
@@ -304,8 +320,7 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility = project.xtras.javaVersion
-    targetCompatibility = project.xtras.javaVersion
+    sourceCompatibility = xtras.javaVersion
+    targetCompatibility = xtras.javaVersion
   }
 }
-
