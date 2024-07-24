@@ -8,13 +8,19 @@ repositories {
 }
 
 /*
+val JAVA_VERSION =JavaVersion.VERSION_11
+val JVM_TARGET = JvmTarget.JVM_11
+
+
+
 java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JAVA_VERSION
+	targetCompatibility = JAVA_VERSION
 }
 
 kotlin {
 	compilerOptions {
-		jvmTarget = JvmTarget.JVM_1_8
+		jvmTarget = JVM_TARGET
 	}
-}*/
+}
+*/

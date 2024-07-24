@@ -12,7 +12,7 @@ fun demo1() {
   log.info { "demo1" }
   runBlocking {
     duckdb(
-      "${getEnv("HOME")}/.habitrack/database",
+      "${getEnv("HOME")}/.habitrack/hb.db",
       databaseConfig(AccessMode.READ_WRITE)
     ) {
 
@@ -31,7 +31,7 @@ fun demo1() {
       }
     }
     duckdb(
-      "${getEnv("HOME")}/.habitrack/database",
+      "${getEnv("HOME")}/.habitrack/hb.db",
       databaseConfig(AccessMode.READ_ONLY)
     ) {
       val midnight = Clock.System.todayIn(TimeZone.currentSystemDefault())

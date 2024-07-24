@@ -8,8 +8,8 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 org-jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-#xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
-xtras = { id = "org.danbrough.xtras" }
+xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
+#xtras = { id = "org.danbrough.xtras" }
 xtras-openssl = { id = "org.danbrough.xtras.openssl", version.ref = "xtras" }
 xtras-mqtt = { id = "org.danbrough.xtras.mqtt", version.ref = "xtras-mqtt" }
 kotest-multiplatform = { id = "io.kotest.multiplatform", version = "5.8.0" }
@@ -34,6 +34,8 @@ compose-plugin = "1.6.11"
 ##          ⬆ = "1.7.0-dev1703"
 ##          ⬆ = "1.7.0-dev1721"
 ##          ⬆ = "1.7.0-dev1727"
+##          ⬆ = "1.7.0-dev1731"
+##          ⬆ = "1.7.0-dev1739"
 ##          ⬆ = "1.7.0-alpha01"
 compose-navigation = "2.8.0-beta05"
 androidx-activityCompose = "1.9.0"
@@ -58,6 +60,8 @@ agp ="8.5.1"
 ##⬆= "8.6.0-alpha07"
 ##⬆= "8.6.0-alpha08"
 ##⬆= "8.6.0-beta01"
+##⬆= "8.7.0-alpha01"
+##⬆= "8.7.0-alpha02"
 kotlin = "2.0.0"
 ##  ⬆ = "2.0.10-RC"
 ##  ⬆ = "2.0.20-Beta1"
@@ -65,11 +69,11 @@ kotlin = "2.0.0"
 io-kvision = "7.4.5"
 flyway = "10.13.0"
 xtrasPackage = "org.danbrough.xtras"
-xtras = "0.0.1-alpha07"
-xtras-jni = "0.0.1-alpha07"
-xtras-support = "0.0.1-alpha07"
+xtras = "0.0.1-beta03"
+xtras-publish = "0.0.1-beta02"
+xtras-jni = "0.0.1-beta02"
+xtras-support = "0.0.1-beta02"
 xtras-mqtt = "0.0.1-alpha01"
-kotlin-logging = "0.0.1-beta01"
 dokka = "1.9.20"
 kotlinx-io = "0.5.0"
 slf4j-api = "2.0.13"
@@ -82,7 +86,7 @@ ktor = "2.3.12"
 kotlinx-datetime = "0.6.0"
 sqldelight = "2.0.2"
 koin-bom = "2.2.0-rc-4"
-klog = "0.0.3-beta03"
+klog = "0.0.3-beta04"
 shadow = "8.1.1"
 
 jwks-rsa-version = "0.22.1"
@@ -118,8 +122,6 @@ androidx-material = { group = "com.google.android.material", name = "material", 
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 
-
-
 xtras-support = { group = "org.danbrough.xtras", name = "support", version.ref = "xtras-support" }
 xtras-jni = { group = "org.danbrough.xtras", name = "jni", version.ref = "xtras-jni" }
 
@@ -134,39 +136,10 @@ dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plug
 xtras-plugin = { group = "org.danbrough.xtras", name = "plugin", version.ref = "xtras" }
 xtras-mqtt-plugin = { group = "org.danbrough.xtras", name = "plugin_mqtt", version.ref = "xtras" }
 xtras-openssl-plugin = { group = "org.danbrough.xtras", name = "plugin_openssl", version.ref = "xtras" }
-#kotlin-logging = { module = "io.github.oshai:kotlin-logging", version.ref = "kotlin-logging" }
-kotlin-logging = { module = "org.danbrough:logging", version.ref = "kotlin-logging" }
-
-kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j-api" }
-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-simple" }
-
-slf4j-android = { module = "org.slf4j:slf4j-android", version = "1.7.36" }
-
-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
-ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
-ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
-ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
-ktor-server-curl = { module = "io.ktor:ktor-server-curl", version.ref = "ktor" }
-ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
-ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
-ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
-ktor-server-tests = { module = "io.ktor:ktor-server-tests", version.ref = "ktor" }
-ktor-server-test-hosts = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
-
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
-ktor-client-curl = { module = "io.ktor:ktor-client-curl", version.ref = "ktor" }
-ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
-ktor-client-jetty = { module = "io.ktor:ktor-client-jetty", version.ref = "ktor" }
 
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
-
 
 clikt = { module = "com.github.ajalt.clikt:clikt", version = "4.4.0" }
 clikt-linuxx64 = { module = "com.github.ajalt.clikt:clikt-linuxx64", version.ref = "clikt" }

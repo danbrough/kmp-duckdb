@@ -40,13 +40,16 @@ cd ../upstream
 BUILDDIR=./build/$PLATFORM_NAME
 mkdir -p $BUILDDIR
 cd $BUILDDIR
+export PATH="$LLVM_DIR:$PATH"
 
 cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1  \
     -DEXTENSION_STATIC_BUILD=1 \
-   -DCMAKE_RANLIB="/home/dan/.konan/dependencies/x86_64-unknown-linux-gnu-gcc-8.3.0-glibc-2.19-kernel-4.9-2/x86_64-unknown-linux-gnu/bin/ranlib" -DCMAKE_AR="$LLVM_DIR/llvm-ar" \
-   -DCMAKE_VERBOSE_MAKEFILE=off \
-   -DBUILD_EXTENSIONS=$DUCKDB_EXTENSIONS \
-   -DDUCKDB_EXPLICIT_PLATFORM=$PLATFORM_NAME -DBUILD_UNITTESTS=0 -DBUILD_SHELL=1 \
-   -DCMAKE_CXX_COMPILER="$LLVM_DIR/clang++" -DCMAKE_C_COMPILER="$LLVM_DIR/clang"  -DOVERRIDE_GIT_DESCRIBE="" \
-   -DCMAKE_BUILD_TYPE=Release ../..
+    -DCMAKE_RANLIB="ranlib" -DCMAKE_AR="llvm-ar" \
+    -DCMAKE_VERBOSE_MAKEFILE=off \
+    -DBUILD_EXTENSIONS=$DUCKDB_EXTENSIONS \
+    -DDUCKDB_EXPLICIT_PLATFORM=$PLATFORM_NAME -DBUILD_UNITTESTS=0 -DBUILD_SHELL=1 \
+    -DCMAKE_CXX_COMPILER="clang++" -DCMAKE_C_COMPILER="clang"  -DOVERRIDE_GIT_DESCRIBE="" \
+    -DCMAKE_BUILD_TYPE=Release ../..
 cmake --build . --config Release
+
+#-DCMAKE_FIND_ROOT_PATH=/home/dan/.konan/dependencies \

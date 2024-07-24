@@ -2,7 +2,7 @@ pluginManagement {
   repositories {
     maven("https://s01.oss.sonatype.org/content/groups/staging/")
 
-    //  maven("https://maven.danbrough.org")
+    //maven("https://maven.danbrough.org")
     google {
       content {
         includeGroupByRegex("com\\.android.*")
@@ -30,18 +30,9 @@ dependencyResolutionManagement {
   }
 }
 
-includeBuild("../../xtras/plugin")
-includeBuild("../../xtras/core")
 
 rootProject.name = "duckdb-kmp"
-//include(":thang")
 include(":duckdb")
-/*
-
-
-listOf("android").forEach {
-  include(":demos:$it")
-}
-
-*/
+include(":demo")
+project(":demo").projectDir = file("demos/android")
 
