@@ -53,7 +53,7 @@ cmake --build . --config Release
 
 JNI_LIBDIR=../../../duckdb/src/androidMain/jniLibs/$ANDROID_ABI
 mkdir -p $JNI_LIBDIR
-cp src/libduckdb.so $JNI_LIBDIR
+cp cp ../../src/include/duckdb.h ../../src/include/duckdb.hpp  src/libduckdb.so $JNI_LIBDIR
 
 $ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip $JNI_LIBDIR/libduckdb.so
 
