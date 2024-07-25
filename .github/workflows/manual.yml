@@ -56,6 +56,7 @@ jobs:
         run: |
           ls -al
           echo XTRAS_DIR = ${{ env.XTRAS_DIR }}
+          echo home: ${{ home }}, ${{ HOME }}, $HOME
           env
           
 
