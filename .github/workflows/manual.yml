@@ -56,13 +56,14 @@ jobs:
         run: |
           ls -al
           echo XTRAS_DIR = ${{ env.XTRAS_DIR }}
+          [ ! -f $XTRAS_DIR ] && mkdir -p $XTRAS_DIR 
           echo home: ${{ env.HOME }}, $HOME
           env
           
 
       - name: Do Something
         shell: bash
-        working-directory: XTRAS_DIR
+        working-directory: ${{ env.XTRAS_DIR }}
         run: |
           echo "doing something on $(date) at $(pwd)" >> build.log
           cat build.log
