@@ -1,0 +1,24 @@
+# This is a basic workflow that is manually triggered
+
+name: Test workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: test1
+        shell: bash
+        run: |
+          echo XTRAS_DIR=$HOME/xtras >> $GITHUB_ENV
+          echo xtras dir = $XTRAS_DIR or ${{ env.XTRAS_DIR }}
