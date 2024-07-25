@@ -40,7 +40,7 @@ jobs:
         id: cache_xtras
         uses: actions/cache@v3
         with:
-          path: $XTRAS_DIR
+          path: ${{ env.XTRAS_DIR }}
           key: ${{ runner.os }}-xtras
 
       - name: Setup gradle
@@ -52,13 +52,12 @@ jobs:
       - name: List gradle tasks
         shell: bash
         env:
-          GRADLE_OPTS: '-Dorg.gradle.caching=true -Dorg.gradle.project.xtras.dir=~/xtras'
+          GRADLE_OPTS: '-Dorg.gradle.caching=true -Dorg.gradle.project.xtras.dir=${{ xtras.dir }}'
         run: |
           ls -al
-          [ ! -d $XTRAS_DIR ] && echo creating $XTRAS_DIR && mkdir $XTRAS_DIR  
-          echo "gradle opts: $GRADLE_OPTS" 
-          echo home dir is $HOME  or ${{ env.workspace}} or ${{ workspace}}
-
+          echo XTRAS_DIR = ${{ env.XTRAS_DIR }}
+          env
+          
 
       - name: Do Something
         shell: bash
