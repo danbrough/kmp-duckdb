@@ -49,7 +49,7 @@ jobs:
       - name: List gradle tasks
         shell: bash
         env:
-          GRADLE_OPTS: '-Dorg.gradle.caching=true'
+          GRADLE_OPTS: '-Dorg.gradle.caching=true -Pxtras.dir=$HOME/xtras'
         run: ls -al && ./gradlew tasks
 
 
