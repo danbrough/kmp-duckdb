@@ -88,10 +88,10 @@ val demos = listOf(
 
 kotlin {
   jvm {
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    compilerOptions {
-      jvmTarget = JvmTarget.JVM_11
-    }
+//    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+//    compilerOptions {
+//      jvmTarget = JvmTarget.JVM_11
+//    }
   }
   linuxX64()
   linuxArm64()
@@ -100,10 +100,10 @@ kotlin {
 
   androidTarget {
     publishLibraryVariants("release")
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    compilerOptions {
-      jvmTarget = JvmTarget.JVM_11
-    }
+//    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+//    compilerOptions {
+//      jvmTarget = JvmTarget.JVM_11
+//    }
   }
   androidNativeX64()
   androidNativeArm64()
@@ -169,13 +169,13 @@ kotlin {
         }
       }
 
-      cinterops {
-        create("duckdb") {
-          definitionFile = interopsDefFile
-          tasks.getByName(interopProcessingTaskName).dependsOn(generateDefFileTaskName)
-          this.compilerOpts("-Wno-return-type")
-        }
-      }
+//      cinterops {
+//        create("duckdb") {
+//          definitionFile = interopsDefFile
+//          tasks.getByName(interopProcessingTaskName).dependsOn(generateDefFileTaskName)
+//          this.compilerOpts("-Wno-return-type")
+//        }
+//      }
     }
 
     binaries {

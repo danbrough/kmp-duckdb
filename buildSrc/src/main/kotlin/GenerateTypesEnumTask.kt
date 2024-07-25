@@ -3,7 +3,7 @@ import org.gradle.api.Project
 const val TASK_GENERATE_TYPES_ENUM = "generateTypesEnum"
 
 fun Project.generateTypesEnumTask() = tasks.register(TASK_GENERATE_TYPES_ENUM) {
-  val inputFile = rootDir.resolve("bin/amd64/duckdb.h")
+  val inputFile = rootDir.resolve("headers/duckdb.h")
   val outputFile =
     project.file("src/commonMain/kotlin/org/danbrough/duckdb/DuckDbType.kt")
   inputs.file(inputFile)
