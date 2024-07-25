@@ -25,9 +25,6 @@ jobs:
 
   test1:
     runs-on: ubuntu-latest
-    env:
-      XTRAS_DIR: ${{ env.HOME }}/xtras
-
     steps:
       - name: Upgrade
         #if: ${{ env.ACT }} # Only run on local act setups, as GitHub Actions provides the Android SDK on Ubuntu
@@ -82,7 +79,6 @@ jobs:
         run: |
           ls -al
           echo XTRAS_DIR = ${{ env.XTRAS_DIR }}
-          
           echo home: $HOME
 
 
