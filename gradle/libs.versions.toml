@@ -8,8 +8,8 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 org-jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-#xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
-xtras = { id = "org.danbrough.xtras" }
+xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
+#xtras = { id = "org.danbrough.xtras" }
 xtras-openssl = { id = "org.danbrough.xtras.openssl", version.ref = "xtras" }
 xtras-mqtt = { id = "org.danbrough.xtras.mqtt", version.ref = "xtras-mqtt" }
 kotest-multiplatform = { id = "io.kotest.multiplatform", version = "5.8.0" }
@@ -69,7 +69,7 @@ kotlin = "2.0.0"
 io-kvision = "7.4.5"
 flyway = "10.13.0"
 xtrasPackage = "org.danbrough.xtras"
-xtras = "0.0.1-beta03"
+xtras = "0.0.1-beta04"
 xtras-publish = "0.0.1-beta02"
 xtras-jni = "0.0.1-beta02"
 xtras-support = "0.0.1-beta02"

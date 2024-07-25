@@ -21,11 +21,41 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
+
   test1:
     runs-on: ubuntu-latest
+
     steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Xtras dir
+        id: cache_xtras
+        uses: actions/cache@v3
+        with:
+          path: $HOME/xtras
+          key: ${{ runner.os }}-xtras
+
+      - name: Setup gradle
+        uses: yumemi-inc/setup-java-gradle@v1
+        with:
+          cache-read-only: false
+          gradle-home-cache-cleanup: false
+
+      - name: List gradle tasks
+        shell: bash
+        env:
+          GRADLE_OPTS: '-Dorg.gradle.caching=true'
+        run: ls -al && ./gradlew tasks
+
+
       - name: Do Something
         shell: bash
+        working-directory: $HOME/xtras
         run: |
           echo "doing something on $(date) at $(pwd)" >> build.log
           cat build.log
@@ -46,8 +76,9 @@ jobs:
     steps:
       # Runs a single command using the runners shell
       - name: Send greeting
+        shell: bash
         run: |
-          echo "Hello ${{ inputs.name }} at `date`"
+          echo "Hello ${{ inputs.name }} at $(date)"
           ls -l
           
         
