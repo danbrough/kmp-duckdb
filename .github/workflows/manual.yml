@@ -62,7 +62,7 @@ jobs:
           ls -al
           echo XTRAS_DIR = ${{ env.XTRAS_DIR }}
           [ ! -f $XTRAS_DIR ] && mkdir -p $XTRAS_DIR 
-          echo home: ${{ env.HOME }}, $HOME
+          echo home: $HOME
           env
           
 
