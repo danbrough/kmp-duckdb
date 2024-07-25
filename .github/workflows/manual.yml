@@ -26,7 +26,7 @@ jobs:
   test1:
     runs-on: ubuntu-latest
     env:
-      XTRAS_DIR: ${{ runner.home }}/xtras
+      XTRAS_DIR: /xtras
 
     steps:
       - uses: actions/checkout@v4
