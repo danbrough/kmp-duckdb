@@ -62,7 +62,7 @@ jobs:
 
       - name: Do Something
         shell: bash
-        working-directory: $XTRAS_DIR
+        working-directory: XTRAS_DIR
         run: |
           echo "doing something on $(date) at $(pwd)" >> build.log
           cat build.log
