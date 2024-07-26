@@ -22,6 +22,7 @@ jobs:
       - name: Setup gradle.properties
         shell: bash
         run: |
+          echo XTRAS_DIR=$HOME/xtras >> $GITHUB_ENV
           GRADLE_PROPS=$HOME/.gradle/gradle.properties
           echo Configuring $GRADLE_PROPS 
           if [ -f $GRADLE_PROPS ]; then
@@ -38,6 +39,13 @@ jobs:
           xtras.dir=$HOME/xtras
           PROPS
           chmod 600 $GRADLE_PROPS
+
+      - name: Cache Xtras dir
+        id: cache_xtras
+        uses: actions/cache@v4.0.2
+        with:
+          path: ${{ env.XTRAS_DIR }}
+          key: ${{ runner.os }}-xtras
 
       - name: publishAllPublicationsToXtras
         shell: bash
