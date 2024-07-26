@@ -1,14 +1,9 @@
-# This is a basic workflow that is manually triggered
 
-name: Test workflow
+name: Test1 workflow
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch:
 
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
   test:
@@ -25,9 +20,12 @@ jobs:
       - name: test1
         shell: bash
         run: |
-          echo testing stuff
-          set          
           GRADLE_PROPS=$HOME/.gradle/gradle.properties
+          echo Configuring $GRADLE_PROPS 
+          if [ -f $GRADLE_PROPS ]; then
+            echo existing $GRADLE_PROPS
+            cat $GRADLE_PROPS
+          fi
           cat > $GRADLE_PROPS <<PROPS
           org.gradle.caching=true
           signing.key=${{ secrets.GPG_SIGNING_KEY }}
@@ -38,7 +36,5 @@ jobs:
           xtras.dir=$HOME/xtras
           PROPS
           chmod 600 $GRADLE_PROPS
-          cat $GRADLE_PROPS
-          ./gradlew thang
 
           
