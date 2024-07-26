@@ -12,12 +12,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup gradle
         uses: yumemi-inc/setup-java-gradle@v1
         with:
           cache-read-only: false
           gradle-home-cache-cleanup: false
-      - name: test1
+
+      - name: Setup gradle.properties
         shell: bash
         run: |
           GRADLE_PROPS=$HOME/.gradle/gradle.properties
@@ -36,5 +38,9 @@ jobs:
           xtras.dir=$HOME/xtras
           PROPS
           chmod 600 $GRADLE_PROPS
+
+      - name: test1
+        shell: bash
+        run: ./gradlew thang
 
           
