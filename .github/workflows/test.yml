@@ -17,8 +17,28 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Setup gradle
+        uses: yumemi-inc/setup-java-gradle@v1
+        with:
+          cache-read-only: false
+          gradle-home-cache-cleanup: false
       - name: test1
         shell: bash
         run: |
-          echo XTRAS_DIR=$HOME/xtras >> $GITHUB_ENV
-          echo xtras dir = $XTRAS_DIR or ${{ env.XTRAS_DIR }}
+          echo testing stuff
+          set          
+          GRADLE_PROPS=$HOME/.gradle/gradle.properties
+          cat > $GRADLE_PROPS <<PROPS
+          org.gradle.caching=true
+          signing.key=${{ secrets.GPG_SIGNING_KEY }}
+          signing.password=${{ secrets.GPG_SIGNING_PASSWORD }}
+          sonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }}
+          sonatype.username=${{ secrets.SONATYPE_USERNAME }}
+          sonatype.password=${{ secrets.SONATYPE_PASSWORD }}
+          xtras.dir=$HOME/xtras
+          PROPS
+          chmod 600 $GRADLE_PROPS
+          cat $GRADLE_PROPS
+          ./gradlew thang
+
+          

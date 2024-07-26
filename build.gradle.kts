@@ -14,3 +14,9 @@ plugins {
 
 
 
+tasks.register("thang"){
+	doFirst {
+		println("running gradle task thang.")
+		println("xtras.dir=${findProperty("xtras.dir")}")
+	}
+}

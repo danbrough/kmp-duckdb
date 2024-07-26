@@ -11,3 +11,4 @@ versions.properties
 **.log
 **.db
 /tmp
+.secrets
