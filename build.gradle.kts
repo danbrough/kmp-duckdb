@@ -20,3 +20,7 @@ tasks.register("thang"){
 		println("xtras.dir=${findProperty("xtras.dir")}")
 	}
 }
+
+tasks.register("deps"){
+	dependsOn(gradle.includedBuild(rootProject.file("deps").absolutePath).task("build"))
+}
