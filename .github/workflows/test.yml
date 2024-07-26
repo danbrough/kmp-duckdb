@@ -39,8 +39,8 @@ jobs:
           PROPS
           chmod 600 $GRADLE_PROPS
 
-      - name: test1
+      - name: publishAllPublicationsToXtras
         shell: bash
-        run: ./gradlew thang
+        run: ./gradlew publishAllPublicationsToXtras
 
           
