@@ -40,7 +40,12 @@ jobs:
           echo XTRAS_DIR=$HOME/xtras >> $GITHUB_ENV
           echo xtras dir = $XTRAS_DIR or ${{ env.XTRAS_DIR }}
           [ ! -f $XTRAS_DIR ] && mkdir -p $XTRAS_DIR 
-          echo GRADLE_OPTS="-Dorg.gradle.caching=true -Dorg.gradle.project.xtras.dir=$XTRAS_DIR" >> $GITHUB_ENV
+          echo GRADLE_OPTS="-Dorg.gradle.caching=true -Dorg.gradle.project.xtras.dir=$XTRAS_DIR \
+                   -Dorg.gradle.project.signing.key= ${{ secrets.GPG_SIGNING_KEY }}  \
+          -Dorg.gradle.project.signing.password="${{ secrets.GPG_SIGNING_PASSWORD }}" \
+          -Dorg.gradle.project.sonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} \
+          -Dorg.gradle.project.sonatype.username=${{ secrets.SONATYPE_USERNAME }} \
+          -Dorg.gradle.project.sonatype.password=${{ secrets.SONATYPE_PASSWORD }}" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
 
@@ -81,13 +86,15 @@ jobs:
           echo XTRAS_DIR = ${{ env.XTRAS_DIR }}
           echo home: $HOME
 
-
-
       - name: Build x86_64
         shell: bash
         run: |
-          ./gradlew xtrasPackageCreateDuckdbAndroidNativeX64 
-
+          ./gradlew xtrasPackageCreateDuckdbAndroidNativeX64 \
+          -Psigning.key="${{ secrets.GPG_SIGNING_KEY }}" \
+          -Psigning.password="${{ secrets.GPG_SIGNING_PASSWORD }}" \
+          -Psonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} \
+          -Psonatype.username=${{ secrets.SONATYPE_USERNAME }} \
+          -Psonatype.password=${{ secrets.SONATYPE_PASSWORD }}
         #run: ./scripts/build_android.sh x86_64
           #      - name: Build arm64-v8a
           #        shell: bash
