@@ -49,6 +49,6 @@ jobs:
 
       - name: publishAllPublicationsToXtras
         shell: bash
-        run: ./gradlew publishAllPublicationsToXtras
+        run: ./gradlew xtrasPackageCreateDuckdbLinuxX64
 
           
