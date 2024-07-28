@@ -86,7 +86,7 @@ jobs:
           echo XTRAS_DIR = ${{ env.XTRAS_DIR }}
           echo home: $HOME
 
-      - name: Build x86_64
+      - name: Build AndroidNativeX64
         shell: bash
         run: |
           ./gradlew xtrasPackageCreateDuckdbAndroidNativeX64 
