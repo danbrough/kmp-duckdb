@@ -30,6 +30,7 @@ dependencyResolutionManagement {
   }
 }
 
+includeBuild("plugin")
 //includeBuild("../../xtras/plugin")
 
 rootProject.name = "duckdb-kmp"

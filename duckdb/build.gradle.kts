@@ -1,5 +1,12 @@
-import org.danbrough.xtras.Xtras
-import org.danbrough.xtras.XtrasLibrary
+import org.danbrough.duckdb.duckdb
+import org.danbrough.xtras.androidLibDir
+import org.danbrough.xtras.capitalized
+import org.danbrough.xtras.envLibraryPathName
+import org.danbrough.xtras.logInfo
+import org.danbrough.xtras.pathOf
+import org.danbrough.xtras.supportsJNI
+import org.danbrough.xtras.xtrasExtension
+import org.danbrough.xtras.xtrasTesting
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -13,20 +20,6 @@ import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.HostManager
 import org.jetbrains.kotlin.konan.target.KonanTarget
 import org.jetbrains.kotlin.konan.target.presetName
-import org.danbrough.xtras.androidLibDir
-import org.danbrough.xtras.supportsJNI
-import org.danbrough.xtras.pathOf
-import org.danbrough.xtras.envLibraryPathName
-import org.danbrough.xtras.logInfo
-import org.danbrough.xtras.capitalized
-import org.danbrough.xtras.environmentKonan
-import org.danbrough.xtras.environmentNDK
-import org.danbrough.xtras.hostTriplet
-import org.danbrough.xtras.konanDir
-import org.danbrough.xtras.registerXtrasGitLibrary
-import org.danbrough.xtras.resolveAll
-import org.danbrough.xtras.xtrasExtension
-import org.danbrough.xtras.xtrasTesting
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
@@ -35,9 +28,16 @@ plugins {
   `maven-publish`
 }
 
+buildscript {
+  dependencies {
+    //noinspection UseTomlInstead
+    classpath("org.danbrough.duckdb:plugin")
+  }
+}
 
 @Suppress("PropertyName")
-val JAVA_VERSION =JavaVersion.VERSION_11
+val JAVA_VERSION = JavaVersion.VERSION_11
+
 @Suppress("PropertyName")
 val JVM_TARGET = JvmTarget.JVM_11
 
@@ -50,7 +50,6 @@ java {
 */
 
 
-
 val KonanTarget.duckdbBinDir: File
   get() = when (this) {
     KonanTarget.LINUX_X64 -> file("../bin/amd64")
@@ -61,8 +60,7 @@ val KonanTarget.duckdbBinDir: File
     else -> TODO("Handle target: $this")
   }
 
-val interopsDefFile = file("src/cinterops/duckdb.def")
-val generateDefFileTaskName = "generateInteropsDefFile"
+
 project.generateTypesEnumTask()
 
 class Demo(val name: String, val entryPoint: String, vararg args: String) {
@@ -85,6 +83,10 @@ val demos = listOf(
     "demo4", "org.danbrough.duckdb.demo4"
   ),
 )
+
+duckdb {
+
+}
 
 kotlin {
   jvm {
@@ -244,44 +246,6 @@ fun SharedLibrary.copyToJniLibs() {
   }
 }
 
-tasks.register(generateDefFileTaskName) {
-  dependsOn(TASK_GENERATE_TYPES_ENUM)
-  val headersFile = file("src/cinterops/duckdb_headers.def")
-  val codeFile = file("src/cinterops/duckdb_code.h")
-  inputs.files(headersFile, codeFile)
-  outputs.files(interopsDefFile)
-
-  doFirst {
-    kotlin.targets.withType<KotlinNativeTarget>() {
-      val binDir = konanTarget.duckdbBinDir
-      if (!binDir.exists())
-        throw GradleException("$binDir not found. Have you run ./download_deps.sh?")
-    }
-  }
-
-  actions.add {
-    headersFile.copyTo(interopsDefFile, overwrite = true)
-  }
-
-  actions.add {
-    kotlin.targets.withType<KotlinNativeTarget>().forEach { target ->
-      val binDir = target.konanTarget.duckdbBinDir
-      interopsDefFile.appendText(
-        """
-						linkerOpts.${target.konanTarget.name} = -L${binDir.absolutePath}
-						compilerOpts.${target.konanTarget.name} = -I${binDir.absolutePath}
-						libraryPaths.${target.konanTarget.name} = ${binDir.absolutePath}
-						
-						
-					""".trimIndent()
-      )
-    }
-  }
-
-  actions.add {
-    interopsDefFile.appendText("---\n${codeFile.readText()}\n")
-  }
-}
 
 tasks.withType<Jar> {
   dependsOn(TASK_GENERATE_TYPES_ENUM)
@@ -324,6 +288,7 @@ android {
 }
 
 
+/*
 registerXtrasGitLibrary<XtrasLibrary>("duckdb") {
   environment { target ->
     //put("CFLAGS", "-Wno-unused-command-line-argument -Wno-macro-redefined")
@@ -394,6 +359,7 @@ registerXtrasGitLibrary<XtrasLibrary>("duckdb") {
         |-DCMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN=${konanDir}/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2 \
         |-DCMAKE_SYSROOT=${konanDir}/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/aarch64-unknown-linux-gnu/sysroot \
       """.trimMargin())
+*/
 /*
 cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1   \
 -DCMAKE_SYSTEM_NAME=Linux \
@@ -413,7 +379,8 @@ cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1   \
   -DCMAKE_SYSROOT=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/aarch64-unknown-linux-gnu/sysroot \
     -DOVERRIDE_GIT_DESCRIBE="" \
    -DCMAKE_BUILD_TYPE=Release ../..
- */
+ *//*
+
     }
 
     writer.println(
@@ -446,6 +413,7 @@ cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1   \
 
   }
 }
+*/
 
 /*
 export PATH="$LLVM_DIR:/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/bin:$PATH"
