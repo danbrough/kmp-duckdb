@@ -21,6 +21,7 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
         header = duckdb.h
         linkerOpts = -lduckdb
       """.trimIndent()
+    }
     environment { target ->
       //put("CFLAGS", "-Wno-unused-command-line-argument -Wno-macro-redefined")
       if (target != null) {
