@@ -31,7 +31,9 @@ dependencyResolutionManagement {
 }
 
 includeBuild("plugin")
-//includeBuild("../../xtras/plugin")
+includeBuild("../../xtras/plugin") {
+  name = "xtras_plugin"
+}
 
 rootProject.name = "duckdb-kmp"
 include(":duckdb")

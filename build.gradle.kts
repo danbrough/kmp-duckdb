@@ -1,8 +1,3 @@
-import com.android.build.api.dsl.Device
-import com.android.build.gradle.internal.setupTaskName
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
-
 plugins {
   alias(libs.plugins.kotlin.multiplatform) apply false
   alias(libs.plugins.kotlin.android) apply false

@@ -62,11 +62,9 @@ agp = "8.5.1"
 ##⬆= "8.7.0-alpha03"
 kotlin = "2.0.0"
 ##  ⬆ = "2.0.10-RC"
+##  ⬆ = "2.0.10-RC2"
 ##  ⬆ = "2.0.20-Beta1"
 ##  ⬆ = "2.0.20-Beta2"
-
-
-
 
 xtras = "0.0.1-beta06"
 xtras-jni = "0.0.1-beta02"
@@ -114,11 +112,9 @@ xtras-jni = { group = "org.danbrough.xtras", name = "jni", version.ref = "xtras-
 
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 
-
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 klog-core = { module = "org.danbrough.klog:core", version.ref = "klog" }
-
 
 androidx-ui-tooling-preview-desktop = { group = "androidx.compose.ui", name = "ui-tooling-preview-desktop", version.ref = "uiToolingPreviewDesktop" }
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }

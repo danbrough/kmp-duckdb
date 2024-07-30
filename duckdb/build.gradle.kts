@@ -1,21 +1,28 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
 import org.danbrough.duckdb.duckdb
 import org.danbrough.xtras.androidLibDir
 import org.danbrough.xtras.capitalized
 import org.danbrough.xtras.envLibraryPathName
+import org.danbrough.xtras.konanDir
+import org.danbrough.xtras.logError
 import org.danbrough.xtras.logInfo
 import org.danbrough.xtras.pathOf
 import org.danbrough.xtras.supportsJNI
+import org.danbrough.xtras.xtrasAndroidConfig
 import org.danbrough.xtras.xtrasExtension
 import org.danbrough.xtras.xtrasTesting
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.SharedLibrary
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.HostManager
 import org.jetbrains.kotlin.konan.target.KonanTarget
@@ -34,31 +41,6 @@ buildscript {
     classpath("org.danbrough.duckdb:plugin")
   }
 }
-
-@Suppress("PropertyName")
-val JAVA_VERSION = JavaVersion.VERSION_11
-
-@Suppress("PropertyName")
-val JVM_TARGET = JvmTarget.JVM_11
-
-
-/*
-java {
-  sourceCompatibility = JAVA_VERSION
-  targetCompatibility = JAVA_VERSION
-}
-*/
-
-
-val KonanTarget.duckdbBinDir: File
-  get() = when (this) {
-    KonanTarget.LINUX_X64 -> file("../bin/amd64")
-    KonanTarget.LINUX_ARM64 -> file("../bin/aarch64")
-    KonanTarget.MINGW_X64 -> file("../bin/windows")
-    KonanTarget.ANDROID_X64, KonanTarget.ANDROID_ARM64, KonanTarget.ANDROID_ARM32 -> file("../bin/android/$androidLibDir")
-    KonanTarget.MACOS_X64, KonanTarget.MACOS_ARM64 -> file("../bin/darwin")
-    else -> TODO("Handle target: $this")
-  }
 
 
 project.generateTypesEnumTask()
@@ -84,32 +66,20 @@ val demos = listOf(
   ),
 )
 
-duckdb {
-
-}
+duckdb {}
 
 kotlin {
-  jvm {
-//    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-//    compilerOptions {
-//      jvmTarget = JvmTarget.JVM_11
-//    }
-  }
+  jvm()
   linuxX64()
   linuxArm64()
   //macosX64()
   //mingwX64()
+  androidNativeX64()
+  androidNativeArm64()
 
   androidTarget {
     publishLibraryVariants("release")
-//    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-//    compilerOptions {
-//      jvmTarget = JvmTarget.JVM_11
-//    }
   }
-  androidNativeX64()
-  androidNativeArm64()
-  //androidNativeArm32()
 
   @OptIn(ExperimentalKotlinGradlePluginApi::class)
   compilerOptions {
@@ -143,7 +113,6 @@ kotlin {
     dependsOn(commonTest)
   }
 
-
   /**
    * Shared JVM and Android code
    */
@@ -159,7 +128,6 @@ kotlin {
     dependsOn(jvmAndroidMain)
   }
 
-
   targets.withType<KotlinNativeTarget> {
 
     compilations["main"].apply {
@@ -170,33 +138,25 @@ kotlin {
           implementation(libs.xtras.jni)
         }
       }
-
-//      cinterops {
-//        create("duckdb") {
-//          definitionFile = interopsDefFile
-//          tasks.getByName(interopProcessingTaskName).dependsOn(generateDefFileTaskName)
-//          this.compilerOpts("-Wno-return-type")
-//        }
-//      }
     }
 
     binaries {
       if (konanTarget.supportsJNI) {
         sharedLib("duckdbkt") {
           copyToJniLibs()
-          if (konanTarget == HostManager.host && buildType == NativeBuildType.DEBUG) {
-            val libDir = linkTask.outputs.files.first()
-            tasks.withType<KotlinJvmTest> {
-              dependsOn(linkTask)
-              val ldPath = pathOf(
-                environment[HostManager.host.envLibraryPathName],
-                libDir,
-                HostManager.host.duckdbBinDir
-              )
-              environment[HostManager.host.envLibraryPathName] = ldPath
-              logInfo("$name: ldPath = $ldPath")
-            }
-          }
+          /*          if (konanTarget == HostManager.host && buildType == NativeBuildType.DEBUG) {
+                      val libDir = linkTask.outputs.files.first()
+                      tasks.withType<KotlinJvmTest> {
+                        dependsOn(linkTask)
+                        val ldPath = pathOf(
+                          environment[HostManager.host.envLibraryPathName],
+                          libDir,
+                          HostManager.host.duckdbBinDir
+                        )
+                        environment[HostManager.host.envLibraryPathName] = ldPath
+                        logInfo("$name: ldPath = $ldPath")
+                      }
+                    }*/
         }
       }
 
@@ -210,25 +170,19 @@ kotlin {
               description = demoInfo.description
               group = "run"
             }.dependsOn(runTaskName)
-
-          runTask?.apply {
-            environment(HostManager.host.envLibraryPathName, konanTarget.duckdbBinDir)
-            args(*demoInfo.cmdArgs)
-          }
         }
       }
-
     }
   }
 }
 
 
-fun SharedLibrary.copyToJniLibs() {
+fun SharedLibrary.copyToJniLibs(jniLibDirProvider: (KotlinNativeTarget.() -> File)? = null) {
   if (target.konanTarget.family == Family.ANDROID && buildType == NativeBuildType.RELEASE) {
     val copyName = "${name}${target.konanTarget.presetName.capitalized()}_copyToJniLibs"
     val libsDir = linkTask.outputs.files.first()
-    val jniLibsDir =
-      project.file("src/androidMain/jniLibs/${target.konanTarget.androidLibDir}")
+    val jniLibsDir = jniLibDirProvider?.invoke(target)
+      ?: project.file("src/androidMain/jniLibs/${target.konanTarget.androidLibDir}")
 
     project.tasks.register<Copy>(copyName) {
       dependsOn(linkTask)
@@ -240,27 +194,25 @@ fun SharedLibrary.copyToJniLibs() {
     }
 
     afterEvaluate {
-      tasks.getByName("mergeDebugJniLibFolders").dependsOn(copyName)
-      tasks.getByName("mergeReleaseJniLibFolders").dependsOn(copyName)
+      tasks.getByName("mergeDebugJniLibFolders").mustRunAfter(copyName)
+      tasks.getByName("mergeReleaseJniLibFolders").mustRunAfter(copyName)
     }
   }
 }
 
 
-tasks.withType<Jar> {
-  dependsOn(TASK_GENERATE_TYPES_ENUM)
+tasks.all {
+  when (this) {
+    is Jar, is KotlinCompile, is KotlinCompileCommon, is KotlinNativeCompile ->
+      dependsOn(TASK_GENERATE_TYPES_ENUM)
+  }
 }
 
-tasks.withType<KotlinCompile> {
-  dependsOn(TASK_GENERATE_TYPES_ENUM)
-}
 
-tasks.withType<KotlinCompileCommon> {
-  dependsOn(TASK_GENERATE_TYPES_ENUM)
-}
-
-val xtras = xtrasExtension.apply {
+xtras {
+  jvmTarget = JvmTarget.JVM_11
   javaVersion = JavaVersion.VERSION_11
+
   androidConfig {
     minSDKVersion = 24
   }
@@ -268,175 +220,17 @@ val xtras = xtrasExtension.apply {
 
 xtrasTesting {}
 
-android {
-  namespace = project.group.toString()
-  compileSdk = xtras.androidConfig.compileSDKVersion
 
+xtrasAndroidConfig(namespace = "org.danbrough.duckdb") {
   defaultConfig {
-    minSdk = xtras.androidConfig.minSDKVersion
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     ndk {
-      //abiFilters += setOf("armeabi-v7a", "arm64-v8a", "x86_64")
       abiFilters += setOf("arm64-v8a", "x86_64")
     }
   }
 
   compileOptions {
-    sourceCompatibility = xtras.javaVersion
-    targetCompatibility = xtras.javaVersion
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
   }
 }
 
-
-/*
-registerXtrasGitLibrary<XtrasLibrary>("duckdb") {
-  environment { target ->
-    //put("CFLAGS", "-Wno-unused-command-line-argument -Wno-macro-redefined")
-    if (target != null) {
-      if (target.family == Family.ANDROID)
-        environmentNDK(xtras, target, project)
-      else if (target.family == Family.LINUX)
-        environmentKonan(this@registerXtrasGitLibrary, target, project)
-    }
-  }
-
-  buildCommand { target ->
-    val compileDir = sourceDir(target).resolveAll("build", target.name).absolutePath
-    writer.println(
-      """
-        |DUCKDB_EXTENSIONS="icu;json;parquet"
-        |#DISABLE_PARQUET=1
-        |mkdir -p "$compileDir"
-        |cd "$compileDir"
-      """.trimMargin()
-    )
-
-    if (target.family == Family.ANDROID) {
-      writer.println(
-        """
-          |ANDROID_ABI=${target.androidLibDir}
-          |ANDROID_PLATFORM=24
-          |PLATFORM_NAME="android_${'$'}ANDROID_ABI"
-      """.trimMargin()
-      )
-    } else {
-      writer.println(
-        """
-          |PLATFORM_NAME=${target.name}
-      """.trimMargin()
-      )
-    }
-
-    writer.println(
-      """
-      |cmake -G "Ninja" -DEXTENSION_STATIC_BUILD=1 \
-      |-DBUILD_EXTENSIONS=${'$'}DUCKDB_EXTENSIONS \
-      |-DCMAKE_VERBOSE_MAKEFILE=on \
-      |-DLOCAL_EXTENSION_REPO=""  -DOVERRIDE_GIT_DESCRIBE="" \
-      |-DBUILD_UNITTESTS=0 -DBUILD_SHELL=1 \
-      |-DCMAKE_CXX_COMPILER="clang++" \
-      |-DCMAKE_C_COMPILER="clang" \
-      |-DDUCKDB_EXPLICIT_PLATFORM=${'$'}PLATFORM_NAME \
-      """.trimMargin()
-    )
-
-    if (target.family == Family.ANDROID) {
-      writer.println(
-        """
-          |-DANDROID_PLATFORM=${'$'}ANDROID_PLATFORM \
-          |-DANDROID_ABI=${'$'}ANDROID_ABI -DCMAKE_TOOLCHAIN_FILE=${'$'}ANDROID_NDK/build/cmake/android.toolchain.cmake \
-          |-DDUCKDB_EXTRA_LINK_FLAGS="-llog" \""".trimMargin()
-      )
-    }
-
-    if (target == KonanTarget.LINUX_ARM64){
-      target.hostTriplet
-      writer.println("""
-        |-DCMAKE_RANLIB="ranlib"  -DCMAKE_AR="llvm-ar" \
-        |-DCMAKE_C_COMPILER_TARGET=${target.hostTriplet} \
-        |-DCMAKE_CXX_COMPILER_TARGET=${target.hostTriplet} \
-        |-DCMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN=${konanDir}/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2 \
-        |-DCMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN=${konanDir}/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2 \
-        |-DCMAKE_SYSROOT=${konanDir}/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/aarch64-unknown-linux-gnu/sysroot \
-      """.trimMargin())
-*/
-/*
-cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1   \
--DCMAKE_SYSTEM_NAME=Linux \
--DCMAKE_SYSTEM_PROCESSOR=aarch64 \
-  -DCMAKE_CROSSCOMPILING=TRUE \
-    -DEXTENSION_STATIC_BUILD=1 \
-   -DCMAKE_RANLIB="ranlib"  -DCMAKE_AR="llvm-ar" \
-   -DCMAKE_VERBOSE_MAKEFILE=off \
-   -DBUILD_EXTENSIONS=$DUCKDB_EXTENSIONS \
-   -DDUCKDB_EXPLICIT_PLATFORM=$PLATFORM_NAME -DBUILD_UNITTESTS=0 -DBUILD_SHELL=1 \
-   -DCMAKE_CXX_COMPILER="clang++" \
-   -DCMAKE_C_COMPILER="clang" \
-  -DCMAKE_C_COMPILER_TARGET=$TARGET \
-  -DCMAKE_CXX_COMPILER_TARGET=$TARGET \
-  -DCMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2 \
-  -DCMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2 \
-  -DCMAKE_SYSROOT=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/aarch64-unknown-linux-gnu/sysroot \
-    -DOVERRIDE_GIT_DESCRIBE="" \
-   -DCMAKE_BUILD_TYPE=Release ../..
- *//*
-
-    }
-
-    writer.println(
-      """
-        |-DCMAKE_BUILD_TYPE=Release ../.. || exit 1
-        |cmake --build . --config Release || exit 1
-    """.trimMargin()
-    )
-
-    if (target.family == Family.ANDROID){
-      //strip them as they are huge
-      writer.println("""
-        |llvm-strip duckdb src/libduckdb.so
-      """.trimMargin())
-    }
-
-    writer.println(
-      """
-        |mkdir -p "${buildDir(target).absolutePath}/bin" "${buildDir(target).absolutePath}/lib" "${
-        buildDir(
-          target
-        ).absolutePath
-      }/include"
-        |cp duckdb "${buildDir(target).absolutePath}/bin" 
-        |cp src/libduckdb.so "${buildDir(target).absolutePath}/lib"
-        |cp ../../src/include/duckdb.h ../../src/include/duckdb.hpp "${buildDir(target).absolutePath}/include"
-    """.trimMargin()
-    )
-
-
-  }
-}
-*/
-
-/*
-export PATH="$LLVM_DIR:/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/bin:$PATH"
-
-#export TOOLCHAIN_PREFIX=aarch64-unknown-linux-gnu-
-TARGET=aarch64-unknown-linux-gnu
-
-cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1   \
--DCMAKE_SYSTEM_NAME=Linux \
--DCMAKE_SYSTEM_PROCESSOR=aarch64 \
-  -DCMAKE_CROSSCOMPILING=TRUE \
-    -DEXTENSION_STATIC_BUILD=1 \
-   -DCMAKE_RANLIB="ranlib"  -DCMAKE_AR="llvm-ar" \
-   -DCMAKE_VERBOSE_MAKEFILE=off \
-   -DBUILD_EXTENSIONS=$DUCKDB_EXTENSIONS \
-   -DDUCKDB_EXPLICIT_PLATFORM=$PLATFORM_NAME -DBUILD_UNITTESTS=0 -DBUILD_SHELL=1 \
-   -DCMAKE_CXX_COMPILER="clang++" \
-   -DCMAKE_C_COMPILER="clang" \
-  -DCMAKE_C_COMPILER_TARGET=$TARGET \
-  -DCMAKE_CXX_COMPILER_TARGET=$TARGET \
-  -DCMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2 \
-  -DCMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2 \
-  -DCMAKE_SYSROOT=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/aarch64-unknown-linux-gnu/sysroot \
-    -DOVERRIDE_GIT_DESCRIBE="" \
-   -DCMAKE_BUILD_TYPE=Release ../..
- */

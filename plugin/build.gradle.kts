@@ -4,8 +4,8 @@ plugins {
   `kotlin-dsl`
   `java-gradle-plugin`
   `maven-publish`
-  id("org.jetbrains.dokka") version "1.9.20"
   signing
+  id("org.jetbrains.dokka") version "1.9.20"
   id("org.danbrough.xtras") version "0.0.1-beta06"
 }
 

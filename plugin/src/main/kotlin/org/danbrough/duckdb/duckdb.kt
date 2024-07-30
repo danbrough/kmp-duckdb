@@ -16,12 +16,15 @@ import org.jetbrains.kotlin.konan.target.KonanTarget
 fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = {}) =
 
   registerXtrasGitLibrary<XtrasLibrary>(libName) {
+
     cinterops {
       declaration = """
-        header = duckdb.h
+        package = org.danbrough.duckdb.cinterops
+        headers = duckdb.h
         linkerOpts = -lduckdb
       """.trimIndent()
     }
+
     environment { target ->
       //put("CFLAGS", "-Wno-unused-command-line-argument -Wno-macro-redefined")
       if (target != null) {
@@ -149,3 +152,5 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
     
     block()
   }
+
+
