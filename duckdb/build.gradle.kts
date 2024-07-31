@@ -221,16 +221,19 @@ xtras {
 xtrasTesting {}
 
 
-xtrasAndroidConfig(namespace = "org.danbrough.duckdb") {
+//xtrasAndroidConfig(namespace = "org.danbrough.duckdb") {
+xtrasAndroidConfig {
   defaultConfig {
     ndk {
       abiFilters += setOf("arm64-v8a", "x86_64")
     }
   }
 
-  compileOptions {
+/*  compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
-  }
+  }*/
 }
+
+
 
