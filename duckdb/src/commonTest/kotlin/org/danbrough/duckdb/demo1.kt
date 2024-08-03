@@ -11,7 +11,7 @@ import org.danbrough.xtras.support.getEnv
 fun demo1() {
   log.info { "demo1" }
   runBlocking {
-    duckdb(
+/*    duckdb(
       "${getEnv("HOME")}/.habitrack/hb.db",
       databaseConfig(AccessMode.READ_WRITE)
     ) {
@@ -29,26 +29,20 @@ fun demo1() {
           }
         }
       }
-    }
+    }*/
     duckdb(
       "${getEnv("HOME")}/.habitrack/hb.db",
       databaseConfig(AccessMode.READ_ONLY)
     ) {
-      val midnight = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        .atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
 
       connect {
-        query("select {id:event.id,time:event.time,type:enum_code(event.type),count:event.count}::JSON from event WHERE time >= $midnight") {
+        query("select {id:event.id,time:event.time,type:enum_code(event.type),count:event.count}::JSON from event") {
 
           log.trace { "rowCount: $rowCount colCount: $columnCount" }
 
           for (n in 0 until rowCount) {
-            log.debug { get(n, 0) }
+            log.debug { get<String>(n, 0) }
           }
-
-          //log.debug { getVarchar(0UL, 1UL) }
-          //PosixUtils.printResult(handle)
-          //log.debug { getVarchar(0UL, 1UL) }
         }
       }
     }

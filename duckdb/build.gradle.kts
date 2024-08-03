@@ -5,6 +5,7 @@ import org.danbrough.xtras.androidLibDir
 import org.danbrough.xtras.capitalized
 import org.danbrough.xtras.envLibraryPathName
 import org.danbrough.xtras.konanDir
+import org.danbrough.xtras.kotlinBinaries
 import org.danbrough.xtras.logError
 import org.danbrough.xtras.logInfo
 import org.danbrough.xtras.pathOf
@@ -16,6 +17,7 @@ import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.SharedLibrary
@@ -66,7 +68,12 @@ val demos = listOf(
   ),
 )
 
-duckdb {}
+duckdb {
+    kotlinBinaries { it is Executable }.forEach {
+      logError("EXE: ${it.name}")
+    }
+
+}
 
 kotlin {
   jvm()
