@@ -1,7 +1,6 @@
 package org.danbrough.duckdb
 
-import org.danbrough.duckdb.Appender.Row
-
+@OptIn(ExperimentalStdlibApi::class)
 expect interface NativePreparedStatement : AutoCloseable
 expect class PreparedStatement : NativePreparedStatement {
 
@@ -20,3 +19,5 @@ expect class PreparedStatement : NativePreparedStatement {
   override fun close()
 
 }
+
+fun PreparedStatement.execute():Unit = execute {  }

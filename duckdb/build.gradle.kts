@@ -44,6 +44,9 @@ buildscript {
   }
 }
 
+duckdb {
+
+}
 
 project.generateTypesEnumTask()
 
@@ -53,29 +56,18 @@ class Demo(val name: String, val entryPoint: String, vararg args: String) {
 }
 
 val demos = listOf(
-  Demo(
-    "demo2", "org.danbrough.duckdb.demo2"
-  ),
-  Demo(
-    "demo1", "org.danbrough.duckdb.demo1",
-    "-d", file("test.db").absolutePath
-  ),
-  Demo(
-    "demo3", "org.danbrough.duckdb.demo3"
-  ),
-  Demo(
-    "demo4", "org.danbrough.duckdb.demo4"
-  ),
+  Demo("demo2", "org.danbrough.duckdb.demo2"),
+  Demo("demo1", "org.danbrough.duckdb.demo1", "-d", file("test.db").absolutePath),
+  Demo("demo3", "org.danbrough.duckdb.demo3"),
+  Demo("demo4", "org.danbrough.duckdb.demo4"),
+  Demo("demo5", "org.danbrough.duckdb.demo5"),
+  Demo("demoVectors", "org.danbrough.duckdb.demoVectors"),
 )
 
-duckdb {
-    kotlinBinaries { it is Executable }.forEach {
-      logError("EXE: ${it.name}")
-    }
-
-}
 
 kotlin {
+
+
   jvm()
   linuxX64()
   linuxArm64()
@@ -92,6 +84,12 @@ kotlin {
   compilerOptions {
     listOf("kotlinx.cinterop.ExperimentalForeignApi").also { optIn = it }
     freeCompilerArgs = freeCompilerArgs.get() + listOf("-Xexpect-actual-classes")
+  }
+
+  sourceSets {
+    all {
+      languageSettings.optIn("kotlin.ExperimentalStdlibApi")
+    }
   }
 
   val commonMain by sourceSets.getting {
@@ -236,11 +234,10 @@ xtrasAndroidConfig {
     }
   }
 
-/*  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-  }*/
+  /*  compileOptions {
+      sourceCompatibility = JavaVersion.VERSION_11
+      targetCompatibility = JavaVersion.VERSION_11
+    }*/
 }
-
 
 

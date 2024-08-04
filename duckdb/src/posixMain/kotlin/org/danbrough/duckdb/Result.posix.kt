@@ -1,5 +1,6 @@
 package org.danbrough.duckdb
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.free
 import kotlinx.cinterop.nativeHeap
@@ -37,11 +38,7 @@ actual class Result(val connection: Connection) : ResultHandle {
       "query: $sql"
     }
   }
-  /*
-    constructor(conn: Connection2, handle: duckdb_result, sql: String) : this(handle) {
 
-    }
-  */
 
   actual val rowCount: Long
     get() = duckdb_row_count(handle.ptr).toLong()
@@ -63,9 +60,9 @@ actual class Result(val connection: Connection) : ResultHandle {
     when (T::class) {
       Boolean::class -> duckdb_value_boolean(handle.ptr, col.toULong(), row.toULong())
       String::class -> duckdb_value_varchar(handle.ptr, col.toULong(), row.toULong()).let { data ->
-        val s = data?.toKStringFromUtf8()
+        val str = data?.toKStringFromUtf8()
         duckdb_free(data)
-        s
+        str
       }
 
       Byte::class -> duckdb_value_int8(handle.ptr, col.toULong(), row.toULong())
