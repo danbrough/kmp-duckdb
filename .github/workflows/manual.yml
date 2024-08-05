@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo apt -qq update
           sudo apt -qq -y upgrade
-          sudo apt -qq install cmake libssl-dev build-essential libffi-dev curl libz-dev ninja-build 
+          sudo apt -qq install cmake libssl-dev build-essential libffi-dev curl libz-dev ninja-build
 
       - name: Setup gradle
         uses: yumemi-inc/setup-java-gradle@v1
@@ -46,15 +46,16 @@ jobs:
       - name: setup
         shell: bash
         run: |
-          echo XTRAS_DIR=$HOME/xtras >> $GITHUB_ENV
-          echo xtras dir = $XTRAS_DIR or ${{ env.XTRAS_DIR }}
+          export XTRAS_DIR=$HOME/xtras
+          echo XTRAS_DIR=$XTRAS_DIR >> $GITHUB_ENV
+          echo XTRAS_DIR = $XTRAS_DIR or ${{ env.XTRAS_DIR }}
           [ ! -f $XTRAS_DIR ] && mkdir -p $XTRAS_DIR 
-          echo GRADLE_OPTS="-Dorg.gradle.caching=true -Dorg.gradle.project.xtras.dir=$XTRAS_DIR \
+          echo GRADLE_OPTS=\"-Dorg.gradle.caching=true -Dorg.gradle.project.xtras.dir=$XTRAS_DIR \
                    -Dorg.gradle.project.signing.key=${{ secrets.GPG_SIGNING_KEY }}  \
           -Dorg.gradle.project.signing.password=${{ secrets.GPG_SIGNING_PASSWORD }} \
           -Dorg.gradle.project.sonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} \
           -Dorg.gradle.project.sonatype.username=${{ secrets.SONATYPE_USERNAME }} \
-          -Dorg.gradle.project.sonatype.password=${{ secrets.SONATYPE_PASSWORD }}" >> $GITHUB_ENV
+          -Dorg.gradle.project.sonatype.password=${{ secrets.SONATYPE_PASSWORD }}\" >> $GITHUB_ENV
 
       
 
