@@ -1,4 +1,3 @@
-androidMain/jniLibs
-jniLibs
 release
 debug
+main

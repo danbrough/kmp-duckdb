@@ -1,6 +1,8 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
+import org.danbrough.duckdb.TASK_GENERATE_TYPES_ENUM
 import org.danbrough.duckdb.duckdb
+import org.danbrough.duckdb.generateTypesEnumTask
 import org.danbrough.xtras.androidLibDir
 import org.danbrough.xtras.capitalized
 import org.danbrough.xtras.envLibraryPathName
@@ -8,6 +10,7 @@ import org.danbrough.xtras.konanDir
 import org.danbrough.xtras.kotlinBinaries
 import org.danbrough.xtras.logError
 import org.danbrough.xtras.logInfo
+import org.danbrough.xtras.logTrace
 import org.danbrough.xtras.pathOf
 import org.danbrough.xtras.supportsJNI
 import org.danbrough.xtras.xtrasAndroidConfig
@@ -172,44 +175,39 @@ kotlin {
 }
 
 
-fun SharedLibrary.copyToJniLibs(jniLibDirProvider: (KotlinNativeTarget.() -> File)? = null) {
+fun SharedLibrary.copyToJniLibs() {
   if (target.konanTarget.family == Family.ANDROID && buildType == NativeBuildType.RELEASE) {
 
-    val copyName = "${name}${target.konanTarget.presetName.capitalized()}_copyToJniLibs"
+    val copyTaskName = "${name}${target.konanTarget.presetName.capitalized()}_copyToJniLibs"
     val libsDir = linkTask.outputs.files.first()
-    val jniLibsDir = jniLibDirProvider?.invoke(target)
-      ?: project.file("src/${buildType.name.lowercase()}/jniLibs/${target.konanTarget.androidLibDir}")
+    val prepareJNILibsTask = tasks.findByName("prepareJNILibs") ?: tasks.create("prepareJNILibs") {
+      outputs.dir(file("src/main/jniLibs"))
+    }
+    prepareJNILibsTask.dependsOn(copyTaskName)
 
-    project.tasks.register<Copy>(copyName) {
+
+    val jniLibsDir = project.file("src/main/jniLibs/${target.konanTarget.androidLibDir}")
+
+    project.tasks.register<Copy>(copyTaskName) {
       dependsOn(linkTask)
       from(libsDir)
       into(jniLibsDir)
+
+      outputs.dir(jniLibsDir)
+      //   jniLibsTask.dependsOn(this)
       doLast {
         logInfo("$name: copied files to $jniLibsDir")
       }
     }
-
-
-    linkTask.finalizedBy(copyName)
-/*    afterEvaluate {
-      if (buildType == NativeBuildType.DEBUG)
-        tasks.getByPath(":duckdb:mergeDebugJniLibFolders").apply {
-          //inputs.dir(jniLibsDir)
-          //mustRunAfter(copyTask)
-          dependsOn(":duckdb:$copyName")
-        }
-
-      else
-
-        tasks.getByPath(":duckdb:mergeReleaseJniLibFolders").apply {
-          //inputs.dir(jniLibsDir)
-          //mustRunAfter(copyTask)
-          dependsOn(":duckdb:$copyName")
-        }
-    }*/
   }
 }
 
+afterEvaluate {
+  tasks.getByPath("mergeReleaseJniLibFolders").apply {
+    dependsOn("prepareJNILibs")
+    //inputs.dir(project.file("src/main/jniLibs/"))
+  }
+}
 
 
 tasks.all {
@@ -242,23 +240,17 @@ xtrasAndroidConfig {
 
   sourceSets.all {
     jniLibs {
-      logError("JNILIBS:$name ${directories.joinToString()}")
+      logTrace("JNILIBS:$name ${directories.joinToString()}")
     }
   }
-
-  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-  }
+  /*
+    compileOptions {
+      sourceCompatibility = JavaVersion.VERSION_17
+      targetCompatibility = JavaVersion.VERSION_17
+    }*/
 }
 
 
-/*
-java {
-  sourceCompatibility = JavaVersion.VERSION_17
-  targetCompatibility = JavaVersion.VERSION_17
-}
-*/
 
 tasks.withType<KotlinJvmCompile> {
   compilerOptions {

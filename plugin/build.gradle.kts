@@ -6,7 +6,7 @@ plugins {
   `maven-publish`
   signing
   id("org.jetbrains.dokka") version "1.9.20"
-  id("org.danbrough.xtras") version "0.0.1-beta07"
+  id("org.danbrough.xtras") version "0.0.1-beta08"
 }
 
 repositories {

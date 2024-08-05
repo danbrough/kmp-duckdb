@@ -1,8 +1,11 @@
+package org.danbrough.duckdb
+
 import org.gradle.api.Project
+import org.gradle.api.tasks.TaskProvider
 
 const val TASK_GENERATE_TYPES_ENUM = "generateTypesEnum"
 
-fun Project.generateTypesEnumTask() = tasks.register(TASK_GENERATE_TYPES_ENUM) {
+fun Project.generateTypesEnumTask():TaskProvider<*> = tasks.register(TASK_GENERATE_TYPES_ENUM) {
   val inputFile = rootDir.resolve("headers/duckdb.h")
   val outputFile =
     project.file("src/commonMain/kotlin/org/danbrough/duckdb/DuckDbType.kt")

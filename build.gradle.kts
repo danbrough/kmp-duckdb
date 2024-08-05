@@ -9,4 +9,6 @@ plugins {
   alias(libs.plugins.xtras)
 }
 
+allprojects {
 
+}
