@@ -1,10 +1,8 @@
 package org.danbrough.duckdb
 
-@OptIn(ExperimentalStdlibApi::class)
 expect interface DatabasePeer : AutoCloseable
 
-@OptIn(ExperimentalStdlibApi::class)
-expect class Database(path: String?, config: DatabaseConfig?) : DatabasePeer, AutoCloseable {
+expect class Database(path: String?, config: DatabaseConfig?) : DatabasePeer {
 
   val path: String?
   val config: DatabaseConfig?

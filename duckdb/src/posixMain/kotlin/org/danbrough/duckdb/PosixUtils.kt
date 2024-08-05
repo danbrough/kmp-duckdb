@@ -3,6 +3,7 @@ package org.danbrough.duckdb
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.CPointerVarOf
+import kotlinx.cinterop.UnsafeNumber
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.convert
 import kotlinx.cinterop.memScoped
@@ -57,6 +58,7 @@ object PosixUtils {
 		fflush(stdout)
 	}
 
+	@OptIn(UnsafeNumber::class)
 	fun duckdbConfigFlags(): Map<String, String> = buildMap {
 		memScoped {
 			val count = duckdb_config_count()

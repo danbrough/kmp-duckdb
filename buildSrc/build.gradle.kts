@@ -7,7 +7,7 @@ repositories {
 	mavenCentral()
 }
 
-/*
+
 val JAVA_VERSION =JavaVersion.VERSION_11
 val JVM_TARGET = JvmTarget.JVM_11
 
@@ -23,4 +23,4 @@ kotlin {
 		jvmTarget = JVM_TARGET
 	}
 }
-*/
+

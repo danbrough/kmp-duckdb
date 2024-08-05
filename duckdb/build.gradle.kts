@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.SharedLibrary
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.HostManager
@@ -75,9 +76,11 @@ kotlin {
   //mingwX64()
   androidNativeX64()
   androidNativeArm64()
+  androidNativeArm32()
 
   androidTarget {
     publishLibraryVariants("release")
+
   }
 
   @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -149,19 +152,6 @@ kotlin {
       if (konanTarget.supportsJNI) {
         sharedLib("duckdbkt") {
           copyToJniLibs()
-          /*          if (konanTarget == HostManager.host && buildType == NativeBuildType.DEBUG) {
-                      val libDir = linkTask.outputs.files.first()
-                      tasks.withType<KotlinJvmTest> {
-                        dependsOn(linkTask)
-                        val ldPath = pathOf(
-                          environment[HostManager.host.envLibraryPathName],
-                          libDir,
-                          HostManager.host.duckdbBinDir
-                        )
-                        environment[HostManager.host.envLibraryPathName] = ldPath
-                        logInfo("$name: ldPath = $ldPath")
-                      }
-                    }*/
         }
       }
 
@@ -184,10 +174,11 @@ kotlin {
 
 fun SharedLibrary.copyToJniLibs(jniLibDirProvider: (KotlinNativeTarget.() -> File)? = null) {
   if (target.konanTarget.family == Family.ANDROID && buildType == NativeBuildType.RELEASE) {
+
     val copyName = "${name}${target.konanTarget.presetName.capitalized()}_copyToJniLibs"
     val libsDir = linkTask.outputs.files.first()
     val jniLibsDir = jniLibDirProvider?.invoke(target)
-      ?: project.file("src/androidMain/jniLibs/${target.konanTarget.androidLibDir}")
+      ?: project.file("src/${buildType.name.lowercase()}/jniLibs/${target.konanTarget.androidLibDir}")
 
     project.tasks.register<Copy>(copyName) {
       dependsOn(linkTask)
@@ -198,12 +189,27 @@ fun SharedLibrary.copyToJniLibs(jniLibDirProvider: (KotlinNativeTarget.() -> Fil
       }
     }
 
-    afterEvaluate {
-      tasks.getByName("mergeDebugJniLibFolders").mustRunAfter(copyName)
-      tasks.getByName("mergeReleaseJniLibFolders").mustRunAfter(copyName)
-    }
+
+    linkTask.finalizedBy(copyName)
+/*    afterEvaluate {
+      if (buildType == NativeBuildType.DEBUG)
+        tasks.getByPath(":duckdb:mergeDebugJniLibFolders").apply {
+          //inputs.dir(jniLibsDir)
+          //mustRunAfter(copyTask)
+          dependsOn(":duckdb:$copyName")
+        }
+
+      else
+
+        tasks.getByPath(":duckdb:mergeReleaseJniLibFolders").apply {
+          //inputs.dir(jniLibsDir)
+          //mustRunAfter(copyTask)
+          dependsOn(":duckdb:$copyName")
+        }
+    }*/
   }
 }
+
 
 
 tasks.all {
@@ -215,8 +221,8 @@ tasks.all {
 
 
 xtras {
-  jvmTarget = JvmTarget.JVM_11
-  javaVersion = JavaVersion.VERSION_11
+  jvmTarget = JvmTarget.JVM_17
+  javaVersion = JavaVersion.VERSION_17
 
   androidConfig {
     minSDKVersion = 24
@@ -230,14 +236,32 @@ xtrasTesting {}
 xtrasAndroidConfig {
   defaultConfig {
     ndk {
-      abiFilters += setOf("arm64-v8a", "x86_64")
+      abiFilters += setOf("arm64-v8a", "x86_64", "armeabi-v7a")
     }
   }
 
-  /*  compileOptions {
-      sourceCompatibility = JavaVersion.VERSION_11
-      targetCompatibility = JavaVersion.VERSION_11
-    }*/
+  sourceSets.all {
+    jniLibs {
+      logError("JNILIBS:$name ${directories.joinToString()}")
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+  }
 }
 
 
+/*
+java {
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
+}
+*/
+
+tasks.withType<KotlinJvmCompile> {
+  compilerOptions {
+    jvmTarget = JvmTarget.JVM_17
+  }
+}

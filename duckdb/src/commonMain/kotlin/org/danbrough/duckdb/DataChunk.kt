@@ -1,7 +1,7 @@
 package org.danbrough.duckdb
 
-@OptIn(ExperimentalStdlibApi::class)
-expect interface DataChunkHandle : AutoCloseable
+expect interface DataChunkPeer : AutoCloseable
 
-expect class DataChunk {
+expect class DataChunk : DataChunkPeer {
+  override fun close()
 }

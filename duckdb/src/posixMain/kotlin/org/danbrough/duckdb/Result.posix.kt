@@ -35,7 +35,7 @@ actual class Result(val connection: Connection) : ResultHandle {
 
   constructor(connection: Connection, sql: String) : this(connection) {
     duckdb_query(connection.handle.value, sql, handle.ptr).handleDuckDbError {
-      "query: $sql"
+      "duckdb_query() failed: $sql"
     }
   }
 
@@ -59,6 +59,7 @@ actual class Result(val connection: Connection) : ResultHandle {
   actual inline fun <reified T : Any?> get(row: Long, col: Long): T =
     when (T::class) {
       Boolean::class -> duckdb_value_boolean(handle.ptr, col.toULong(), row.toULong())
+
       String::class -> duckdb_value_varchar(handle.ptr, col.toULong(), row.toULong()).let { data ->
         val str = data?.toKStringFromUtf8()
         duckdb_free(data)

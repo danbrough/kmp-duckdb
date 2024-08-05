@@ -1,6 +1,9 @@
 package org.danbrough.duckdb
 
-actual class DataChunk {
+actual  class DataChunk : DataChunkPeer {
+  actual override fun close() {
+    TODO("Not yet implemented")
+  }
 }
 
-actual interface DataChunkHandle : AutoCloseable
+actual interface DataChunkPeer : AutoCloseable

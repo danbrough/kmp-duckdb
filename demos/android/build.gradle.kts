@@ -5,6 +5,11 @@ plugins {
   alias(libs.plugins.compose.compiler)
 }
 
+//java {
+//  sourceCompatibility = JavaVersion.VERSION_17
+//  targetCompatibility = JavaVersion.VERSION_17
+//}
+
 android {
   namespace = "org.danbrough.demo"
   compileSdk = 34
@@ -22,7 +27,7 @@ android {
     }
 
     ndk {
-      //abiFilters.add("armeabi-v7a")
+      abiFilters.add("armeabi-v7a")
       abiFilters.add("arm64-v8a")
       abiFilters.add("x86_64")
     }
@@ -36,13 +41,14 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
 
   kotlinOptions {
-    jvmTarget = "11"
+    jvmTarget = "17"
   }
+
   buildFeatures {
     compose = true
   }
