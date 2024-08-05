@@ -43,21 +43,27 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: setup
+      - name: Setup gradle.properties
         shell: bash
         run: |
-          export XTRAS_DIR=$HOME/xtras
-          echo XTRAS_DIR=$XTRAS_DIR >> $GITHUB_ENV
-          echo XTRAS_DIR = $XTRAS_DIR or ${{ env.XTRAS_DIR }}
-          [ ! -f $XTRAS_DIR ] && mkdir -p $XTRAS_DIR 
-          echo GRADLE_OPTS=\"-Dorg.gradle.caching=true -Dorg.gradle.project.xtras.dir=$XTRAS_DIR \
-                   -Dorg.gradle.project.signing.key=${{ secrets.GPG_SIGNING_KEY }}  \
-          -Dorg.gradle.project.signing.password=${{ secrets.GPG_SIGNING_PASSWORD }} \
-          -Dorg.gradle.project.sonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} \
-          -Dorg.gradle.project.sonatype.username=${{ secrets.SONATYPE_USERNAME }} \
-          -Dorg.gradle.project.sonatype.password=${{ secrets.SONATYPE_PASSWORD }}\" >> $GITHUB_ENV
-
-      
+          echo XTRAS_DIR=$HOME/xtras >> $GITHUB_ENV
+          echo KONAN_DIR=$HOME/.konan >> $GITHUB_ENV
+          GRADLE_PROPS=$HOME/.gradle/gradle.properties
+          echo Configuring $GRADLE_PROPS 
+          if [ -f $GRADLE_PROPS ]; then
+            echo existing $GRADLE_PROPS
+            cat $GRADLE_PROPS
+          fi
+          cat > $GRADLE_PROPS <<PROPS
+          org.gradle.caching=true
+          signing.key=${{ secrets.GPG_SIGNING_KEY }}
+          signing.password=${{ secrets.GPG_SIGNING_PASSWORD }}
+          sonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }}
+          sonatype.username=${{ secrets.SONATYPE_USERNAME }}
+          sonatype.password=${{ secrets.SONATYPE_PASSWORD }}
+          xtras.dir=$HOME/xtras
+          PROPS
+          chmod 600 $GRADLE_PROPS
 
 #      - uses: actions/setup-java@v4
 #        with:
