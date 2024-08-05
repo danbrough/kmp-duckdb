@@ -91,8 +91,8 @@ jobs:
       - name: List gradle tasks
         shell: bash
         run: |
-          echo ~/.konan/dependencies 
-          ls -al ~/.konan/dependencies 
+          #echo ~/.konan/dependencies 
+          #ls -al ~/.konan/dependencies 
           echo XTRAS_DIR = ${{ env.XTRAS_DIR }}
           echo home: $HOME
 
