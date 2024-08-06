@@ -48,6 +48,11 @@ buildscript {
   }
 }
 
+java {
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
+}
+
 duckdb {
 
 }
@@ -68,9 +73,15 @@ val demos = listOf(
   Demo("demoVectors", "org.danbrough.duckdb.demoVectors"),
 )
 
+tasks.create("prepareJNILibs") {
+  outputs.dir(project.file("src/main/jniLibs"))
+}
+
+afterEvaluate {
+  tasks.getByName("mergeDebugJniLibFolders").dependsOn("prepareJNILibs")
+}
 
 kotlin {
-
 
   jvm()
   linuxX64()
@@ -160,6 +171,7 @@ kotlin {
 
       demos.forEach { demoInfo ->
         executable(demoInfo.name, buildTypes = setOf(NativeBuildType.DEBUG)) {
+
           entryPoint = demoInfo.entryPoint
           compilation = compilations["test"]
 
@@ -175,24 +187,22 @@ kotlin {
 }
 
 
+
 fun SharedLibrary.copyToJniLibs() {
   if (target.konanTarget.family == Family.ANDROID && buildType == NativeBuildType.RELEASE) {
-
     val copyTaskName = "${name}${target.konanTarget.presetName.capitalized()}_copyToJniLibs"
+    logError("SharedLibrary.copyToJniLibs creating: $copyTaskName")
     val libsDir = linkTask.outputs.files.first()
-    val prepareJNILibsTask = tasks.findByName("prepareJNILibs") ?: tasks.create("prepareJNILibs") {
-      outputs.dir(file("src/main/jniLibs"))
-    }
+    val prepareJNILibsTask = tasks.getByName("prepareJNILibs")
     prepareJNILibsTask.dependsOn(copyTaskName)
-
 
     val jniLibsDir = project.file("src/main/jniLibs/${target.konanTarget.androidLibDir}")
 
     project.tasks.register<Copy>(copyTaskName) {
       dependsOn(linkTask)
+      group = "copyToJniLibs"
       from(libsDir)
       into(jniLibsDir)
-
       outputs.dir(jniLibsDir)
       //   jniLibsTask.dependsOn(this)
       doLast {
@@ -202,12 +212,6 @@ fun SharedLibrary.copyToJniLibs() {
   }
 }
 
-afterEvaluate {
-  tasks.getByPath("mergeReleaseJniLibFolders").apply {
-    dependsOn("prepareJNILibs")
-    //inputs.dir(project.file("src/main/jniLibs/"))
-  }
-}
 
 
 tasks.all {
@@ -243,17 +247,17 @@ xtrasAndroidConfig {
       logTrace("JNILIBS:$name ${directories.joinToString()}")
     }
   }
-  /*
-    compileOptions {
-      sourceCompatibility = JavaVersion.VERSION_17
-      targetCompatibility = JavaVersion.VERSION_17
-    }*/
+
+  compileOptions {
+    sourceCompatibility = xtras.javaVersion
+    targetCompatibility = xtras.javaVersion
+  }
 }
 
 
 
 tasks.withType<KotlinJvmCompile> {
   compilerOptions {
-    jvmTarget = JvmTarget.JVM_17
+    jvmTarget = xtras.jvmTarget
   }
 }

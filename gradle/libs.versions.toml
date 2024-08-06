@@ -8,8 +8,8 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 org-jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
-#xtras = { id = "org.danbrough.xtras" }
+#xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
+xtras = { id = "org.danbrough.xtras" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -32,6 +32,7 @@ compose-plugin = "1.6.11"
 ##          ⬆ = "1.7.0-dev1742"
 ##          ⬆ = "1.7.0-dev1743"
 ##          ⬆ = "1.7.0-dev1750"
+##          ⬆ = "1.7.0-dev1756"
 ##          ⬆ = "1.7.0-alpha01"
 ##          ⬆ = "1.7.0-alpha02"
 compose-navigation = "2.8.0-beta06"
@@ -61,9 +62,7 @@ agp = "8.5.1"
 ##⬆= "8.7.0-alpha01"
 ##⬆= "8.7.0-alpha02"
 ##⬆= "8.7.0-alpha03"
-kotlin = "2.0.0"
-##  ⬆ = "2.0.10-RC"
-##  ⬆ = "2.0.10-RC2"
+kotlin = "2.0.10"
 ##  ⬆ = "2.0.20-Beta1"
 ##  ⬆ = "2.0.20-Beta2"
 ##  ⬆ = "2.0.20-RC"

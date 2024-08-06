@@ -6,24 +6,11 @@ name: Manual workflow
 # or API.
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: false
-        # The data type of the input
-        type: string
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
 
-
-
-  test1:
+  build:
     runs-on: ubuntu-latest
     steps:
 
@@ -35,13 +22,15 @@ jobs:
           sudo apt -qq -y upgrade
           sudo apt -qq install cmake libssl-dev build-essential libffi-dev curl libz-dev ninja-build
 
-      - name: Setup gradle
-        uses: yumemi-inc/setup-java-gradle@v1
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          cache-read-only: false
-          gradle-home-cache-cleanup: true
-
-      - uses: actions/checkout@v4
+          distribution: 'temurin'
+          java-version: 21
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Setup gradle.properties
         shell: bash
@@ -88,12 +77,6 @@ jobs:
         with:
           path: ${{ env.XTRAS_DIR }}
           key: ${{ runner.os }}-xtras
-
-      - name: Setup gradle
-        uses: yumemi-inc/setup-java-gradle@v1
-        with:
-          cache-read-only: false
-          gradle-home-cache-cleanup: false
 
       - name: List gradle tasks
         shell: bash
