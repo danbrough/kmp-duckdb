@@ -129,7 +129,7 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
         //strip them as they are huge
         writer.println(
           """
-        |llvm-strip duckdb src/libduckdb.so
+        |${'$'}ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip duckdb src/libduckdb.so
       """.trimMargin()
         )
       }
