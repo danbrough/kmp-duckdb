@@ -59,22 +59,6 @@ duckdb {
 
 project.generateTypesEnumTask()
 
-class Demo(val name: String, val entryPoint: String, vararg args: String) {
-  var description: String = "$name test application"
-  val cmdArgs: Array<out String> = args
-}
-
-val demos = listOf(
-  Demo("demo2", "org.danbrough.duckdb.demo2"),
-  Demo("demo1", "org.danbrough.duckdb.demo1", "-d", file("test.db").absolutePath),
-  Demo("demo3", "org.danbrough.duckdb.demo3"),
-  Demo("demo4", "org.danbrough.duckdb.demo4"),
-  Demo("demo5", "org.danbrough.duckdb.demo5"),
-  Demo("demoVectors", "org.danbrough.duckdb.demoVectors"),
-)
-
-
-
 
 
 kotlin {
@@ -115,8 +99,8 @@ kotlin {
   val commonTest by sourceSets.getting {
     dependencies {
       implementation(kotlin("test"))
-      implementation(libs.kotlinx.coroutines)
-      implementation(libs.kotlinx.datetime)
+    //  implementation(libs.kotlinx.coroutines)
+    //  implementation(libs.kotlinx.datetime)
     }
   }
 
@@ -165,19 +149,6 @@ kotlin {
         }
       }
 
-      demos.forEach { demoInfo ->
-        executable(demoInfo.name, buildTypes = setOf(NativeBuildType.DEBUG)) {
-
-          entryPoint = demoInfo.entryPoint
-          compilation = compilations["test"]
-
-          if (konanTarget == HostManager.host)
-            tasks.create("run${demoInfo.name.capitalized()}") {
-              description = demoInfo.description
-              group = "run"
-            }.dependsOn(runTaskName)
-        }
-      }
     }
   }
 }

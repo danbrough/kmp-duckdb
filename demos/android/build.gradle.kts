@@ -5,18 +5,13 @@ plugins {
   alias(libs.plugins.compose.compiler)
 }
 
-//java {
-//  sourceCompatibility = JavaVersion.VERSION_17
-//  targetCompatibility = JavaVersion.VERSION_17
-//}
-
 android {
   namespace = "org.danbrough.demo"
   compileSdk = 34
 
   defaultConfig {
     applicationId = "org.danbrough.demo"
-    minSdk = 23
+    minSdk = 24
     targetSdk = 34
     versionCode = 1
     versionName = "1.0"
