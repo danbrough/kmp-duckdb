@@ -1,38 +1,17 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
-import org.danbrough.duckdb.TASK_GENERATE_TYPES_ENUM
 import org.danbrough.duckdb.duckdb
-import org.danbrough.duckdb.generateTypesEnumTask
-import org.danbrough.xtras.androidLibDir
 import org.danbrough.xtras.capitalized
-import org.danbrough.xtras.envLibraryPathName
-import org.danbrough.xtras.konanDir
-import org.danbrough.xtras.kotlinBinaries
-import org.danbrough.xtras.logError
-import org.danbrough.xtras.logInfo
 import org.danbrough.xtras.logTrace
-import org.danbrough.xtras.pathOf
 import org.danbrough.xtras.supportsJNI
 import org.danbrough.xtras.xtrasAndroidConfig
-import org.danbrough.xtras.xtrasExtension
 import org.danbrough.xtras.xtrasTesting
-import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
-import org.jetbrains.kotlin.gradle.plugin.mpp.SharedLibrary
-import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
-import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.HostManager
-import org.jetbrains.kotlin.konan.target.KonanTarget
-import org.jetbrains.kotlin.konan.target.presetName
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
@@ -48,16 +27,13 @@ buildscript {
   }
 }
 
+
 java {
   sourceCompatibility = JavaVersion.VERSION_17
   targetCompatibility = JavaVersion.VERSION_17
 }
 
-duckdb {
 
-}
-
-project.generateTypesEnumTask()
 
 class Demo(val name: String, val entryPoint: String, vararg args: String) {
   var description: String = "$name test application"
@@ -74,7 +50,9 @@ val demos = listOf(
 )
 
 
-
+duckdb {
+  buildEnabled = false
+}
 
 
 kotlin {
@@ -90,7 +68,6 @@ kotlin {
 
   androidTarget {
     publishLibraryVariants("release")
-
   }
 
   @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -109,6 +86,7 @@ kotlin {
     dependencies {
       implementation(libs.klog.core)
       implementation(libs.xtras.support)
+      api(project(":libs"))
     }
   }
 
@@ -183,17 +161,6 @@ kotlin {
 }
 
 
-
-
-
-
-
-tasks.all {
-  when (this) {
-    is Jar, is KotlinCompile, is KotlinCompileCommon, is KotlinNativeCompile ->
-      dependsOn(TASK_GENERATE_TYPES_ENUM)
-  }
-}
 
 
 xtras {
