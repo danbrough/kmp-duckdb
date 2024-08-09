@@ -12,7 +12,7 @@ export GEN=ninja
 export LLVM_DIR=$KONAN_DIR/dependencies/apple-llvm-20200714-macos-x64-essentials/bin
 
 
-PLATFORM_NAME="macos_x64"
+PLATFORM_NAME="macos_arm64"
 DUCKDB_EXTENSIONS="icu;json;parquet"
 
 cd ../upstream
@@ -26,10 +26,10 @@ cd $BUILDDIR
 
 echo clang is `which clang` cmake is `which cmake`
 #export TOOLCHAIN_PREFIX=aarch64-unknown-linux-gnu-
-TARGET=x86_64-apple-darwin
+TARGET=arm64-apple-darwin
 #    KonanTarget.MACOS_X64 -> "x86_64-apple-darwin"
 #    KonanTarget.MACOS_ARM64 -> "aarch64-apple-darwin"
-export CFLAGS="-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.sdk"
+export CFLAGS="-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.sdk -arch arm64"
 
 
 cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1   \
