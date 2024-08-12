@@ -16,23 +16,26 @@ repositories {
 }
 
 java {
-//  sourceCompatibility = JavaVersion.VERSION_17
-//  targetCompatibility = JavaVersion.VERSION_17
   withSourcesJar()
 //  withJavadocJar()
 }
 
-//kotlin {
-//  compilerOptions {
-//    jvmTarget = JvmTarget.JVM_17
-//  }
-//}
 
 dependencies {
   compileOnly(kotlin("gradle-plugin"))
   //noinspection UseTomlInstead
   implementation("org.danbrough.xtras:plugin:0.0.1-beta08")
   //noinspection UseTomlInstead
-  compileOnly("com.android.tools.build:gradle:8.5.1")
+  compileOnly("com.android.tools.build:gradle:8.5.2")
 }
 
+gradlePlugin {
+  plugins {
+    create("duckdb") {
+      id = group.toString()
+      implementationClass = "$group.DuckDBPlugin"
+      displayName = "DuckDB Plugin"
+      description = "Kotlin multiplatform support plugin for duckdb"
+    }
+  }
+}
