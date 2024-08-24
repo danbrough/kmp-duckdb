@@ -8,15 +8,16 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 org-jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
-#xtras = { id = "org.danbrough.xtras" }
+#xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
+xtras = { id = "org.danbrough.xtras" }
+duckdb = { id = "org.danbrough.duckdb" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [versions]
 
-compose = "1.7.0-beta07"
+compose = "1.7.0-rc01"
 
 compose-plugin = "1.6.11"
 ##          ⬆ = "1.6.20-dev1646"
@@ -36,12 +37,14 @@ compose-plugin = "1.6.11"
 ##          ⬆ = "1.7.0-dev1756"
 ##          ⬆ = "1.7.0-alpha01"
 ##          ⬆ = "1.7.0-alpha02"
-compose-navigation = "2.8.0-beta07"
+##          ⬆ = "1.7.0-alpha03"
+compose-navigation = "2.8.0-rc01"
 androidx-activityCompose = "1.9.1"
 ##                    ⬆ = "1.10.0-alpha01"
 androidx-core-ktx = "1.13.1"
 ##             ⬆ = "1.14.0-alpha01"
 ##             ⬆ = "1.15.0-alpha01"
+##             ⬆ = "1.15.0-alpha02"
 androidx-appcompat = "1.7.0"
 androidx-material = "1.12.0"
 androidx-constraintlayout = "2.1.4"
@@ -66,20 +69,21 @@ agp = "8.5.2"
 ##⬆= "8.7.0-alpha03"
 ##⬆= "8.7.0-alpha04"
 ##⬆= "8.7.0-alpha05"
-kotlin = "2.0.10"
-##  ⬆ = "2.0.20-Beta1"
-##  ⬆ = "2.0.20-Beta2"
-##  ⬆ = "2.0.20-RC"
+##⬆= "8.7.0-alpha06"
+##⬆= "8.7.0-alpha07"
+kotlin = "2.0.20"
 
-xtras = "0.0.1-beta08"
-xtras-jni = "0.0.1-beta03"
+xtras = "0.0.1-beta10"
+xtras-jni = "0.0.3-beta03"
+
 xtras-support = "0.0.1-beta02"
 dokka = "1.9.20"
 kotlinx-coroutines = "1.8.1"
 ##              ⬆ = "1.9.0-RC"
+##              ⬆ = "1.9.0-RC.2"
 ktor = "2.3.12"
 
-kotlinx-datetime = "0.6.0"
+kotlinx-datetime = "0.6.1"
 sqldelight = "2.0.2"
 koin-bom = "2.2.0-rc-4"
 klog = "0.0.3-beta05"
@@ -92,7 +96,7 @@ clikt = "4.4.0"
 junit = "4.13.2"
 lifecycleRuntimeKtx = "2.8.4"
 ##               ⬆ = "2.9.0-alpha01"
-composeBom = "2024.06.00"
+composeBom = "2024.08.00"
 duckdb = "1.0.0"
 
 [libraries]

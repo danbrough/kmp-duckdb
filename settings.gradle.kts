@@ -31,13 +31,13 @@ dependencyResolutionManagement {
 }
 
 includeBuild("plugin")
-//includeBuild("../../xtras/plugin") {
-//  name = "xtras_plugin"
-//}
+includeBuild("../../xtras/plugin") {
+  name = "xtras_plugin"
+}
 
 rootProject.name = "duckdb"
 
-include(":duckdb",":libs")
+include(":duckdb", ":libs")
 
 listOf("android").forEach {
   include(":demo_$it")

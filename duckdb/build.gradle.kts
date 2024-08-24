@@ -7,24 +7,16 @@ import org.danbrough.xtras.supportsJNI
 import org.danbrough.xtras.xtrasAndroidConfig
 import org.danbrough.xtras.xtrasTesting
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.android.library)
   alias(libs.plugins.org.jetbrains.dokka)
+  alias(libs.plugins.duckdb)
   `maven-publish`
-}
-
-buildscript {
-  dependencies {
-    //noinspection UseTomlInstead
-    classpath("org.danbrough.duckdb:plugin")
-  }
 }
 
 
@@ -34,26 +26,23 @@ java {
 }
 
 
-
 class Demo(val name: String, val entryPoint: String, vararg args: String) {
   var description: String = "$name test application"
   val cmdArgs: Array<out String> = args
 }
 
 val demos = listOf(
-  Demo("demo2", "org.danbrough.duckdb.demo2"),
   Demo("demo1", "org.danbrough.duckdb.demo1", "-d", file("test.db").absolutePath),
+  Demo("demo2", "org.danbrough.duckdb.demo2"),
   Demo("demo3", "org.danbrough.duckdb.demo3"),
   Demo("demo4", "org.danbrough.duckdb.demo4"),
   Demo("demo5", "org.danbrough.duckdb.demo5"),
   Demo("demoVectors", "org.danbrough.duckdb.demoVectors"),
 )
 
-
 duckdb {
   buildEnabled = false
 }
-
 
 kotlin {
 
@@ -163,14 +152,6 @@ kotlin {
 
 
 
-xtras {
-  jvmTarget = JvmTarget.JVM_17
-  javaVersion = JavaVersion.VERSION_17
-
-  androidConfig {
-    minSDKVersion = 24
-  }
-}
 
 xtrasTesting {}
 
@@ -188,17 +169,7 @@ xtrasAndroidConfig {
       logTrace("JNILIBS:$name ${directories.joinToString()}")
     }
   }
-
-  compileOptions {
-    sourceCompatibility = xtras.javaVersion
-    targetCompatibility = xtras.javaVersion
-  }
 }
 
 
-
-tasks.withType<KotlinJvmCompile> {
-  compilerOptions {
-    jvmTarget = xtras.jvmTarget
-  }
-}
+tasks.getByName("runDemo1DebugExecutableLinuxX64")
