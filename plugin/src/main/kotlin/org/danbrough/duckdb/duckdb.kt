@@ -97,8 +97,6 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
         writer.println("-DCMAKE_SYSTEM_NAME=Darwin \\")
         writer.println("-DCMAKE_SYSTEM_PROCESSOR=x64 \\")
         writer.println("-DCMAKE_CROSSCOMPILING=FALSE \\")
-        writer.println("")
-        writer.println("")
         /*
 
 export LLVM_DIR=$KONAN_DIR/dependencies/apple-llvm-20200714-macos-x64-essentials/bin
