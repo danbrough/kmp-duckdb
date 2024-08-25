@@ -60,6 +60,8 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
         writer.println("PLATFORM_NAME=${target.name}")
         if (target == KonanTarget.MACOS_X64)
           writer.println("export CFLAGS=\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.sdk\"")
+        else if (target == KonanTarget.MACOS_ARM64)
+          writer.println("export CFLAGS=\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.sdk\" -arch arm64")
       }
 
       writer.println(
@@ -95,33 +97,13 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
       """.trimMargin()
         )
       } else if (target == KonanTarget.MACOS_X64) {
-
         writer.println("-DCMAKE_SYSTEM_NAME=Darwin \\")
         writer.println("-DCMAKE_SYSTEM_PROCESSOR=x64 \\")
         writer.println("-DCMAKE_CROSSCOMPILING=FALSE \\")
-        /*
-
-export LLVM_DIR=$KONAN_DIR/dependencies/apple-llvm-20200714-macos-x64-essentials/bin
-TARGET=x86_64-apple-darwin
-#    KonanTarget.MACOS_X64 -> "x86_64-apple-darwin"
-#    KonanTarget.MACOS_ARM64 -> "aarch64-apple-darwin"
-export CFLAGS="-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.sdk"
-cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1   \
-
-
--DCMAKE_VERBOSE_MAKEFILE=on \
--DBUILD_EXTENSIONS=$DUCKDB_EXTENSIONS \
--DCMAKE_CXX_COMPILER="clang++" \
--DCMAKE_C_COMPILER="clang" \
--DCMAKE_C_COMPILER_TARGET=$TARGET \
--DCMAKE_CXX_COMPILER_TARGET=$TARGET \
--DOVERRIDE_GIT_DESCRIBE="" \
--DCMAKE_BUILD_TYPE=Release ../..
-
-cmake --build . --config Release || exit 1
-
-
-*/
+      }else if (target == KonanTarget.MACOS_ARM64) {
+        writer.println("-DCMAKE_SYSTEM_NAME=Darwin \\")
+        writer.println("-DCMAKE_SYSTEM_PROCESSOR=arm64 \\")
+        writer.println("-DCMAKE_CROSSCOMPILING=TRUE \\")
       }
 
       writer.println(
