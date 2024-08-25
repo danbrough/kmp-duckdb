@@ -76,7 +76,7 @@ kotlin = "2.0.20"
 xtras = "0.0.1-beta09"
 xtras-jni = "0.0.3-beta03"
 
-xtras-support = "0.0.1-beta02"
+xtras-support = "0.0.1-beta01"
 dokka = "1.9.20"
 kotlinx-coroutines = "1.8.1"
 ##              ⬆ = "1.9.0-RC"

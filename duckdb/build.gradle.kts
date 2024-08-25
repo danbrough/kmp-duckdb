@@ -47,15 +47,15 @@ duckdb {
 kotlin {
 
   jvm()
-  linuxX64()
-  linuxArm64()
+
 
   if (HostManager.hostIsMac) {
     macosX64()
     mingwX64()
   } else {
 
-
+    linuxX64()
+    linuxArm64()
     androidNativeX64()
     androidNativeArm64()
     androidNativeArm32()
