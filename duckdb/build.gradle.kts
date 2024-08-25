@@ -47,13 +47,18 @@ duckdb {
 kotlin {
 
   jvm()
-  linuxX64()
-  linuxArm64()
-  //macosX64()
-  //mingwX64()
-  androidNativeX64()
-  androidNativeArm64()
-  androidNativeArm32()
+
+  if (HostManager.hostIsMac) {
+    macosX64()
+    mingwX64()
+  } else {
+    linuxX64()
+    linuxArm64()
+
+    androidNativeX64()
+    androidNativeArm64()
+    androidNativeArm32()
+  }
 
   androidTarget {
     publishLibraryVariants("release")
@@ -128,7 +133,7 @@ kotlin {
     binaries {
       if (konanTarget.supportsJNI) {
         sharedLib("duckdbkt") {
-         // copyToJniLibs()
+          // copyToJniLibs()
         }
       }
 

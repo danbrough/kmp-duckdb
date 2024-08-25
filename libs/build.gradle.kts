@@ -21,15 +21,16 @@ plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.android.library)
   alias(libs.plugins.org.jetbrains.dokka)
+  id("org.danbrough.duckdb")
   `maven-publish`
 }
-
+/*
 buildscript {
   dependencies {
     //noinspection UseTomlInstead
     classpath("org.danbrough.duckdb:plugin")
   }
-}
+}*/
 
 java {
   sourceCompatibility = JavaVersion.VERSION_17
