@@ -8,7 +8,9 @@ import org.danbrough.xtras.hostTriplet
 import org.danbrough.xtras.konanDir
 import org.danbrough.xtras.registerXtrasGitLibrary
 import org.danbrough.xtras.resolveAll
+import org.danbrough.xtras.sharedLibExtn
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.utils.`is`
 import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.KonanTarget
 
@@ -146,7 +148,7 @@ cmake --build . --config Release || exit 1
           ).absolutePath
         }/include"
         |cp duckdb "${buildDir(target).absolutePath}/bin" 
-        |cp src/libduckdb.so "${buildDir(target).absolutePath}/lib"
+        |cp src/libduckdb.${target.sharedLibExtn} "${buildDir(target).absolutePath}/lib"
         |cp ../../src/include/duckdb.h ../../src/include/duckdb.hpp "${buildDir(target).absolutePath}/include"
     """.trimMargin()
       )
