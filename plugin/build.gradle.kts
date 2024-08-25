@@ -25,10 +25,9 @@ java {
 
 dependencies {
   compileOnly(kotlin("gradle-plugin"))
-  //noinspection UseTomlInstead
-  implementation("org.danbrough.xtras:plugin:0.0.1-beta10")
-  //noinspection UseTomlInstead
-  compileOnly("com.android.tools.build:gradle:8.5.2")
+  implementation(libs.xtras.plugin)
+  compileOnly(libs.android.gradle)
+
 }
 
 gradlePlugin {

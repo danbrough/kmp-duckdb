@@ -55,11 +55,9 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
       """.trimMargin()
         )
       } else {
-        writer.println(
-          """
-          |PLATFORM_NAME=${target.name}
-      """.trimMargin()
-        )
+        writer.println("PLATFORM_NAME=${target.name}")
+        if (target == KonanTarget.MACOS_X64)
+          writer.println("export CFLAGS=\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.sdk\"")
       }
 
       writer.println(
@@ -82,9 +80,7 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
           |-DANDROID_ABI=${'$'}ANDROID_ABI -DCMAKE_TOOLCHAIN_FILE=${'$'}ANDROID_NDK/build/cmake/android.toolchain.cmake \
           |-DDUCKDB_EXTRA_LINK_FLAGS="-llog" \""".trimMargin()
         )
-      }
-
-      if (target == KonanTarget.LINUX_ARM64) {
+      } else if (target == KonanTarget.LINUX_ARM64) {
         target.hostTriplet
         writer.println(
           """
@@ -96,26 +92,36 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
         |-DCMAKE_SYSROOT=${konanDir}/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/aarch64-unknown-linux-gnu/sysroot \
       """.trimMargin()
         )
+      } else if (target == KonanTarget.MACOS_X64) {
+
+        writer.println("-DCMAKE_SYSTEM_NAME=Darwin \\")
+        writer.println("-DCMAKE_SYSTEM_PROCESSOR=x64 \\")
+        writer.println("-DCMAKE_CROSSCOMPILING=FALSE \\")
+        writer.println("")
+        writer.println("")
         /*
-        cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1   \
-        -DCMAKE_SYSTEM_NAME=Linux \
-        -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
-          -DCMAKE_CROSSCOMPILING=TRUE \
-            -DEXTENSION_STATIC_BUILD=1 \
-           -DCMAKE_RANLIB="ranlib"  -DCMAKE_AR="llvm-ar" \
-           -DCMAKE_VERBOSE_MAKEFILE=off \
-           -DBUILD_EXTENSIONS=$DUCKDB_EXTENSIONS \
-           -DDUCKDB_EXPLICIT_PLATFORM=$PLATFORM_NAME -DBUILD_UNITTESTS=0 -DBUILD_SHELL=1 \
-           -DCMAKE_CXX_COMPILER="clang++" \
-           -DCMAKE_C_COMPILER="clang" \
-          -DCMAKE_C_COMPILER_TARGET=$TARGET \
-          -DCMAKE_CXX_COMPILER_TARGET=$TARGET \
-          -DCMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2 \
-          -DCMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2 \
-          -DCMAKE_SYSROOT=/home/dan/.konan/dependencies/aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/aarch64-unknown-linux-gnu/sysroot \
-            -DOVERRIDE_GIT_DESCRIBE="" \
-           -DCMAKE_BUILD_TYPE=Release ../..
-         */
+
+export LLVM_DIR=$KONAN_DIR/dependencies/apple-llvm-20200714-macos-x64-essentials/bin
+TARGET=x86_64-apple-darwin
+#    KonanTarget.MACOS_X64 -> "x86_64-apple-darwin"
+#    KonanTarget.MACOS_ARM64 -> "aarch64-apple-darwin"
+export CFLAGS="-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.sdk"
+cmake -G "Ninja" -DFORCE_COLORED_OUTPUT=1   \
+
+
+-DCMAKE_VERBOSE_MAKEFILE=on \
+-DBUILD_EXTENSIONS=$DUCKDB_EXTENSIONS \
+-DCMAKE_CXX_COMPILER="clang++" \
+-DCMAKE_C_COMPILER="clang" \
+-DCMAKE_C_COMPILER_TARGET=$TARGET \
+-DCMAKE_CXX_COMPILER_TARGET=$TARGET \
+-DOVERRIDE_GIT_DESCRIBE="" \
+-DCMAKE_BUILD_TYPE=Release ../..
+
+cmake --build . --config Release || exit 1
+
+
+*/
       }
 
       writer.println(
@@ -149,7 +155,7 @@ fun Project.duckdb(libName: String = "duckdb", block: XtrasLibrary.() -> Unit = 
 
 
     }
-    
+
     block()
   }
 
