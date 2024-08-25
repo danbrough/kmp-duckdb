@@ -48,10 +48,12 @@ project.generateTypesEnumTask()
 kotlin {
   jvm()
 
+
   if (HostManager.hostIsMac) {
     macosX64()
     macosArm64()
   } else {
+
     linuxX64()
     linuxArm64()
 

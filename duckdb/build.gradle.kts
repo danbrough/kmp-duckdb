@@ -48,14 +48,13 @@ kotlin {
 
   jvm()
 
-    linuxX64()
-    linuxArm64()
+  linuxX64()
+  linuxArm64()
 
   if (HostManager.hostIsMac) {
     macosX64()
-    mingwX64()
+    macosArm64()
   } else {
-
     androidNativeX64()
     androidNativeArm64()
     androidNativeArm32()
@@ -154,9 +153,6 @@ kotlin {
     }
   }
 }
-
-
-
 
 
 xtrasTesting {}
