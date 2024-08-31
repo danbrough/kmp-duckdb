@@ -6,11 +6,11 @@ pluginManagement {
   }
 }
 
-/*
+
 includeBuild("../../../xtras/plugin") {
   name = "xtras_plugin"
 }
-*/
+
 
 
 dependencyResolutionManagement {

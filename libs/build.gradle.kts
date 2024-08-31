@@ -166,6 +166,7 @@ xtrasAndroidConfig {
 
   sourceSets.all {
     jniLibs {
+      @Suppress("UnstableApiUsage")
       logTrace("JNILIBS:$name ${directories.joinToString()}")
     }
   }
