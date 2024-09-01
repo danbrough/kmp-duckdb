@@ -57,11 +57,12 @@ kotlin {
     linuxX64()
     linuxArm64()
 
+  }
+
     //mingwX64()
     androidNativeX64()
     androidNativeArm64()
     androidNativeArm32()
-  }
 
   androidTarget {
     publishLibraryVariants("release")
