@@ -38,31 +38,26 @@ java {
 }
 
 duckdb {
-
 }
 
 project.generateTypesEnumTask()
 
 
-
 kotlin {
   jvm()
-
 
   if (HostManager.hostIsMac) {
     macosX64()
     macosArm64()
   } else {
-
     linuxX64()
     linuxArm64()
-
   }
 
-    //mingwX64()
-    androidNativeX64()
-    androidNativeArm64()
-    androidNativeArm32()
+  //mingwX64()
+  androidNativeX64()
+  androidNativeArm64()
+  androidNativeArm32()
 
   androidTarget {
     publishLibraryVariants("release")

@@ -20,7 +20,8 @@ plugins {
 }
 
 dependencyResolutionManagement {
-  //repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  @Suppress("UnstableApiUsage")
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   @Suppress("UnstableApiUsage")
   repositories {
     maven("https://s01.oss.sonatype.org/content/groups/staging")
