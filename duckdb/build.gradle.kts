@@ -45,20 +45,21 @@ duckdb {
 }
 
 kotlin {
+  applyDefaultHierarchyTemplate()
 
   jvm()
 
   linuxX64()
   linuxArm64()
 
-  if (HostManager.hostIsMac) {
+  //if (HostManager.hostIsMac) {
     macosX64()
     macosArm64()
-  } else {
+  //} else {
     androidNativeX64()
     androidNativeArm64()
     androidNativeArm32()
-  }
+  //}
 
   androidTarget {
     publishLibraryVariants("release")
