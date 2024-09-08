@@ -141,7 +141,7 @@ kotlin {
       }
 
       if ((HostManager.host.family.isAppleFamily && konanTarget.family.isAppleFamily) ||
-        HostManager.hostIsLinux && konanTarget.family == Family.LINUX
+        (HostManager.hostIsLinux && konanTarget.family == Family.LINUX)
       ) {
 
         demos.forEach { demoInfo ->
@@ -160,25 +160,26 @@ kotlin {
       }
     }
   }
+}
 
 
-  xtrasTesting {}
+xtrasTesting {}
 
 
 //xtrasAndroidConfig(namespace = "org.danbrough.duckdb") {
-  xtrasAndroidConfig {
-    defaultConfig {
-      ndk {
-        abiFilters += setOf("arm64-v8a", "x86_64", "armeabi-v7a")
-      }
-    }
-
-    sourceSets.all {
-      jniLibs {
-        logTrace("JNILIBS:$name ${directories.joinToString()}")
-      }
+xtrasAndroidConfig {
+  defaultConfig {
+    ndk {
+      abiFilters += setOf("arm64-v8a", "x86_64", "armeabi-v7a")
     }
   }
 
+  sourceSets.all {
+    jniLibs {
+      logTrace("JNILIBS:$name ${directories.joinToString()}")
+    }
+  }
+}
 
-  tasks.getByName("runDemo1DebugExecutableLinuxX64")
+
+tasks.getByName("runDemo1DebugExecutableLinuxX64")
