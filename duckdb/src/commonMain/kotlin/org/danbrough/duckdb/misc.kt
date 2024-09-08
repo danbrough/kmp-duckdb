@@ -1,5 +1,6 @@
 package org.danbrough.duckdb
 
 
-val log = klog.logger("DuckDB")
+internal val log = klog.logger("DuckDB")
 
+val log_duckdb = klog.logger("DuckDB")

@@ -7,9 +7,9 @@ import platform.posix.strerror
 
 inline fun UInt.handleDuckDbError(msg: () -> String) {
   if (this == DuckDBError) {
-    log.trace { "got an error" }
+    log_duckdb.trace { "got an error" }
     "${msg()} message: ${strerror(errno)?.toKString()}".also {
-      log.error { it }
+      log_duckdb.error { it }
       throw Exception(it)
     }
   }
