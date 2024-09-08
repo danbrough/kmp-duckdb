@@ -34,18 +34,18 @@ dependencyResolutionManagement {
 includeBuild("plugin")
 
 
-/*
+
 includeBuild("../../xtras/plugin") {
   name = "xtras_plugin"
 }
 
-*/
+
 
 rootProject.name = "duckdb"
 
 include(":duckdb", ":libs")
 
-listOf("android").forEach {
+listOf("android","simple").forEach {
   include(":demo_$it")
   project(":demo_$it").projectDir = file("demos/$it")
 }
