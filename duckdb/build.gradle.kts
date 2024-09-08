@@ -9,6 +9,7 @@ import org.danbrough.xtras.xtrasTesting
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
+import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
@@ -139,41 +140,45 @@ kotlin {
         }
       }
 
-      demos.forEach { demoInfo ->
-        executable(demoInfo.name, buildTypes = setOf(NativeBuildType.DEBUG)) {
+      if ((HostManager.host.family.isAppleFamily && konanTarget.family.isAppleFamily) ||
+        HostManager.hostIsLinux && konanTarget.family == Family.LINUX
+      ) {
 
-          entryPoint = demoInfo.entryPoint
-          compilation = compilations["test"]
+        demos.forEach { demoInfo ->
+          executable(demoInfo.name, buildTypes = setOf(NativeBuildType.DEBUG)) {
 
-          if (konanTarget == HostManager.host)
-            tasks.create("run${demoInfo.name.capitalized()}") {
-              description = demoInfo.description
-              group = "run"
-            }.dependsOn(runTaskName)
+            entryPoint = demoInfo.entryPoint
+            compilation = compilations["test"]
+
+            if (konanTarget == HostManager.host)
+              tasks.create("run${demoInfo.name.capitalized()}") {
+                description = demoInfo.description
+                group = "run"
+              }.dependsOn(runTaskName)
+          }
         }
       }
     }
   }
-}
 
 
-xtrasTesting {}
+  xtrasTesting {}
 
 
 //xtrasAndroidConfig(namespace = "org.danbrough.duckdb") {
-xtrasAndroidConfig {
-  defaultConfig {
-    ndk {
-      abiFilters += setOf("arm64-v8a", "x86_64", "armeabi-v7a")
+  xtrasAndroidConfig {
+    defaultConfig {
+      ndk {
+        abiFilters += setOf("arm64-v8a", "x86_64", "armeabi-v7a")
+      }
+    }
+
+    sourceSets.all {
+      jniLibs {
+        logTrace("JNILIBS:$name ${directories.joinToString()}")
+      }
     }
   }
 
-  sourceSets.all {
-    jniLibs {
-      logTrace("JNILIBS:$name ${directories.joinToString()}")
-    }
-  }
-}
 
-
-tasks.getByName("runDemo1DebugExecutableLinuxX64")
+  tasks.getByName("runDemo1DebugExecutableLinuxX64")
