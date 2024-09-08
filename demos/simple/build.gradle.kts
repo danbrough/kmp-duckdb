@@ -13,6 +13,7 @@ duckdb {
 kotlin {
 
   linuxX64()
+  macosX64()
 
   val commonMain by sourceSets.getting {
     dependencies {
