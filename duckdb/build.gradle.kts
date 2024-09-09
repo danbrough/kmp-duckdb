@@ -2,6 +2,7 @@
 
 import org.danbrough.duckdb.duckdb
 import org.danbrough.xtras.capitalized
+import org.danbrough.xtras.logError
 import org.danbrough.xtras.logTrace
 import org.danbrough.xtras.supportsJNI
 import org.danbrough.xtras.xtrasAndroidConfig
@@ -150,11 +151,13 @@ kotlin {
             entryPoint = demoInfo.entryPoint
             compilation = compilations["test"]
 
-            if (konanTarget == HostManager.host)
+            if (konanTarget == HostManager.host) {
+              logError("Creating task run${demoInfo.name.capitalized()} for $runTaskName")
               tasks.create("run${demoInfo.name.capitalized()}") {
                 description = demoInfo.description
                 group = "run"
               }.dependsOn(runTaskName)
+            }
           }
         }
       }
