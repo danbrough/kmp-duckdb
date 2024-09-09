@@ -1,7 +1,6 @@
 import org.danbrough.duckdb.duckdb
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.konan.target.HostManager
-import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
