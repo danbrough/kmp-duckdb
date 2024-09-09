@@ -151,13 +151,12 @@ kotlin {
             entryPoint = demoInfo.entryPoint
             compilation = compilations["test"]
 
-            if (konanTarget == HostManager.host) {
-              logError("Creating task run${demoInfo.name.capitalized()} for $runTaskName")
+            if (konanTarget == HostManager.host)
               tasks.create("run${demoInfo.name.capitalized()}") {
                 description = demoInfo.description
                 group = "run"
               }.dependsOn(runTaskName)
-            }
+            
           }
         }
       }
@@ -185,4 +184,3 @@ xtrasAndroidConfig {
 }
 
 
-tasks.getByName("runDemo1DebugExecutableLinuxX64")
