@@ -13,19 +13,17 @@ duckdb {
 }
 
 kotlin {
-  when(HostManager.host){
-    KonanTarget.LINUX_X64,KonanTarget.LINUX_ARM64->{
-      linuxX64()
-      linuxArm64()
-    }
-    KonanTarget.MACOS_X64,KonanTarget.MACOS_ARM64 -> {
-      macosX64()
-      macosArm64()
-    }
-    else -> error("Unsupported host: ${HostManager.host}")
+  applyDefaultHierarchyTemplate()
+
+
+  if (HostManager.hostIsMac) {
+    macosX64()
+    macosArm64()
+  } else {
+    linuxX64()
+    linuxArm64()
   }
 
-  macosX64()
 
   val commonMain by sourceSets.getting {
     dependencies {
