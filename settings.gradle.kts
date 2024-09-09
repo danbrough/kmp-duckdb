@@ -43,9 +43,9 @@ includeBuild("../../xtras/plugin") {
 
 rootProject.name = "duckdb"
 
-include(":duckdb", ":libs")
+include(":duckdb")
 
-listOf("android","simple").forEach {
+listOf("android", "simple").forEach {
   include(":demo_$it")
   project(":demo_$it").projectDir = file("demos/$it")
 }

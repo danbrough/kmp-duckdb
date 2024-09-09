@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
 import org.danbrough.duckdb.duckdb
+import org.danbrough.duckdb.generateTypesEnumTask
 import org.danbrough.xtras.capitalized
 import org.danbrough.xtras.logError
 import org.danbrough.xtras.logTrace
@@ -10,6 +11,7 @@ import org.danbrough.xtras.xtrasTesting
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.HostManager
 
@@ -27,6 +29,8 @@ java {
   targetCompatibility = JavaVersion.VERSION_17
 }
 
+project.generateTypesEnumTask()
+
 
 class Demo(val name: String, val entryPoint: String, vararg args: String) {
   var description: String = "$name test application"
@@ -43,7 +47,6 @@ val demos = listOf(
 )
 
 duckdb {
-  buildEnabled = false
 }
 
 kotlin {
@@ -84,7 +87,7 @@ kotlin {
     dependencies {
       implementation(libs.klog.core)
       implementation(libs.xtras.support)
-      api(project(":libs"))
+      //api(project(":libs"))
     }
   }
 
@@ -179,9 +182,16 @@ xtrasAndroidConfig {
 
   sourceSets.all {
     jniLibs {
+      @Suppress("UnstableApiUsage")
       logTrace("JNILIBS:$name ${directories.joinToString()}")
     }
   }
 }
 
 
+
+tasks.withType<KotlinJvmCompile> {
+  compilerOptions {
+    jvmTarget = xtras.jvmTarget
+  }
+}

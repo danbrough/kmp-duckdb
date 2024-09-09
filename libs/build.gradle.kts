@@ -148,30 +148,3 @@ tasks.all {
 }
 
 
-
-xtrasTesting {}
-
-
-//xtrasAndroidConfig(namespace = "org.danbrough.duckdb") {
-xtrasAndroidConfig {
-  defaultConfig {
-    ndk {
-      abiFilters += setOf("arm64-v8a", "x86_64", "armeabi-v7a")
-    }
-  }
-
-  sourceSets.all {
-    jniLibs {
-      @Suppress("UnstableApiUsage")
-      logTrace("JNILIBS:$name ${directories.joinToString()}")
-    }
-  }
-}
-
-
-
-tasks.withType<KotlinJvmCompile> {
-  compilerOptions {
-    jvmTarget = xtras.jvmTarget
-  }
-}

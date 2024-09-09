@@ -27,7 +27,6 @@ kotlin {
 
   val commonMain by sourceSets.getting {
     dependencies {
-      //implementation(kotlin("test"))
       implementation(libs.klog.core)
       implementation(libs.kotlinx.coroutines)
       implementation(libs.xtras.support)
@@ -36,7 +35,7 @@ kotlin {
     }
   }
 
-  targets.withType<KotlinNativeTarget>{
+  targets.withType<KotlinNativeTarget> {
     if (this.konanTarget == HostManager.host) {
       binaries {
         executable("demo1") {
