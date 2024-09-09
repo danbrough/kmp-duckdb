@@ -151,12 +151,13 @@ kotlin {
             entryPoint = demoInfo.entryPoint
             compilation = compilations["test"]
 
-            if (konanTarget == HostManager.host)
-              tasks.create("run${demoInfo.name.capitalized()}") {
+            if (konanTarget == HostManager.host) {
+              tasks.register(demoInfo.name) {
                 description = demoInfo.description
                 group = "run"
-              }.dependsOn(runTaskName)
-            
+                dependsOn(runTaskName)
+              }
+            }
           }
         }
       }
