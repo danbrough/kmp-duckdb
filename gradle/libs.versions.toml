@@ -8,8 +8,8 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 org-jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-#xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
-xtras = { id = "org.danbrough.xtras" }
+xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
+#xtras = { id = "org.danbrough.xtras" }
 duckdb = { id = "org.danbrough.duckdb" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
@@ -69,7 +69,7 @@ agp = "8.6.0"
 ##⬆= "8.7.0-beta01"
 kotlin = "2.0.20"
 
-xtras = "0.0.1-beta09"
+xtras = "0.0.1-beta10"
 xtras-jni = "0.0.3-beta04"
 
 xtras-support = "0.0.1-beta01"
@@ -116,11 +116,11 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
-android-gradle = { module = "com.android.tools.build:gradle", version.ref="android-gradle"}
+android-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
 
 xtras-support = { group = "org.danbrough.xtras", name = "support", version.ref = "xtras-support" }
 xtras-jni = { group = "org.danbrough.xtras", name = "jni", version.ref = "xtras-jni" }
-xtras-plugin = { module="org.danbrough.xtras:plugin", version.ref="xtras"}
+xtras-plugin = { module = "org.danbrough.xtras:plugin", version.ref = "xtras" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 klog-core = { module = "org.danbrough.klog:core", version.ref = "klog" }
