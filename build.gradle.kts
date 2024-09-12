@@ -9,4 +9,3 @@ plugins {
   alias(libs.plugins.duckdb) apply false
   alias(libs.plugins.xtras)
 }
-
