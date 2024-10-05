@@ -6,8 +6,10 @@ plugins {
   `maven-publish`
   signing
   id("org.jetbrains.dokka") version "1.9.20"
-  id("org.danbrough.xtras") version "0.0.1-beta09"
+  id("org.danbrough.xtras") version "0.0.1-beta11"
 }
+
+group = "org.danbrough.duckdb"
 
 repositories {
   maven("https://s01.oss.sonatype.org/content/groups/staging/")
