@@ -5,8 +5,8 @@ plugins {
   `java-gradle-plugin`
   `maven-publish`
   signing
-  id("org.jetbrains.dokka") version "1.9.20"
-  id("org.danbrough.xtras") version "0.0.1-beta11"
+  id("org.jetbrains.dokka") version "2.0.0-Beta"
+  id("org.danbrough.xtras") version "0.0.1-beta12"
 }
 
 group = "org.danbrough.duckdb"

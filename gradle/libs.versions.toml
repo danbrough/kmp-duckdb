@@ -52,7 +52,7 @@ kotlin = "2.0.20"
 xtras = "0.0.1-beta12"
 xtras-jni = "0.0.3-beta04"
 
-xtras-support = "0.0.1-beta01"
+xtras-support = "0.0.1-beta02"
 dokka =  "2.0.0-Beta"
 kotlinx-coroutines = "1.9.0"
 ktor = "2.3.12"
