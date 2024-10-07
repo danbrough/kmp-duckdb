@@ -22,6 +22,7 @@ compose = "1.7.3"
 ##   ⬆ = "1.8.0-alpha03"
 
 compose-plugin = "1.7.0-rc01"
+##          ⬆ = "1.8.0-dev1873"
 compose-navigation = "2.8.0"
 androidx-activityCompose = "1.9.2"
 ##                    ⬆ = "1.10.0-alpha01"
@@ -48,12 +49,11 @@ kotlin = "2.0.20"
 ##  ⬆ = "2.0.21-RC"
 ##  ⬆ = "2.1.0-Beta1"
 
-xtras = "0.0.1-beta11"
+xtras = "0.0.1-beta12"
 xtras-jni = "0.0.3-beta04"
 
 xtras-support = "0.0.1-beta01"
-dokka = "1.9.20"
-## ⬆ = "2.0.0-Beta"
+dokka =  "2.0.0-Beta"
 kotlinx-coroutines = "1.9.0"
 ktor = "2.3.12"
 
