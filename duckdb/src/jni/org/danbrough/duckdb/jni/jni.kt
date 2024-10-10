@@ -6,8 +6,8 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.invoke
 import kotlinx.cinterop.pointed
 import kotlinx.cinterop.toKString
-import org.danbrough.xtras.jni.JNIEnvVar
-import org.danbrough.xtras.jni.jstring
+import org.danbrough.jni.cinterops.JNIEnvVar
+import org.danbrough.jni.cinterops.jstring
 
 val log = logger("DuckDB.jni")
 

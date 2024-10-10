@@ -2,6 +2,7 @@
 
 import org.danbrough.duckdb.duckdb
 import org.danbrough.duckdb.generateTypesEnumTask
+import org.danbrough.openssl.plugin.openssl
 import org.danbrough.xtras.capitalized
 import org.danbrough.xtras.logError
 import org.danbrough.xtras.logTrace
@@ -18,8 +19,9 @@ import org.jetbrains.kotlin.konan.target.HostManager
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.android.library)
-  alias(libs.plugins.org.jetbrains.dokka)
+  alias(libs.plugins.dokka)
   alias(libs.plugins.duckdb)
+  id("org.danbrough.openssl") version "0.0.1-beta01"
   `maven-publish`
 }
 
@@ -28,6 +30,7 @@ java {
   sourceCompatibility = JavaVersion.VERSION_17
   targetCompatibility = JavaVersion.VERSION_17
 }
+
 
 project.generateTypesEnumTask()
 
@@ -46,6 +49,9 @@ val demos = listOf(
   Demo("demoVectors", "org.danbrough.duckdb.demoVectors"),
 )
 
+openssl {
+  
+}
 duckdb {
 
 }
@@ -56,16 +62,16 @@ kotlin {
   jvm()
 
 
-  macosX64()
+  //macosX64()
   //macosArm64()
 
   linuxX64()
-  linuxArm64()
+  //linuxArm64()
 
 
   //mingwX64()
-  androidNativeX64()
-  androidNativeArm64()
+//  androidNativeX64()
+//  androidNativeArm64()
 //  androidNativeArm32()
 
   androidTarget {
@@ -122,9 +128,9 @@ kotlin {
     dependsOn(jvmAndroidMain)
   }
 
-  val androidMain by sourceSets.getting {
-    dependsOn(jvmAndroidMain)
-  }
+//  val androidMain by sourceSets.getting {
+//    dependsOn(jvmAndroidMain)
+//  }
 
   targets.withType<KotlinNativeTarget> {
 

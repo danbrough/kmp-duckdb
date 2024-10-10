@@ -19,11 +19,11 @@ import org.danbrough.duckdb.cinterops.DuckDBError
 import org.danbrough.duckdb.cinterops.duckdb_close
 import org.danbrough.duckdb.cinterops.duckdb_databaseVar
 import org.danbrough.duckdb.cinterops.duckdb_open_ext
-import org.danbrough.xtras.jni.JNIEnvVar
-import org.danbrough.xtras.jni.jclass
-import org.danbrough.xtras.jni.jlong
-import org.danbrough.xtras.jni.jobject
-import org.danbrough.xtras.jni.jstring
+import org.danbrough.jni.cinterops.JNIEnvVar
+import org.danbrough.jni.cinterops.jclass
+import org.danbrough.jni.cinterops.jlong
+import org.danbrough.jni.cinterops.jobject
+import org.danbrough.jni.cinterops.jstring
 import kotlin.experimental.ExperimentalNativeApi
 
 private const val JNI_PREFIX = "Java_org_danbrough_duckdb_Database"
@@ -41,6 +41,7 @@ fun databaseCreate(
     val dbHandle: duckdb_databaseVar = nativeHeap.alloc()
     val error: CPointerVarOf<CPointer<ByteVar>> = alloc()
     //config?.handle?.value
+
 
     if (duckdb_open_ext(jPath.toKString(env), dbHandle.ptr, null, error.ptr) == DuckDBError) {
       error("duckdb_open_ext failed: ${error.value?.toKString()}")

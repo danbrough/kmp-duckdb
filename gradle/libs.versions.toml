@@ -5,10 +5,11 @@
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-org-jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
+#xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
+xtras = { id = "org.danbrough.xtras" }
 duckdb = { id = "org.danbrough.duckdb" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
@@ -17,21 +18,13 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 [versions]
 
 compose = "1.7.3"
-##   ⬆ = "1.8.0-alpha01"
-##   ⬆ = "1.8.0-alpha02"
-##   ⬆ = "1.8.0-alpha03"
 
 compose-plugin = "1.7.0-rc01"
 ##          ⬆ = "1.8.0-dev1873"
-compose-navigation = "2.8.0"
+##          ⬆ = "1.8.0-dev1875"
+compose-navigation = "2.8.2"
 androidx-activityCompose = "1.9.2"
-##                    ⬆ = "1.10.0-alpha01"
-##                    ⬆ = "1.10.0-alpha02"
 androidx-core-ktx = "1.13.1"
-##             ⬆ = "1.14.0-alpha01"
-##             ⬆ = "1.15.0-alpha01"
-##             ⬆ = "1.15.0-alpha02"
-##             ⬆ = "1.15.0-beta01"
 androidx-appcompat = "1.7.0"
 androidx-material = "1.12.0"
 androidx-constraintlayout = "2.1.4"
@@ -50,7 +43,7 @@ kotlin = "2.0.20"
 ##  ⬆ = "2.1.0-Beta1"
 
 xtras = "0.0.1-beta12"
-xtras-jni = "0.0.3-beta04"
+xtras-jni = "0.0.3-beta07"
 
 xtras-support = "0.0.1-beta02"
 dokka =  "2.0.0-Beta"
@@ -65,14 +58,10 @@ shadow = "8.1.1"
 
 kotlinx-serialization = "1.7.1"
 uiToolingPreviewDesktop = "1.7.0"
-uiToolingPreviewAndroid = "1.7.1"
+uiToolingPreviewAndroid = "1.7.3"
 clikt = "4.4.0"
 junit = "4.13.2"
 lifecycleRuntimeKtx = "2.8.6"
-##               ⬆ = "2.9.0-alpha01"
-##               ⬆ = "2.9.0-alpha02"
-##               ⬆ = "2.9.0-alpha03"
-##               ⬆ = "2.9.0-alpha04"
 composeBom = "2024.09.03"
 duckdb = "1.0.0"
 android-gradle = "8.5.2"
@@ -99,7 +88,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
 
 xtras-support = { group = "org.danbrough.xtras", name = "support", version.ref = "xtras-support" }
-xtras-jni = { group = "org.danbrough.xtras", name = "jni", version.ref = "xtras-jni" }
+xtras-jni = { group = "org.danbrough", name = "jni", version.ref = "xtras-jni" }
 xtras-plugin = { module = "org.danbrough.xtras:plugin", version.ref = "xtras" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }

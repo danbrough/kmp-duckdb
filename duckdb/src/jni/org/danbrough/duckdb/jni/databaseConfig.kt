@@ -18,10 +18,10 @@ import org.danbrough.duckdb.cinterops.duckdb_create_config
 import org.danbrough.duckdb.cinterops.duckdb_destroy_config
 import org.danbrough.duckdb.cinterops.duckdb_set_config
 import org.danbrough.duckdb.handleDuckDbError
-import org.danbrough.xtras.jni.JNIEnvVar
-import org.danbrough.xtras.jni.jclass
-import org.danbrough.xtras.jni.jlong
-import org.danbrough.xtras.jni.jstring
+import org.danbrough.jni.cinterops.JNIEnvVar
+import org.danbrough.jni.cinterops.jclass
+import org.danbrough.jni.cinterops.jlong
+import org.danbrough.jni.cinterops.jstring
 import kotlin.experimental.ExperimentalNativeApi
 
 private const val JNI_PREFIX = "Java_org_danbrough_duckdb_DatabaseConfig"

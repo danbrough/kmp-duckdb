@@ -27,15 +27,17 @@ import org.danbrough.duckdb.cinterops.duckdb_value_uint32
 import org.danbrough.duckdb.cinterops.duckdb_value_uint64
 import org.danbrough.duckdb.cinterops.duckdb_value_uint8
 import org.danbrough.duckdb.cinterops.duckdb_value_varchar
-import org.danbrough.xtras.jni.JNIEnvVar
-import org.danbrough.xtras.jni.jbyte
-import org.danbrough.xtras.jni.jclass
-import org.danbrough.xtras.jni.jdouble
-import org.danbrough.xtras.jni.jfloat
-import org.danbrough.xtras.jni.jint
-import org.danbrough.xtras.jni.jlong
-import org.danbrough.xtras.jni.jshort
-import org.danbrough.xtras.jni.jstring
+import org.danbrough.jni.cinterops.JNIEnvVar
+import org.danbrough.jni.cinterops.jbyte
+import org.danbrough.jni.cinterops.jclass
+import org.danbrough.jni.cinterops.jdouble
+import org.danbrough.jni.cinterops.jfloat
+import org.danbrough.jni.cinterops.jint
+import org.danbrough.jni.cinterops.jlong
+import org.danbrough.jni.cinterops.jshort
+import org.danbrough.jni.cinterops.jstring
+
+
 import kotlin.experimental.ExperimentalNativeApi
 
 private const val JNI_PREFIX = "Java_org_danbrough_duckdb_Result"
