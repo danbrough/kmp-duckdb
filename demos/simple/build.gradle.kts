@@ -14,14 +14,15 @@ duckdb {
 kotlin {
   applyDefaultHierarchyTemplate()
 
+  linuxX64()
 
-  if (HostManager.hostIsMac) {
-    macosX64()
-    macosArm64()
-  } else {
-    linuxX64()
-    linuxArm64()
-  }
+//  if (HostManager.hostIsMac) {
+//    macosX64()
+//    macosArm64()
+//  } else {
+//    linuxX64()
+//    linuxArm64()
+//  }
 
 
   val commonMain by sourceSets.getting {
