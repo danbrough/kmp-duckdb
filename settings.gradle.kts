@@ -5,6 +5,7 @@ pluginManagement {
     maven("https://s01.oss.sonatype.org/content/groups/staging/")
 
     //maven("https://maven.danbrough.org")
+
     google {
       content {
         includeGroupByRegex("com\\.android.*")
@@ -37,9 +38,11 @@ dependencyResolutionManagement {
 includeBuild("plugin")
 
 
+/*
 includeBuild("../../xtras/plugin") {
   name = "xtras_plugin"
 }
+*/
 
 
 rootProject.name = "duckdb"

@@ -8,8 +8,8 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-#xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
-xtras = { id = "org.danbrough.xtras" }
+xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
+#xtras = { id = "org.danbrough.xtras" }
 duckdb = { id = "org.danbrough.duckdb" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
@@ -17,7 +17,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 
 [versions]
 
-compose = "1.7.3"
+compose = "1.7.5"
 
 compose-plugin ="1.7.0"
 ##         ⬆ = "1.8.0-dev1873"
@@ -25,19 +25,18 @@ compose-plugin ="1.7.0"
 ##         ⬆ = "1.8.0-dev1890"
 ##         ⬆ = "1.8.0-dev1897"
 ##         ⬆ = "1.8.0-dev1899"
-compose-navigation = "2.8.2"
-androidx-activityCompose = "1.9.2"
-androidx-core-ktx = "1.13.1"
+##         ⬆ = "1.8.0-dev1905"
+compose-navigation = "2.8.3"
+androidx-activityCompose = "1.9.3"
+androidx-core-ktx = "1.15.0"
 androidx-appcompat = "1.7.0"
 androidx-material = "1.12.0"
-androidx-constraintlayout = "2.1.4"
+androidx-constraintlayout = "2.2.0"
 androidx-test-junit = "1.2.1"
 androidx-espresso-core = "3.6.1"
-decompose = "3.0.0"
+decompose = "3.2.1"
 
-agp = "8.7.0"
-##⬆= "8.7.1"
-##⬆= "8.7.2"
+agp = "8.7.2"
 ##⬆= "8.8.0-alpha01"
 ##⬆= "8.8.0-alpha02"
 ##⬆= "8.8.0-alpha03"
@@ -50,11 +49,12 @@ agp = "8.7.0"
 kotlin ="2.0.21"
 ## ⬆ = "2.1.0-Beta1"
 ## ⬆ = "2.1.0-Beta2"
+## ⬆ = "2.1.0-RC"
 
 xtras = "0.0.1-beta12"
 xtras-jni = "0.0.3-beta07"
 
-xtras-support = "0.0.1-beta02"
+xtras-support = "0.0.1-beta01"
 dokka =  "2.0.0-Beta"
 kotlinx-coroutines = "1.9.0"
 ktor = "2.3.12"
@@ -62,16 +62,16 @@ ktor = "2.3.12"
 kotlinx-datetime = "0.6.1"
 sqldelight = "2.0.2"
 koin-bom = "2.2.0-rc-4"
-klog = "0.0.3-beta06"
+klog = "0.0.4"
 shadow = "8.1.1"
 
 kotlinx-serialization = "1.7.1"
 uiToolingPreviewDesktop = "1.7.0"
-uiToolingPreviewAndroid = "1.7.3"
+uiToolingPreviewAndroid = "1.7.5"
 clikt = "4.4.0"
 junit = "4.13.2"
-lifecycleRuntimeKtx = "2.8.6"
-composeBom = "2024.09.03"
+lifecycleRuntimeKtx = "2.8.7"
+composeBom = "2024.10.01"
 duckdb = "1.0.0"
 android-gradle = "8.5.2"
 

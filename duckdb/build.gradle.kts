@@ -50,7 +50,7 @@ val demos = listOf(
 )
 
 openssl {
-  
+
 }
 duckdb {
 
@@ -60,19 +60,16 @@ kotlin {
   applyDefaultHierarchyTemplate()
 
   jvm()
-
-
-  //macosX64()
+  macosX64()
   //macosArm64()
 
   linuxX64()
   linuxArm64()
 
-
   //mingwX64()
-    androidNativeX64()
-//  androidNativeArm64()
-//  androidNativeArm32()
+  androidNativeX64()
+  androidNativeArm64()
+  androidNativeArm32()
 
   androidTarget {
     publishLibraryVariants("release")
