@@ -3,9 +3,6 @@
 import org.danbrough.duckdb.duckdb
 import org.danbrough.duckdb.generateTypesEnumTask
 import org.danbrough.openssl.plugin.openssl
-import org.danbrough.xtras.capitalized
-import org.danbrough.xtras.logError
-import org.danbrough.xtras.logTrace
 import org.danbrough.xtras.supportsJNI
 import org.danbrough.xtras.xtrasAndroidConfig
 import org.danbrough.xtras.xtrasTesting
@@ -48,6 +45,7 @@ val demos = listOf(
   Demo("demo5", "org.danbrough.duckdb.demo5"),
   Demo("demoVectors", "org.danbrough.duckdb.demoVectors"),
 )
+
 
 openssl {
 
@@ -125,9 +123,9 @@ kotlin {
     dependsOn(jvmAndroidMain)
   }
 
-//  val androidMain by sourceSets.getting {
-//    dependsOn(jvmAndroidMain)
-//  }
+  val androidMain by sourceSets.getting {
+    dependsOn(jvmAndroidMain)
+  }
 
   targets.withType<KotlinNativeTarget> {
 
@@ -186,8 +184,8 @@ xtrasAndroidConfig {
 
   sourceSets.all {
     jniLibs {
-      @Suppress("UnstableApiUsage")
-      logTrace("JNILIBS:$name ${directories.joinToString()}")
+      //@Suppress("UnstableApiUsage")
+      //logTrace("JNILIBS:$name ${directories.joinToString()}")
     }
   }
 }
