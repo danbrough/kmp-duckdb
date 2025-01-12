@@ -29,7 +29,6 @@ dependencies {
   compileOnly(kotlin("gradle-plugin"))
   implementation(libs.xtras.plugin)
   compileOnly(libs.android.gradle)
-
 }
 
 gradlePlugin {

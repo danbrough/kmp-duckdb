@@ -18,14 +18,14 @@ plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.dokka)
   alias(libs.plugins.duckdb)
-  id("org.danbrough.openssl") version "0.0.1-beta01"
+  alias(libs.plugins.xtras.openssl)
   `maven-publish`
 }
 
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_17
-  targetCompatibility = JavaVersion.VERSION_17
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
 }
 
 
@@ -73,7 +73,6 @@ kotlin {
     publishLibraryVariants("release")
   }
 
-  @OptIn(ExperimentalKotlinGradlePluginApi::class)
   compilerOptions {
     listOf("kotlinx.cinterop.ExperimentalForeignApi").also { optIn = it }
     freeCompilerArgs = freeCompilerArgs.get() + listOf("-Xexpect-actual-classes")
