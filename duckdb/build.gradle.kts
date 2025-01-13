@@ -142,6 +142,7 @@ kotlin {
       if (konanTarget.supportsJNI) {
         sharedLib("duckdbkt") {
           // copyToJniLibs()
+
         }
       }
 
