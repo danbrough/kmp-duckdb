@@ -46,6 +46,12 @@ val demos = listOf(
   Demo("demoVectors", "org.danbrough.duckdb.demoVectors"),
 )
 
+xtras {
+  androidConfig {
+    compileSDKVersion = 35
+  }
+}
+
 
 openssl {
 

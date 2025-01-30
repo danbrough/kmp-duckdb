@@ -1,14 +1,9 @@
-import org.danbrough.duckdb.duckdb
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.duckdb)
-}
-
-duckdb {
-  buildEnabled = false
 }
 
 kotlin {
