@@ -6,9 +6,9 @@ pluginManagement {
   }
 }
 
-includeBuild("../../../xtras/plugin") {
+/*includeBuild("../../../xtras/plugin") {
   name = "xtras_plugin"
-}
+}*/
 
 dependencyResolutionManagement {
   versionCatalogs {

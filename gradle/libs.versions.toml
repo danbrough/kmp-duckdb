@@ -8,8 +8,8 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-#xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
-xtras = { id = "org.danbrough.xtras" }
+xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
+#xtras = { id = "org.danbrough.xtras" }
 xtras-openssl = { id = "org.danbrough.openssl", version.ref = "xtras-openssl" }
 
 duckdb = { id = "org.danbrough.duckdb" }
@@ -52,7 +52,7 @@ kotlin ="2.1.10"
 ## ⬆ = "2.1.20-Beta1"
 ## ⬆ = "2.1.20-Beta2"
 
-xtras = "0.0.1-beta13"
+xtras = "0.0.1-beta14"
 xtras-jni = "0.0.3-beta07"
 xtras-openssl = "0.0.1-beta01"
 xtras-support = "0.0.1-beta03"
