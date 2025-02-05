@@ -30,12 +30,16 @@ kotlin {
     }
   }
 
+  val ldLibPathName = if (HostManager.hostIsMac) "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
+
   targets.withType<KotlinNativeTarget> {
     if (this.konanTarget == HostManager.host) {
       binaries {
         executable("demo1") {
           entryPoint = "org.danbrough.duckdb.demo1"
+          runTask?.environment(ldLibPathName,System.getenv(ldLibPathName))
         }
+
       }
     }
   }

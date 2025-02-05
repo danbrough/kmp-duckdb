@@ -3,7 +3,7 @@ package org.danbrough.duckdb
 import kotlinx.coroutines.runBlocking
 import org.danbrough.xtras.support.getEnv
 
-private val log = klog.logger("simple")
+private val log = klog.logger("DEMO")
 
 fun demo1() {
   log.info { "demo1" }
