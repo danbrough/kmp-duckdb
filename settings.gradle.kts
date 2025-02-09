@@ -24,8 +24,11 @@ plugins {
 dependencyResolutionManagement {
   @Suppress("UnstableApiUsage")
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
   @Suppress("UnstableApiUsage")
   repositories {
+    maven("file:///files/xtras/maven")
+
     maven("https://s01.oss.sonatype.org/content/groups/staging")
     google()
     mavenCentral()

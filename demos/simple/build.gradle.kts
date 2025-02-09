@@ -34,9 +34,11 @@ kotlin {
 
   targets.withType<KotlinNativeTarget> {
     if (this.konanTarget == HostManager.host) {
+
       binaries {
         executable("demo1") {
           entryPoint = "org.danbrough.duckdb.demo1"
+
           runTask?.environment(ldLibPathName,System.getenv(ldLibPathName))
         }
 
