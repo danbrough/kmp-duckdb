@@ -1,0 +1,14 @@
+**.gradle
+/.idea
+local.properties
+versions.properties
+/upstream
+**/build
+/bin
+/.kotlin
+/duckdb/src/cinterops/duckdb.def
+**vgcore*
+**.log
+**.db
+/tmp
+.secrets
