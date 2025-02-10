@@ -90,7 +90,7 @@ duckdb = "1.0.0"
 android-gradle = "8.5.2"
 
 [libraries]
-xtras-duckdb = {module = "org.danbrough.duckdb:duckdb",version="1.2.0-beta01"}
+xtras-duckdb = {module = "org.danbrough:duckdb",version="1.2.0-beta01"}
 
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
