@@ -6,6 +6,16 @@ plugins {
   alias(libs.plugins.duckdb)
 }
 
+xtras{
+  //message="Hello World!!!"
+}
+
+val thang by tasks.registering {
+  doFirst {
+    println("THE MESSAGE IS:")
+  }
+}
+
 kotlin {
   applyDefaultHierarchyTemplate()
 

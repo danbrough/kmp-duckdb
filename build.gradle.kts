@@ -1,3 +1,5 @@
+import org.danbrough.xtras.logWarn
+
 plugins {
   alias(libs.plugins.kotlin.multiplatform) apply false
   alias(libs.plugins.kotlin.android) apply false
@@ -11,3 +13,18 @@ plugins {
 }
 
 
+tasks.register("thang") {
+
+
+  actions.add {
+
+    project.providers.exec {
+      println("HELLO WORLD!")
+      this.commandLine("date")
+
+    }.standardOutput.asText.also {
+      logWarn("OUTPUT: ${it.get()}")
+    }
+
+  }
+}
