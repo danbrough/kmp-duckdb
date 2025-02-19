@@ -6,6 +6,10 @@ pluginManagement {
   }
 }
 
+plugins {
+  id("de.fayard.refreshVersions") version "0.60.5"
+}
+
 /*includeBuild("../../../xtras/plugin") {
   name = "xtras_plugin"
 }*/
