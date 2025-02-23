@@ -19,7 +19,7 @@ duckdb = { id = "org.danbrough.duckdb", version.ref = "xtras-duckdb"}
 [versions]
 
 compose = "1.8.0-beta01"
-xtras-duckdb = "1.2.0-beta01"
+xtras-duckdb = "0.0.1-beta03"
 
 compose-plugin ="1.7.3"
 compose-navigation = "2.8.6"
